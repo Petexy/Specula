@@ -1,6 +1,7 @@
 # Maintainer: Piotr 'Linexy' Lewandowski <piotr.petexiness@gmail.com>
 
 pkgname=specula-git
+pkgver=0
 pkgrel=1
 pkgdesc="Wire-free Android screen mirroring and control for the Linux desktop."
 arch=('x86_64' 'aarch64')
