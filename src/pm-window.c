@@ -1057,7 +1057,7 @@ pm_window_apply_state (PmWindow   *self,
   pm_window_set_disconnect_available (self, mirroring);
 
   if (!mirroring) {
-    adw_window_title_set_title (self->title, "Phone Mirror");
+    adw_window_title_set_title (self->title, _("Phone Mirror"));
     adw_window_title_set_subtitle (self->title, NULL);
   }
 
@@ -1065,7 +1065,7 @@ pm_window_apply_state (PmWindow   *self,
     case PM_STATE_IDLE:
       pm_window_reset_window_shape (self);
       adw_view_stack_set_visible_child_name (self->stack, "searching");
-      adw_status_page_set_title (self->status_page, "Phone Mirror");
+      adw_status_page_set_title (self->status_page, _("Phone Mirror"));
       adw_status_page_set_description (self->status_page,
         _("Press Connect to find your phone automatically."));
       gtk_spinner_set_spinning (self->spinner, FALSE);
@@ -3853,7 +3853,7 @@ pm_window_init (PmWindow *self)
   self->screen_off = prefs.screen_off;
   self->setup_complete = prefs.setup_complete;
 
-  gtk_window_set_title (GTK_WINDOW (self), "Phone Mirror");
+  gtk_window_set_title (GTK_WINDOW (self), _("Phone Mirror"));
   gtk_window_set_default_size (GTK_WINDOW (self), 420, 760);
 
   /* Window actions. Register before building action-backed menu widgets. */
@@ -3872,7 +3872,7 @@ pm_window_init (PmWindow *self)
 
   /* Header bar */
   self->header_bar = ADW_HEADER_BAR (adw_header_bar_new ());
-  self->title = ADW_WINDOW_TITLE (adw_window_title_new ("Phone Mirror", NULL));
+  self->title = ADW_WINDOW_TITLE (adw_window_title_new (_("Phone Mirror"), NULL));
   adw_header_bar_set_title_widget (self->header_bar, GTK_WIDGET (self->title));
 
   pm_window_install_pin_css (self);

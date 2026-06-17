@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: specula 0.2.0\n"
 "Report-Msgid-Bugs-To: piotr.petexiness@gmail.com\n"
-"POT-Creation-Date: 2026-06-17 18:07+0200\n"
+"POT-Creation-Date: 2026-06-17 20:34+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,6 +16,11 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+
+#: src/pm-application.c:59 src/pm-window.c:1060 src/pm-window.c:1068
+#: src/pm-window.c:3856 src/pm-window.c:3875
+msgid "Phone Mirror"
+msgstr ""
 
 #: src/pm-window.c:1070
 msgid "Press Connect to find your phone automatically."

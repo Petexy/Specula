@@ -9,6 +9,7 @@
 #include "pm-application.h"
 #include "pm-window.h"
 #include "pm-config.h"
+#include <glib/gi18n.h>
 
 struct _PmApplication {
   AdwApplication parent_instance;
@@ -55,7 +56,7 @@ on_about_action (GSimpleAction *action,
   };
 
   adw_show_about_dialog (GTK_WIDGET (gtk_application_get_active_window (app)),
-                         "application-name", "Phone Mirror",
+                         "application-name", _("Phone Mirror"),
                          "application-icon", PM_APP_ID,
                          "version", PM_VERSION,
                          "developers", developers,

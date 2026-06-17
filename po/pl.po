@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: specula 0.2.0\n"
 "Report-Msgid-Bugs-To: piotr.petexiness@gmail.com\n"
-"POT-Creation-Date: 2026-06-17 18:07+0200\n"
+"POT-Creation-Date: 2026-06-17 20:34+0200\n"
 "PO-Revision-Date: 2026-06-17 18:10+0200\n"
 "Last-Translator: Piotr Lewandowski <piotr.petexiness@gmail.com>\n"
 "Language-Team: Polish\n"
@@ -17,6 +17,11 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
+
+#: src/pm-application.c:59 src/pm-window.c:1060 src/pm-window.c:1068
+#: src/pm-window.c:3856 src/pm-window.c:3875
+msgid "Phone Mirror"
+msgstr "Klonowanie Telefonu"
 
 #: src/pm-window.c:1070
 msgid "Press Connect to find your phone automatically."
@@ -339,7 +344,7 @@ msgstr "Konfiguracja początkowa"
 
 #: src/pm-window.c:3608
 msgid "Welcome to Phone Mirror"
-msgstr "Witamy w Phone Mirror"
+msgstr "Witamy w aplikacji Klonowanie Telefonu"
 
 #: src/pm-window.c:3609
 msgid ""
@@ -367,7 +372,8 @@ msgid ""
 "System first, then tap About phone."
 msgstr ""
 "W Ustawieniach przewiń w dół. Kliknij Informacje o telefonie. W niektórych "
-"telefonach otwórz najpierw System, a następnie kliknij Informacje o telefonie."
+"telefonach otwórz najpierw System, a następnie kliknij Informacje o "
+"telefonie."
 
 #: src/pm-window.c:3620
 msgid "Turn on Developer options"
@@ -462,7 +468,7 @@ msgstr "_Ustawienia"
 
 #: src/pm-window.c:3797
 msgid "_About Phone Mirror"
-msgstr "_O programie Phone Mirror"
+msgstr "_O programie Klonowanie Telefonu"
 
 #: src/pm-window.c:3802
 msgid "_Quit"
@@ -526,8 +532,8 @@ msgid ""
 "Enter the Wi-Fi debugging address only if automatic discovery cannot find "
 "the phone."
 msgstr ""
-"Wprowadź adres debugowania Wi-Fi tylko wtedy, gdy automatyczne wykrywanie nie "
-"może znaleźć telefonu."
+"Wprowadź adres debugowania Wi-Fi tylko wtedy, gdy automatyczne wykrywanie "
+"nie może znaleźć telefonu."
 
 #: src/pm-connect-dialog.c:271
 msgid "IP address"

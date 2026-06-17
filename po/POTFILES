@@ -1,3 +1,4 @@
+src/pm-application.c
 src/pm-window.c
 src/pm-connect-dialog.c
 src/pm-settings-dialog.c

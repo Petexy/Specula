@@ -1,11 +1,15 @@
 [Desktop Entry]
 Type=Application
 Name=Phone Mirror
+Name[pl]=Klonowanie Telefonu
 GenericName=Phone Screen Mirror
+GenericName[pl]=Klonowanie ekranu telefonu
 Comment=Wire-free Android screen mirroring and control
+Comment[pl]=Bezprzewodowe klonowanie i sterowanie ekranem Androida
 Exec=specula
 Icon=io.github.petexy.Specula
 Terminal=false
 Categories=Network;RemoteAccess;GTK;
 Keywords=Android;scrcpy;mirror;cast;screen;phone;remote;
+Keywords[pl]=Android;scrcpy;klonowanie;rzutowanie;ekran;telefon;zdalny;
 StartupNotify=true

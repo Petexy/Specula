@@ -6,7 +6,9 @@
   <project_license>GPL-3.0-or-later</project_license>
 
   <name>Phone Mirror</name>
+  <name xml:lang="pl">Klonowanie Telefonu</name>
   <summary>Wire-free Android screen mirroring and control</summary>
+  <summary xml:lang="pl">Bezprzewodowe klonowanie i sterowanie ekranem Androida</summary>
 
   <description>
     <p>
