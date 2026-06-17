@@ -1,755 +1,711 @@
-# Polish translation for Specula.
+# Chinese (Simplified) translation for Specula.
 # Copyright (C) 2026 Piotr Lewandowski
 # This file is distributed under the same license as the specula package.
-# Piotr Lewandowski <piotr.petexiness@gmail.com>, 2026.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: specula 0.3.0\n"
 "Report-Msgid-Bugs-To: piotr.petexiness@gmail.com\n"
 "POT-Creation-Date: 2026-06-17 20:34+0200\n"
-"PO-Revision-Date: 2026-06-17 18:10+0200\n"
-"Last-Translator: Piotr Lewandowski <piotr.petexiness@gmail.com>\n"
-"Language-Team: Polish\n"
-"Language: pl\n"
+"PO-Revision-Date: 2026-06-17 21:30+0200\n"
+"Last-Translator: Specula <piotr.petexiness@gmail.com>\n"
+"Language-Team: Chinese (Simplified)\n"
+"Language: zh_CN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
-"|| n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
 
 #: src/pm-application.c:59 src/pm-window.c:1060 src/pm-window.c:1068
 #: src/pm-window.c:3856 src/pm-window.c:3875
 msgid "Phone Mirror"
-msgstr "Klonowanie Telefonu"
+msgstr "手机镜像"
 
 #: src/pm-window.c:1070
 msgid "Press Connect to find your phone automatically."
-msgstr "Naciśnij Połącz, aby automatycznie znaleźć telefon."
+msgstr "按“连接”自动查找您的手机。"
 
 #: src/pm-window.c:1078
 msgid "Searching…"
-msgstr "Wyszukiwanie…"
+msgstr "正在搜索…"
 
 #: src/pm-window.c:1080
 msgid "Looking for your phone on the local network."
-msgstr "Wyszukiwanie telefonu w sieci lokalnej."
+msgstr "正在本地网络中查找您的手机。"
 
 #: src/pm-window.c:1088
 msgid "Connecting…"
-msgstr "Łączenie…"
+msgstr "正在连接…"
 
 #: src/pm-window.c:1090
 msgid "Starting the mirror server on your device."
-msgstr "Uruchamianie serwera kopii lustrzanej na urządzeniu."
+msgstr "正在您的设备上启动镜像服务器。"
 
 #: src/pm-window.c:1110
 msgid "Connection failed"
-msgstr "Połączenie nie powiodło się"
+msgstr "连接失败"
 
 #: src/pm-window.c:1112
 msgid "Could not reach the device."
-msgstr "Nie można połączyć się z urządzeniem."
+msgstr "无法连接到设备。"
 
 #: src/pm-window.c:1651 src/pm-window.c:1664 src/pm-connect-dialog.c:79
 msgid "Lockscreen PIN"
-msgstr "PIN ekranu blokady"
+msgstr "锁屏 PIN"
 
 #: src/pm-window.c:1658 src/pm-connect-dialog.c:72
 msgid "Auto-unlock"
-msgstr "Automatyczne odblokowanie"
+msgstr "自动解锁"
 
 #: src/pm-window.c:1660
 msgid ""
 "Stored encrypted on this computer, tied to this phone, and used to unlock it "
 "automatically when it connects."
-msgstr ""
-"Przechowywany w postaci zaszyfrowanej na tym komputerze, powiązany z tym "
-"telefonem i używany do automatycznego odblokowywania go przy połączeniu."
+msgstr "以加密形式存储在此计算机上,与此手机绑定,用于在连接时自动解锁手机。"
 
 #: src/pm-window.c:1673
 msgid "Save"
-msgstr "Zapisz"
+msgstr "保存"
 
 #: src/pm-window.c:1676
 msgid "Remove"
-msgstr "Usuń"
+msgstr "移除"
 
 #: src/pm-window.c:1804
 msgid "Network & internet"
-msgstr "Sieć i internet"
+msgstr "网络和互联网"
 
 #: src/pm-window.c:1804
 msgid "Wi-Fi, SIM, hotspot"
-msgstr "Wi-Fi, SIM, hotspot"
+msgstr "Wi-Fi、SIM 卡、热点"
 
 #: src/pm-window.c:1805
 msgid "Connected devices"
-msgstr "Połączone urządzenia"
+msgstr "已连接的设备"
 
 #: src/pm-window.c:1805
 msgid "Bluetooth, pairing"
-msgstr "Bluetooth, parowanie"
+msgstr "蓝牙、配对"
 
 #: src/pm-window.c:1806
 msgid "Apps"
-msgstr "Aplikacje"
+msgstr "应用"
 
 #: src/pm-window.c:1806
 msgid "Permissions and defaults"
-msgstr "Uprawnienia i ustawienia domyślne"
+msgstr "权限和默认应用"
 
 #: src/pm-window.c:1807
 msgid "Notifications"
-msgstr "Powiadomienia"
+msgstr "通知"
 
 #: src/pm-window.c:1807
 msgid "History and conversations"
-msgstr "Historia i rozmowy"
+msgstr "历史记录和对话"
 
 #: src/pm-window.c:1808
 msgid "Battery"
-msgstr "Bateria"
+msgstr "电池"
 
 #: src/pm-window.c:1808
 msgid "87%, until 10:30 PM"
-msgstr "87%, do 22:30"
+msgstr "87%,可用至晚上 10:30"
 
 #: src/pm-window.c:1809
 msgid "System"
-msgstr "System"
+msgstr "系统"
 
 #: src/pm-window.c:1809
 msgid "Languages, gestures, time"
-msgstr "Języki, gesty, czas"
+msgstr "语言、手势、时间"
 
 #: src/pm-window.c:1810 src/pm-window.c:2860 src/pm-window.c:2893
 #: src/pm-window.c:2970
 msgid "About phone"
-msgstr "Informacje o telefonie"
+msgstr "关于手机"
 
 #: src/pm-window.c:1810
 msgid "Model, Android version"
-msgstr "Model, wersja Androida"
+msgstr "型号、Android 版本"
 
 #: src/pm-window.c:1811 src/pm-window.c:2983 src/pm-window.c:3040
 msgid "Developer options"
-msgstr "Opcje programisty"
+msgstr "开发者选项"
 
 #: src/pm-window.c:1811
 msgid "Debugging and input"
-msgstr "Debugowanie i wprowadzanie"
+msgstr "调试和输入"
 
 #: src/pm-window.c:1821 src/pm-window.c:3025
 msgid "Device name"
-msgstr "Nazwa urządzenia"
+msgstr "设备名称"
 
 #: src/pm-window.c:1821
 msgid "Pixel phone"
-msgstr "Telefon Pixel"
+msgstr "Pixel 手机"
 
 #: src/pm-window.c:1822
 msgid "Android version"
-msgstr "Wersja Androida"
+msgstr "Android 版本"
 
 #: src/pm-window.c:1822
 msgid "Version and security update"
-msgstr "Wersja i aktualizacja zabezpieczeń"
+msgstr "版本和安全更新"
 
 #: src/pm-window.c:1823
 msgid "Build number"
-msgstr "Numer kompilacji"
+msgstr "版本号"
 
 #: src/pm-window.c:1823
 msgid "Tap seven times"
-msgstr "Kliknij siedem razy"
+msgstr "点按七次"
 
 #: src/pm-window.c:1840
 msgid "Use developer options"
-msgstr "Użyj opcji programisty"
+msgstr "使用开发者选项"
 
 #: src/pm-window.c:1840 src/pm-window.c:3085
 msgid "On"
-msgstr "Wł."
+msgstr "开启"
 
 #: src/pm-window.c:1841
 msgid "USB debugging"
-msgstr "Debugowanie USB"
+msgstr "USB 调试"
 
 #: src/pm-window.c:1841
 msgid "Debug mode when USB is connected"
-msgstr "Tryb debugowania, gdy podłączono USB"
+msgstr "连接 USB 时进入调试模式"
 
 #: src/pm-window.c:1842 src/pm-window.c:3050 src/pm-window.c:3100
 msgid "Wireless debugging"
-msgstr "Debugowanie bezprzewodowe"
+msgstr "无线调试"
 
 #: src/pm-window.c:1842
 msgid "Debug over Wi-Fi"
-msgstr "Debugowanie przez Wi-Fi"
+msgstr "通过 Wi-Fi 调试"
 
 #: src/pm-window.c:1843
 msgid "Revoke debugging authorizations"
-msgstr "Cofnij autoryzacje debugowania"
+msgstr "撤销调试授权"
 
 #: src/pm-window.c:2217
 msgid "Phone"
-msgstr "Telefon"
+msgstr "电话"
 
 #: src/pm-window.c:2218
 msgid "Messages"
-msgstr "Wiadomości"
+msgstr "信息"
 
 #: src/pm-window.c:2219
 msgid "Photos"
-msgstr "Zdjęcia"
+msgstr "照片"
 
 #: src/pm-window.c:2220
 msgid "Camera"
-msgstr "Aparat"
+msgstr "相机"
 
 #: src/pm-window.c:2221 src/pm-window.c:2818 src/pm-window.c:2850
 #: src/pm-window.c:2957 src/pm-settings-dialog.c:76
 msgid "Settings"
-msgstr "Ustawienia"
+msgstr "设置"
 
 #: src/pm-window.c:2222
 msgid "Files"
-msgstr "Pliki"
+msgstr "文件"
 
 #: src/pm-window.c:2245
 msgid "Search your phone"
-msgstr "Przeszukaj telefon"
+msgstr "搜索您的手机"
 
 #: src/pm-window.c:2623
 msgid "Cancel"
-msgstr "Anuluj"
+msgstr "取消"
 
 #: src/pm-window.c:2902
 #, c-format
 msgid "Tap %d of 7"
-msgstr "Kliknięcie %d z 7"
+msgstr "第 %d 次点按(共 7 次)"
 
 #: src/pm-window.c:2927
 msgid "You are now a developer!"
-msgstr "Jesteś teraz programistą!"
+msgstr "您现在是开发者了!"
 
 #: src/pm-window.c:3007
 msgid "Allow USB debugging?"
-msgstr "Zezwolić na debugowanie USB?"
+msgstr "允许 USB 调试?"
 
 #: src/pm-window.c:3008
 msgid "Computer RSA key fingerprint"
-msgstr "Odcisk klucza RSA komputera"
+msgstr "计算机 RSA 密钥指纹"
 
 #: src/pm-window.c:3009
 msgid "OK"
-msgstr "OK"
+msgstr "确定"
 
 #: src/pm-window.c:3023 src/pm-window.c:3085
 msgid "Use wireless debugging"
-msgstr "Użyj debugowania bezprzewodowego"
+msgstr "使用无线调试"
 
 #: src/pm-window.c:3023
 msgid "Current Wi-Fi network"
-msgstr "Bieżąca sieć Wi-Fi"
+msgstr "当前 Wi-Fi 网络"
 
 #: src/pm-window.c:3024
 msgid "Wi-Fi network"
-msgstr "Sieć Wi-Fi"
+msgstr "Wi-Fi 网络"
 
 #: src/pm-window.c:3024
 msgid "Same network as Linux"
-msgstr "Ta sama sieć co Linux"
+msgstr "与 Linux 相同的网络"
 
 #: src/pm-window.c:3025
 msgid "Android device"
-msgstr "Urządzenie z Androidem"
+msgstr "Android 设备"
 
 #: src/pm-window.c:3069
 msgid "Allow wireless debugging?"
-msgstr "Zezwolić na debugowanie bezprzewodowe?"
+msgstr "允许无线调试?"
 
 #: src/pm-window.c:3070
 msgid "Allow on this Wi-Fi network"
-msgstr "Zezwól w tej sieci Wi-Fi"
+msgstr "在此 Wi-Fi 网络上允许"
 
 #: src/pm-window.c:3071
 msgid "Allow"
-msgstr "Zezwól"
+msgstr "允许"
 
 #: src/pm-window.c:3086
 msgid "Pair device with code"
-msgstr "Sparuj urządzenie za pomocą kodu"
+msgstr "使用配对码配对设备"
 
 #: src/pm-window.c:3086
 msgid "Shows code and address"
-msgstr "Pokazuje kod i adres"
+msgstr "显示配对码和地址"
 
 #: src/pm-window.c:3087
 msgid "IP address & port"
-msgstr "Adres IP i port"
+msgstr "IP 地址和端口"
 
 #: src/pm-window.c:3090 src/pm-window.c:3282 src/pm-connect-dialog.c:246
 msgid "Pairing code"
-msgstr "Kod parowania"
+msgstr "配对码"
 
 #: src/pm-window.c:3091
 msgid "Pairing address"
-msgstr "Adres parowania"
+msgstr "配对地址"
 
 #: src/pm-window.c:3092
 msgid "Keep this screen open"
-msgstr "Pozostaw ten ekran otwarty"
+msgstr "请保持此屏幕开启"
 
 #: src/pm-window.c:3092
 msgid "Code expires soon"
-msgstr "Kod wkrótce wygaśnie"
+msgstr "配对码即将过期"
 
 #: src/pm-window.c:3110
 msgid "Pair device"
-msgstr "Sparuj urządzenie"
+msgstr "配对设备"
 
 #: src/pm-window.c:3246 src/pm-connect-dialog.c:257
 msgid "Set up device"
-msgstr "Skonfiguruj urządzenie"
+msgstr "设置设备"
 
 #: src/pm-window.c:3257 src/pm-connect-dialog.c:238
 msgid "Pairing"
-msgstr "Parowanie"
+msgstr "配对"
 
 #: src/pm-window.c:3267
 msgid "Android 11+: Pair device with code."
-msgstr "Android 11+: Sparuj urządzenie za pomocą kodu."
+msgstr "Android 11+:使用配对码配对设备。"
 
 #: src/pm-window.c:3279 src/pm-connect-dialog.c:244
 msgid "Pairing address (ip:port)"
-msgstr "Adres parowania (ip:port)"
+msgstr "配对地址(ip:端口)"
 
 #: src/pm-window.c:3296 src/pm-connect-dialog.c:254
 msgid "Pair & Connect"
-msgstr "Sparuj i połącz"
+msgstr "配对并连接"
 
 #: src/pm-window.c:3537
 msgid "Go to Home"
-msgstr "Przejdź do ekranu głównego"
+msgstr "返回主屏幕"
 
 #: src/pm-window.c:3538 src/pm-window.c:3746
 msgid "Continue"
-msgstr "Dalej"
+msgstr "继续"
 
 #: src/pm-window.c:3541
 msgid "First Time Setup"
-msgstr "Konfiguracja początkowa"
+msgstr "首次设置"
 
 #: src/pm-window.c:3608
 msgid "Welcome to Phone Mirror"
-msgstr "Witamy w aplikacji Klonowanie Telefonu"
+msgstr "欢迎使用手机镜像"
 
 #: src/pm-window.c:3609
 msgid ""
 "We will help you prepare your Android phone. Keep your phone nearby and "
 "connect it to the same Wi-Fi network as this computer."
-msgstr ""
-"Pomożemy Ci przygotować telefon z Androidem. Trzymaj telefon w pobliżu i "
-"połącz go z tą samą siecią Wi-Fi co ten komputer."
+msgstr "我们将帮助您准备 Android 手机。请将手机放在附近,并将其连接到与此计算机相同的 Wi-Fi 网络。"
 
 #: src/pm-window.c:3612
 msgid "Open Settings"
-msgstr "Otwórz Ustawienia"
+msgstr "打开设置"
 
 #: src/pm-window.c:3613
 msgid "Unlock your Android phone. Find the Settings app and open it."
-msgstr "Odblokuj telefon z Androidem. Znajdź aplikację Ustawienia i otwórz ją."
+msgstr "解锁您的 Android 手机。找到“设置”应用并打开它。"
 
 #: src/pm-window.c:3616
 msgid "Find About phone"
-msgstr "Znajdź Informacje o telefonie"
+msgstr "找到“关于手机”"
 
 #: src/pm-window.c:3617
 msgid ""
 "In Settings, scroll toward the bottom. Tap About phone. On some phones, open "
 "System first, then tap About phone."
-msgstr ""
-"W Ustawieniach przewiń w dół. Kliknij Informacje o telefonie. W niektórych "
-"telefonach otwórz najpierw System, a następnie kliknij Informacje o "
-"telefonie."
+msgstr "在“设置”中向下滚动。点按“关于手机”。在某些手机上,请先打开“系统”,然后点按“关于手机”。"
 
 #: src/pm-window.c:3620
 msgid "Turn on Developer options"
-msgstr "Włącz opcje programisty"
+msgstr "开启开发者选项"
 
 #: src/pm-window.c:3621
 msgid ""
 "Find Build number. Tap Build number seven times. If Android asks for your "
 "PIN, enter it. Stop when the phone says you are now a developer."
-msgstr ""
-"Znajdź Numer kompilacji. Kliknij Numer kompilacji siedem razy. Jeśli Android "
-"poprosi o kod PIN, wprowadź go. Przerwij, gdy telefon napisze, że jesteś "
-"teraz programistą."
+msgstr "找到“版本号”。点按“版本号”七次。如果 Android 要求输入 PIN,请输入。当手机提示您已成为开发者时停止。"
 
 #: src/pm-window.c:3624
 msgid "Turn on USB debugging"
-msgstr "Włącz debugowanie USB"
+msgstr "开启 USB 调试"
 
 #: src/pm-window.c:3625
 msgid ""
 "Go back to Settings. Open Developer options. On some phones, open System "
 "first, then turn on USB debugging. If Android asks, tap OK."
-msgstr ""
-"Wróć do Ustawień. Otwórz Opcje programisty. W niektórych telefonach otwórz "
-"najpierw System, a następnie włącz debugowanie USB. Jeśli Android zapyta, "
-"kliknij OK."
+msgstr "返回“设置”。打开开发者选项。在某些手机上,请先打开“系统”,然后开启 USB 调试。如果 Android 询问,请点按“确定”。"
 
 #: src/pm-window.c:3628
 msgid "Turn on Wireless debugging"
-msgstr "Włącz debugowanie bezprzewodowe"
+msgstr "开启无线调试"
 
 #: src/pm-window.c:3629
 msgid ""
 "Stay in Developer options. Turn on Wireless debugging. Keep your phone and "
 "this computer on the same network. If Android asks, tap Allow."
-msgstr ""
-"Pozostań w Opcjach programisty. Włącz debugowanie bezprzewodowe. Trzymaj "
-"telefon i ten komputer w tej samej sieci. Jeśli Android zapyta, kliknij "
-"Zezwól."
+msgstr "保持在开发者选项中。开启无线调试。让您的手机和此计算机处于同一网络。如果 Android 询问,请点按“允许”。"
 
 #: src/pm-window.c:3632
 msgid "Get the pairing code"
-msgstr "Pobierz kod parowania"
+msgstr "获取配对码"
 
 #: src/pm-window.c:3633
 msgid ""
 "Tap Wireless debugging, then Pair device with pairing code. Leave that "
 "screen open. On the home page, choose Set Up Device, enter the pairing "
 "address and code, then choose Pair & Connect."
-msgstr ""
-"Kliknij Debugowanie bezprzewodowe, a następnie Sparuj urządzenie za pomocą "
-"kodu parowania. Pozostaw ten ekran otwarty. Na stronie głównej wybierz "
-"Skonfiguruj urządzenie, wprowadź adres i kod parowania, a następnie wybierz "
-"Sparuj i połącz."
+msgstr "点按“无线调试”,然后点按“使用配对码配对设备”。保持该屏幕开启。在主页上,选择“设置设备”,输入配对地址和配对码,然后选择“配对并连接”。"
 
 #: src/pm-window.c:3647
 msgid "Welcome"
-msgstr "Witamy"
+msgstr "欢迎"
 
 #: src/pm-window.c:3648
 #, c-format
 msgid "Step %u of %u"
-msgstr "Krok %u z %u"
+msgstr "第 %u 步,共 %u 步"
 
 #: src/pm-window.c:3741
 msgid "Back"
-msgstr "Wstecz"
+msgstr "返回"
 
 #: src/pm-window.c:3781
 msgid "_Disconnect"
-msgstr "_Rozłącz"
+msgstr "断开连接(_D)"
 
 #: src/pm-window.c:3782
 msgid "_Lockscreen PIN…"
-msgstr "_PIN ekranu blokady…"
+msgstr "锁屏 PIN(_L)…"
 
 #: src/pm-window.c:3783
 msgid "_First Time Setup"
-msgstr "_Konfiguracja początkowa"
+msgstr "首次设置(_F)"
 
 #: src/pm-window.c:3789
 msgid "_Manual Connection…"
-msgstr "Połączenie _ręczne…"
+msgstr "手动连接(_M)…"
 
 #: src/pm-window.c:3790
 msgid "_Set Up Device…"
-msgstr "_Skonfiguruj urządzenie…"
+msgstr "设置设备(_S)…"
 
 #: src/pm-window.c:3796
 msgid "_Settings"
-msgstr "_Ustawienia"
+msgstr "设置(_S)"
 
 #: src/pm-window.c:3797
 msgid "_About Phone Mirror"
-msgstr "_O programie Klonowanie Telefonu"
+msgstr "关于手机镜像(_A)"
 
 #: src/pm-window.c:3802
 msgid "_Quit"
-msgstr "Za_kończ"
+msgstr "退出(_Q)"
 
 #: src/pm-window.c:3886
 msgid "Keep controls visible"
-msgstr "Pokazuj elementy sterujące"
+msgstr "保持控件可见"
 
 #: src/pm-window.c:3901
 msgid "Press Connect to look for your paired device."
-msgstr "Naciśnij Połącz, aby wyszukać sparowane urządzenie."
+msgstr "按“连接”查找已配对的设备。"
 
 #: src/pm-window.c:3906
 msgid "Connect"
-msgstr "Połącz"
+msgstr "连接"
 
 #: src/pm-window.c:3913
 msgid "Set Up Device…"
-msgstr "Skonfiguruj urządzenie…"
+msgstr "设置设备…"
 
 #: src/pm-connect-dialog.c:74
 msgid ""
 "OPTIONAL. Stored encrypted on this computer, keyed to the phone, and used to "
 "unlock its lockscreen automatically on connect. Otherwise, the app will show "
 "a black screen during unlocking phone."
-msgstr ""
-"OPCJONALNE. Przechowywany w postaci zaszyfrowanej na tym komputerze, "
-"powiązany z telefonem i używany do automatycznego odblokowywania jego ekranu "
-"blokady przy połączeniu. W przeciwnym razie aplikacja wyświetli czarny ekran "
-"podczas odblokowywania telefonu."
+msgstr "可选。以加密形式存储在此计算机上,与手机绑定,用于在连接时自动解锁其锁屏。否则,应用在解锁手机期间将显示黑屏。"
 
 #: src/pm-connect-dialog.c:104
 msgid "Enter the device IP address"
-msgstr "Wprowadź adres IP urządzenia"
+msgstr "输入设备 IP 地址"
 
 #: src/pm-connect-dialog.c:176
 msgid "Enter pairing address (ip:port) and code"
-msgstr "Wprowadź adres parowania (ip:port) i kod"
+msgstr "输入配对地址(ip:端口)和配对码"
 
 #: src/pm-connect-dialog.c:185
 msgid "Invalid pairing port"
-msgstr "Nieprawidłowy port parowania"
+msgstr "配对端口无效"
 
 #: src/pm-connect-dialog.c:193
 msgid "Pairing…"
-msgstr "Parowanie…"
+msgstr "正在配对…"
 
 #: src/pm-connect-dialog.c:240
 msgid "Android 11+: enable Wireless debugging → Pair device with code."
-msgstr ""
-"Android 11+: włącz debugowanie bezprzewodowe → Sparuj urządzenie za pomocą "
-"kodu."
+msgstr "Android 11+:启用无线调试 → 使用配对码配对设备。"
 
 #: src/pm-connect-dialog.c:266
 msgid "Connection"
-msgstr "Połączenie"
+msgstr "连接"
 
 #: src/pm-connect-dialog.c:268
 msgid ""
 "Enter the Wi-Fi debugging address only if automatic discovery cannot find "
 "the phone."
-msgstr ""
-"Wprowadź adres debugowania Wi-Fi tylko wtedy, gdy automatyczne wykrywanie "
-"nie może znaleźć telefonu."
+msgstr "仅当自动发现无法找到手机时,才输入 Wi-Fi 调试地址。"
 
 #: src/pm-connect-dialog.c:271
 msgid "IP address"
-msgstr "Adres IP"
+msgstr "IP 地址"
 
 #: src/pm-connect-dialog.c:273
 msgid "Port (default 5555)"
-msgstr "Port (domyślnie 5555)"
+msgstr "端口(默认 5555)"
 
 #: src/pm-connect-dialog.c:283
 msgid "Connect manually"
-msgstr "Połącz ręcznie"
+msgstr "手动连接"
 
 #: src/pm-connect-dialog.c:296
 msgid "Manual connection"
-msgstr "Połączenie ręczne"
+msgstr "手动连接"
 
 #: src/pm-settings-dialog.c:86
 msgid "Display"
-msgstr "Wyświetlanie"
+msgstr "显示"
 
 #: src/pm-settings-dialog.c:88
 msgid "Mirror"
-msgstr "Lustrzane odbicie"
+msgstr "镜像"
 
 #: src/pm-settings-dialog.c:88
 msgid "Virtual"
-msgstr "Wirtualny"
+msgstr "虚拟"
 
 #: src/pm-settings-dialog.c:91
 msgid "Display mode"
-msgstr "Tryb wyświetlania"
+msgstr "显示模式"
 
 #: src/pm-settings-dialog.c:93
 msgid ""
 "Mirror the phone's screen, or run a separate virtual display on the device."
-msgstr ""
-"Odbij lustrzanie ekran telefonu lub uruchom osobny wirtualny ekran na "
-"urządzeniu."
+msgstr "镜像手机屏幕,或在设备上运行单独的虚拟显示器。"
 
 #: src/pm-settings-dialog.c:101
 msgid "Width"
-msgstr "Szerokość"
+msgstr "宽度"
 
 #: src/pm-settings-dialog.c:103
 msgid "Virtual display width in pixels."
-msgstr "Szerokość wirtualnego ekranu w pikselach."
+msgstr "虚拟显示器的宽度(像素)。"
 
 #: src/pm-settings-dialog.c:107
 msgid "Height"
-msgstr "Wysokość"
+msgstr "高度"
 
 #: src/pm-settings-dialog.c:109
 msgid "Virtual display height in pixels."
-msgstr "Wysokość wirtualnego ekranu w pikselach."
+msgstr "虚拟显示器的高度(像素)。"
 
 #: src/pm-settings-dialog.c:113
 msgid "Density (DPI)"
-msgstr "Gęstość (DPI)"
+msgstr "密度(DPI)"
 
 #: src/pm-settings-dialog.c:115
 msgid "Pixel density of the virtual display."
-msgstr "Gęstość pikseli wirtualnego ekranu."
+msgstr "虚拟显示器的像素密度。"
 
 #: src/pm-settings-dialog.c:122
 msgid "Video bitrate (Mbps)"
-msgstr "Przepływność wideo (Mb/s)"
+msgstr "视频比特率(Mbps)"
 
 #: src/pm-settings-dialog.c:124
 msgid "Lower it to save bandwidth. Reconnects to apply."
-msgstr ""
-"Zmniejsz, aby oszczędzać przepustowość. Wymaga ponownego połączenia, aby "
-"zastosować."
+msgstr "降低它以节省带宽。重新连接后生效。"
 
 #: src/pm-settings-dialog.c:132
 msgid "Turn off phone screen"
-msgstr "Wyłącz ekran telefonu"
+msgstr "关闭手机屏幕"
 
 #: src/pm-settings-dialog.c:134
 msgid ""
 "Dark the phone's panel to save battery once you unlock it. Reconnects to "
 "apply."
-msgstr ""
-"Wygaś panel telefonu, aby oszczędzać baterię po jego odblokowaniu. Wymaga "
-"ponownego połączenia, aby zastosować."
+msgstr "解锁后熄灭手机面板以节省电量。重新连接后生效。"
 
 #: src/pm-settings-dialog.c:138
 msgid "Window"
-msgstr "Okno"
+msgstr "窗口"
 
 #: src/pm-settings-dialog.c:142
 msgid "Free resize"
-msgstr "Swobodna zmiana rozmiaru"
+msgstr "自由调整大小"
 
 #: src/pm-settings-dialog.c:144
 msgid "Resize the window freely instead of keeping the phone's aspect ratio."
-msgstr ""
-"Zmieniaj rozmiar okna swobodnie zamiast zachowywać proporcje ekranu telefonu."
+msgstr "自由调整窗口大小,而不保持手机的宽高比。"
 
 #: src/pm-settings-dialog.c:148
 msgid "Input"
-msgstr "Sterowanie"
+msgstr "输入"
 
 #: src/pm-settings-dialog.c:150
 msgid "Mouse"
-msgstr "Mysz"
+msgstr "鼠标"
 
 #: src/pm-settings-dialog.c:150
 msgid "Touch"
-msgstr "Dotyk"
+msgstr "触摸"
 
 #: src/pm-settings-dialog.c:153
 msgid "Pointer input"
-msgstr "Wprowadzanie wskaźnikiem"
+msgstr "指针输入"
 
 #: src/pm-settings-dialog.c:155
 msgid "How mouse input is sent to the phone."
-msgstr "Sposób przekazywania ruchu myszy do telefonu."
+msgstr "如何将鼠标输入发送到手机。"
 
 #: src/pm-settings-dialog.c:161
 msgid "Audio"
-msgstr "Dźwięk"
+msgstr "音频"
 
 #: src/pm-settings-dialog.c:165
 msgid "Play phone audio"
-msgstr "Odtwarzaj dźwięk telefonu"
+msgstr "播放手机音频"
 
 #: src/pm-settings-dialog.c:167
 msgid "Route the phone's sound to this computer. Reconnects to apply."
-msgstr ""
-"Przekieruj dźwięk telefonu na ten komputer. Wymaga ponownego połączenia, aby "
-"zastosować."
+msgstr "将手机的声音路由到此计算机。重新连接后生效。"
 
 #: src/pm-session.c:186
 msgid "Mirroring a connected phone"
-msgstr "Wyświetlanie obrazu z podłączonego telefonu"
+msgstr "正在镜像已连接的手机"
 
 #: src/pm-session.c:371
 #, c-format
 msgid "scrcpy-server exited with status %d"
-msgstr "Serwer scrcpy zakończył działanie z kodem %d"
+msgstr "scrcpy-server 已退出,状态为 %d"
 
 #: src/pm-session.c:399
 #, c-format
 msgid "timed out waiting for scrcpy-server socket%s%s"
-msgstr "Przekroczono czas oczekiwania na gniazdo serwera scrcpy%s%s"
+msgstr "等待 scrcpy-server 套接字超时%s%s"
 
 #: src/pm-session.c:646
 msgid "Connecting to device…"
-msgstr "Łączenie z urządzeniem…"
+msgstr "正在连接到设备…"
 
 #: src/pm-session.c:653
 msgid ""
 "Could not find scrcpy-server. Install scrcpy or set PM_SERVER_JAR to the "
 "server path."
-msgstr ""
-"Nie znaleziono serwera scrcpy. Zainstaluj scrcpy lub ustaw zmienną "
-"PM_SERVER_JAR na ścieżkę do serwera."
+msgstr "找不到 scrcpy-server。请安装 scrcpy,或将 PM_SERVER_JAR 设置为服务器路径。"
 
 #: src/pm-session.c:660
 msgid ""
 "Could not determine scrcpy-server version. Install scrcpy or set "
 "PM_SCRCPY_VERSION to match your server."
-msgstr ""
-"Nie można ustalić wersji serwera scrcpy. Zainstaluj scrcpy lub ustaw zmienną "
-"PM_SCRCPY_VERSION zgodnie z wersją serwera."
+msgstr "无法确定 scrcpy-server 的版本。请安装 scrcpy,或将 PM_SCRCPY_VERSION 设置为与您的服务器匹配。"
 
 #: src/pm-session.c:718
 msgid "Connecting with adb…"
-msgstr "Łączenie przez adb…"
+msgstr "正在通过 adb 连接…"
 
 #: src/pm-session.c:734
 msgid "Installing mirror server…"
-msgstr "Instalowanie serwera kopii lustrzanej…"
+msgstr "正在安装镜像服务器…"
 
 #: src/pm-session.c:740
 msgid "Opening mirror socket…"
-msgstr "Otwieranie gniazda kopii lustrzanej…"
+msgstr "正在打开镜像套接字…"
 
 #: src/pm-session.c:746
 msgid "Starting mirror server…"
-msgstr "Uruchamianie serwera kopii lustrzanej…"
+msgstr "正在启动镜像服务器…"
 
 #: src/pm-session.c:753
 msgid "Connecting video stream…"
-msgstr "Łączenie strumienia wideo…"
+msgstr "正在连接视频流…"
 
 #: src/pm-session.c:764
 msgid "Connecting audio stream…"
-msgstr "Łączenie strumienia dźwięku…"
+msgstr "正在连接音频流…"
 
 #: src/pm-session.c:771
 msgid "Connecting controls…"
-msgstr "Łączenie sterowania…"
+msgstr "正在连接控制…"
 
 #: src/pm-session.c:782
 msgid "Reading video stream…"
-msgstr "Odczytywanie strumienia wideo…"
+msgstr "正在读取视频流…"
 
 #: src/pm-session.c:929
 #, c-format
 msgid "%s failed: %s%s"
-msgstr "%s — niepowodzenie: %s%s"
+msgstr "%s 失败:%s%s"
 
 #: src/pm-session.c:931
 msgid "connection failed"
-msgstr "połączenie nie powiodło się"
+msgstr "连接失败"
 
 #: src/pm-session.c:994
 msgid "Found device — starting mirror server…"
-msgstr "Znaleziono urządzenie — uruchamianie serwera kopii lustrzanej…"
+msgstr "已找到设备 — 正在启动镜像服务器…"
 
 #: src/pm-session.c:1063
 msgid ""
 "No phone found. Use Set Up Device to enter your phone's Wireless debugging "
 "address."
-msgstr ""
-"Nie znaleziono telefonu. Użyj opcji Skonfiguruj urządzenie, aby wprowadzić "
-"adres debugowania bezprzewodowego telefonu."
+msgstr "未找到手机。请使用“设置设备”输入手机的无线调试地址。"

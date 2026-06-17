@@ -1993,8 +1993,6 @@ pm_setup_draw_text_fit (cairo_t    *cr,
                         double      blue,
                         double      alpha)
 {
-  char clipped[128];
-
   if (text == NULL || max_width <= 0.0)
     return;
 
@@ -2002,13 +2000,12 @@ pm_setup_draw_text_fit (cairo_t    *cr,
     pm_setup_draw_text (cr, text, x, baseline, size, bold, red, green, blue, alpha);
     return;
   }
+  
+  for (const char *p = g_utf8_find_prev_char (text, text + strlen (text));
+       p != NULL && p > text;
+       p = g_utf8_find_prev_char (text, p)) {
+    g_autofree char *ellipsized = g_strdup_printf ("%.*s...", (int) (p - text), text);
 
-  g_strlcpy (clipped, text, sizeof clipped);
-  while (strlen (clipped) > 3) {
-    char ellipsized[128];
-
-    clipped[strlen (clipped) - 1] = '\0';
-    g_snprintf (ellipsized, sizeof ellipsized, "%s...", clipped);
     if (pm_setup_text_width (cr, ellipsized, size, bold) <= max_width) {
       pm_setup_draw_text (cr,
                           ellipsized,

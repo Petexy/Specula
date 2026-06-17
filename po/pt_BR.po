@@ -1,111 +1,108 @@
-# Polish translation for Specula.
+# Portuguese (Brazil) translation for Specula.
 # Copyright (C) 2026 Piotr Lewandowski
 # This file is distributed under the same license as the specula package.
-# Piotr Lewandowski <piotr.petexiness@gmail.com>, 2026.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: specula 0.3.0\n"
 "Report-Msgid-Bugs-To: piotr.petexiness@gmail.com\n"
 "POT-Creation-Date: 2026-06-17 20:34+0200\n"
-"PO-Revision-Date: 2026-06-17 18:10+0200\n"
-"Last-Translator: Piotr Lewandowski <piotr.petexiness@gmail.com>\n"
-"Language-Team: Polish\n"
-"Language: pl\n"
+"PO-Revision-Date: 2026-06-17 21:30+0200\n"
+"Last-Translator: Specula <piotr.petexiness@gmail.com>\n"
+"Language-Team: Portuguese (Brazil)\n"
+"Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
-"|| n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
 
 #: src/pm-application.c:59 src/pm-window.c:1060 src/pm-window.c:1068
 #: src/pm-window.c:3856 src/pm-window.c:3875
 msgid "Phone Mirror"
-msgstr "Klonowanie Telefonu"
+msgstr "Espelhamento do telefone"
 
 #: src/pm-window.c:1070
 msgid "Press Connect to find your phone automatically."
-msgstr "Naciśnij Połącz, aby automatycznie znaleźć telefon."
+msgstr "Pressione Conectar para encontrar seu telefone automaticamente."
 
 #: src/pm-window.c:1078
 msgid "Searching…"
-msgstr "Wyszukiwanie…"
+msgstr "Procurando…"
 
 #: src/pm-window.c:1080
 msgid "Looking for your phone on the local network."
-msgstr "Wyszukiwanie telefonu w sieci lokalnej."
+msgstr "Procurando seu telefone na rede local."
 
 #: src/pm-window.c:1088
 msgid "Connecting…"
-msgstr "Łączenie…"
+msgstr "Conectando…"
 
 #: src/pm-window.c:1090
 msgid "Starting the mirror server on your device."
-msgstr "Uruchamianie serwera kopii lustrzanej na urządzeniu."
+msgstr "Iniciando o servidor de espelhamento no seu dispositivo."
 
 #: src/pm-window.c:1110
 msgid "Connection failed"
-msgstr "Połączenie nie powiodło się"
+msgstr "Falha na conexão"
 
 #: src/pm-window.c:1112
 msgid "Could not reach the device."
-msgstr "Nie można połączyć się z urządzeniem."
+msgstr "Não foi possível acessar o dispositivo."
 
 #: src/pm-window.c:1651 src/pm-window.c:1664 src/pm-connect-dialog.c:79
 msgid "Lockscreen PIN"
-msgstr "PIN ekranu blokady"
+msgstr "PIN da tela de bloqueio"
 
 #: src/pm-window.c:1658 src/pm-connect-dialog.c:72
 msgid "Auto-unlock"
-msgstr "Automatyczne odblokowanie"
+msgstr "Desbloqueio automático"
 
 #: src/pm-window.c:1660
 msgid ""
 "Stored encrypted on this computer, tied to this phone, and used to unlock it "
 "automatically when it connects."
-msgstr ""
-"Przechowywany w postaci zaszyfrowanej na tym komputerze, powiązany z tym "
-"telefonem i używany do automatycznego odblokowywania go przy połączeniu."
+msgstr "Armazenado de forma criptografada neste computador, vinculado a este telefone e usado para desbloqueá-lo automaticamente ao conectar."
 
 #: src/pm-window.c:1673
 msgid "Save"
-msgstr "Zapisz"
+msgstr "Salvar"
 
 #: src/pm-window.c:1676
 msgid "Remove"
-msgstr "Usuń"
+msgstr "Remover"
 
 #: src/pm-window.c:1804
 msgid "Network & internet"
-msgstr "Sieć i internet"
+msgstr "Rede e internet"
 
 #: src/pm-window.c:1804
 msgid "Wi-Fi, SIM, hotspot"
-msgstr "Wi-Fi, SIM, hotspot"
+msgstr "Wi-Fi, SIM, ponto de acesso"
 
 #: src/pm-window.c:1805
 msgid "Connected devices"
-msgstr "Połączone urządzenia"
+msgstr "Dispositivos conectados"
 
 #: src/pm-window.c:1805
 msgid "Bluetooth, pairing"
-msgstr "Bluetooth, parowanie"
+msgstr "Bluetooth, pareamento"
 
 #: src/pm-window.c:1806
 msgid "Apps"
-msgstr "Aplikacje"
+msgstr "Aplicativos"
 
 #: src/pm-window.c:1806
 msgid "Permissions and defaults"
-msgstr "Uprawnienia i ustawienia domyślne"
+msgstr "Permissões e padrões"
 
 #: src/pm-window.c:1807
 msgid "Notifications"
-msgstr "Powiadomienia"
+msgstr "Notificações"
 
 #: src/pm-window.c:1807
 msgid "History and conversations"
-msgstr "Historia i rozmowy"
+msgstr "Histórico e conversas"
 
 #: src/pm-window.c:1808
 msgid "Battery"
@@ -113,134 +110,134 @@ msgstr "Bateria"
 
 #: src/pm-window.c:1808
 msgid "87%, until 10:30 PM"
-msgstr "87%, do 22:30"
+msgstr "87%, até 22:30"
 
 #: src/pm-window.c:1809
 msgid "System"
-msgstr "System"
+msgstr "Sistema"
 
 #: src/pm-window.c:1809
 msgid "Languages, gestures, time"
-msgstr "Języki, gesty, czas"
+msgstr "Idiomas, gestos, hora"
 
 #: src/pm-window.c:1810 src/pm-window.c:2860 src/pm-window.c:2893
 #: src/pm-window.c:2970
 msgid "About phone"
-msgstr "Informacje o telefonie"
+msgstr "Sobre o telefone"
 
 #: src/pm-window.c:1810
 msgid "Model, Android version"
-msgstr "Model, wersja Androida"
+msgstr "Modelo, versão do Android"
 
 #: src/pm-window.c:1811 src/pm-window.c:2983 src/pm-window.c:3040
 msgid "Developer options"
-msgstr "Opcje programisty"
+msgstr "Opções do desenvolvedor"
 
 #: src/pm-window.c:1811
 msgid "Debugging and input"
-msgstr "Debugowanie i wprowadzanie"
+msgstr "Depuração e entrada"
 
 #: src/pm-window.c:1821 src/pm-window.c:3025
 msgid "Device name"
-msgstr "Nazwa urządzenia"
+msgstr "Nome do dispositivo"
 
 #: src/pm-window.c:1821
 msgid "Pixel phone"
-msgstr "Telefon Pixel"
+msgstr "Telefone Pixel"
 
 #: src/pm-window.c:1822
 msgid "Android version"
-msgstr "Wersja Androida"
+msgstr "Versão do Android"
 
 #: src/pm-window.c:1822
 msgid "Version and security update"
-msgstr "Wersja i aktualizacja zabezpieczeń"
+msgstr "Versão e atualização de segurança"
 
 #: src/pm-window.c:1823
 msgid "Build number"
-msgstr "Numer kompilacji"
+msgstr "Número da versão"
 
 #: src/pm-window.c:1823
 msgid "Tap seven times"
-msgstr "Kliknij siedem razy"
+msgstr "Toque sete vezes"
 
 #: src/pm-window.c:1840
 msgid "Use developer options"
-msgstr "Użyj opcji programisty"
+msgstr "Usar opções do desenvolvedor"
 
 #: src/pm-window.c:1840 src/pm-window.c:3085
 msgid "On"
-msgstr "Wł."
+msgstr "Ativado"
 
 #: src/pm-window.c:1841
 msgid "USB debugging"
-msgstr "Debugowanie USB"
+msgstr "Depuração USB"
 
 #: src/pm-window.c:1841
 msgid "Debug mode when USB is connected"
-msgstr "Tryb debugowania, gdy podłączono USB"
+msgstr "Modo de depuração quando o USB está conectado"
 
 #: src/pm-window.c:1842 src/pm-window.c:3050 src/pm-window.c:3100
 msgid "Wireless debugging"
-msgstr "Debugowanie bezprzewodowe"
+msgstr "Depuração sem fio"
 
 #: src/pm-window.c:1842
 msgid "Debug over Wi-Fi"
-msgstr "Debugowanie przez Wi-Fi"
+msgstr "Depurar por Wi-Fi"
 
 #: src/pm-window.c:1843
 msgid "Revoke debugging authorizations"
-msgstr "Cofnij autoryzacje debugowania"
+msgstr "Revogar autorizações de depuração"
 
 #: src/pm-window.c:2217
 msgid "Phone"
-msgstr "Telefon"
+msgstr "Telefone"
 
 #: src/pm-window.c:2218
 msgid "Messages"
-msgstr "Wiadomości"
+msgstr "Mensagens"
 
 #: src/pm-window.c:2219
 msgid "Photos"
-msgstr "Zdjęcia"
+msgstr "Fotos"
 
 #: src/pm-window.c:2220
 msgid "Camera"
-msgstr "Aparat"
+msgstr "Câmera"
 
 #: src/pm-window.c:2221 src/pm-window.c:2818 src/pm-window.c:2850
 #: src/pm-window.c:2957 src/pm-settings-dialog.c:76
 msgid "Settings"
-msgstr "Ustawienia"
+msgstr "Configurações"
 
 #: src/pm-window.c:2222
 msgid "Files"
-msgstr "Pliki"
+msgstr "Arquivos"
 
 #: src/pm-window.c:2245
 msgid "Search your phone"
-msgstr "Przeszukaj telefon"
+msgstr "Pesquisar no telefone"
 
 #: src/pm-window.c:2623
 msgid "Cancel"
-msgstr "Anuluj"
+msgstr "Cancelar"
 
 #: src/pm-window.c:2902
 #, c-format
 msgid "Tap %d of 7"
-msgstr "Kliknięcie %d z 7"
+msgstr "Toque %d de 7"
 
 #: src/pm-window.c:2927
 msgid "You are now a developer!"
-msgstr "Jesteś teraz programistą!"
+msgstr "Agora você é um desenvolvedor!"
 
 #: src/pm-window.c:3007
 msgid "Allow USB debugging?"
-msgstr "Zezwolić na debugowanie USB?"
+msgstr "Permitir depuração USB?"
 
 #: src/pm-window.c:3008
 msgid "Computer RSA key fingerprint"
-msgstr "Odcisk klucza RSA komputera"
+msgstr "Impressão digital da chave RSA do computador"
 
 #: src/pm-window.c:3009
 msgid "OK"
@@ -248,508 +245,467 @@ msgstr "OK"
 
 #: src/pm-window.c:3023 src/pm-window.c:3085
 msgid "Use wireless debugging"
-msgstr "Użyj debugowania bezprzewodowego"
+msgstr "Usar depuração sem fio"
 
 #: src/pm-window.c:3023
 msgid "Current Wi-Fi network"
-msgstr "Bieżąca sieć Wi-Fi"
+msgstr "Rede Wi-Fi atual"
 
 #: src/pm-window.c:3024
 msgid "Wi-Fi network"
-msgstr "Sieć Wi-Fi"
+msgstr "Rede Wi-Fi"
 
 #: src/pm-window.c:3024
 msgid "Same network as Linux"
-msgstr "Ta sama sieć co Linux"
+msgstr "Mesma rede que o Linux"
 
 #: src/pm-window.c:3025
 msgid "Android device"
-msgstr "Urządzenie z Androidem"
+msgstr "Dispositivo Android"
 
 #: src/pm-window.c:3069
 msgid "Allow wireless debugging?"
-msgstr "Zezwolić na debugowanie bezprzewodowe?"
+msgstr "Permitir depuração sem fio?"
 
 #: src/pm-window.c:3070
 msgid "Allow on this Wi-Fi network"
-msgstr "Zezwól w tej sieci Wi-Fi"
+msgstr "Permitir nesta rede Wi-Fi"
 
 #: src/pm-window.c:3071
 msgid "Allow"
-msgstr "Zezwól"
+msgstr "Permitir"
 
 #: src/pm-window.c:3086
 msgid "Pair device with code"
-msgstr "Sparuj urządzenie za pomocą kodu"
+msgstr "Parear dispositivo com código"
 
 #: src/pm-window.c:3086
 msgid "Shows code and address"
-msgstr "Pokazuje kod i adres"
+msgstr "Mostra o código e o endereço"
 
 #: src/pm-window.c:3087
 msgid "IP address & port"
-msgstr "Adres IP i port"
+msgstr "Endereço IP e porta"
 
 #: src/pm-window.c:3090 src/pm-window.c:3282 src/pm-connect-dialog.c:246
 msgid "Pairing code"
-msgstr "Kod parowania"
+msgstr "Código de pareamento"
 
 #: src/pm-window.c:3091
 msgid "Pairing address"
-msgstr "Adres parowania"
+msgstr "Endereço de pareamento"
 
 #: src/pm-window.c:3092
 msgid "Keep this screen open"
-msgstr "Pozostaw ten ekran otwarty"
+msgstr "Mantenha esta tela aberta"
 
 #: src/pm-window.c:3092
 msgid "Code expires soon"
-msgstr "Kod wkrótce wygaśnie"
+msgstr "O código expira em breve"
 
 #: src/pm-window.c:3110
 msgid "Pair device"
-msgstr "Sparuj urządzenie"
+msgstr "Parear dispositivo"
 
 #: src/pm-window.c:3246 src/pm-connect-dialog.c:257
 msgid "Set up device"
-msgstr "Skonfiguruj urządzenie"
+msgstr "Configurar dispositivo"
 
 #: src/pm-window.c:3257 src/pm-connect-dialog.c:238
 msgid "Pairing"
-msgstr "Parowanie"
+msgstr "Pareamento"
 
 #: src/pm-window.c:3267
 msgid "Android 11+: Pair device with code."
-msgstr "Android 11+: Sparuj urządzenie za pomocą kodu."
+msgstr "Android 11+: pareie o dispositivo com código."
 
 #: src/pm-window.c:3279 src/pm-connect-dialog.c:244
 msgid "Pairing address (ip:port)"
-msgstr "Adres parowania (ip:port)"
+msgstr "Endereço de pareamento (ip:porta)"
 
 #: src/pm-window.c:3296 src/pm-connect-dialog.c:254
 msgid "Pair & Connect"
-msgstr "Sparuj i połącz"
+msgstr "Parear e conectar"
 
 #: src/pm-window.c:3537
 msgid "Go to Home"
-msgstr "Przejdź do ekranu głównego"
+msgstr "Ir para a tela inicial"
 
 #: src/pm-window.c:3538 src/pm-window.c:3746
 msgid "Continue"
-msgstr "Dalej"
+msgstr "Continuar"
 
 #: src/pm-window.c:3541
 msgid "First Time Setup"
-msgstr "Konfiguracja początkowa"
+msgstr "Configuração inicial"
 
 #: src/pm-window.c:3608
 msgid "Welcome to Phone Mirror"
-msgstr "Witamy w aplikacji Klonowanie Telefonu"
+msgstr "Bem-vindo ao Espelhamento do telefone"
 
 #: src/pm-window.c:3609
 msgid ""
 "We will help you prepare your Android phone. Keep your phone nearby and "
 "connect it to the same Wi-Fi network as this computer."
-msgstr ""
-"Pomożemy Ci przygotować telefon z Androidem. Trzymaj telefon w pobliżu i "
-"połącz go z tą samą siecią Wi-Fi co ten komputer."
+msgstr "Vamos ajudá-lo a preparar seu telefone Android. Mantenha seu telefone por perto e conecte-o à mesma rede Wi-Fi que este computador."
 
 #: src/pm-window.c:3612
 msgid "Open Settings"
-msgstr "Otwórz Ustawienia"
+msgstr "Abrir Configurações"
 
 #: src/pm-window.c:3613
 msgid "Unlock your Android phone. Find the Settings app and open it."
-msgstr "Odblokuj telefon z Androidem. Znajdź aplikację Ustawienia i otwórz ją."
+msgstr "Desbloqueie seu telefone Android. Encontre o aplicativo Configurações e abra-o."
 
 #: src/pm-window.c:3616
 msgid "Find About phone"
-msgstr "Znajdź Informacje o telefonie"
+msgstr "Encontrar Sobre o telefone"
 
 #: src/pm-window.c:3617
 msgid ""
 "In Settings, scroll toward the bottom. Tap About phone. On some phones, open "
 "System first, then tap About phone."
-msgstr ""
-"W Ustawieniach przewiń w dół. Kliknij Informacje o telefonie. W niektórych "
-"telefonach otwórz najpierw System, a następnie kliknij Informacje o "
-"telefonie."
+msgstr "Em Configurações, role até o final. Toque em Sobre o telefone. Em alguns telefones, abra primeiro Sistema e depois toque em Sobre o telefone."
 
 #: src/pm-window.c:3620
 msgid "Turn on Developer options"
-msgstr "Włącz opcje programisty"
+msgstr "Ativar opções do desenvolvedor"
 
 #: src/pm-window.c:3621
 msgid ""
 "Find Build number. Tap Build number seven times. If Android asks for your "
 "PIN, enter it. Stop when the phone says you are now a developer."
-msgstr ""
-"Znajdź Numer kompilacji. Kliknij Numer kompilacji siedem razy. Jeśli Android "
-"poprosi o kod PIN, wprowadź go. Przerwij, gdy telefon napisze, że jesteś "
-"teraz programistą."
+msgstr "Encontre o Número da versão. Toque no Número da versão sete vezes. Se o Android pedir seu PIN, digite-o. Pare quando o telefone disser que agora você é um desenvolvedor."
 
 #: src/pm-window.c:3624
 msgid "Turn on USB debugging"
-msgstr "Włącz debugowanie USB"
+msgstr "Ativar depuração USB"
 
 #: src/pm-window.c:3625
 msgid ""
 "Go back to Settings. Open Developer options. On some phones, open System "
 "first, then turn on USB debugging. If Android asks, tap OK."
-msgstr ""
-"Wróć do Ustawień. Otwórz Opcje programisty. W niektórych telefonach otwórz "
-"najpierw System, a następnie włącz debugowanie USB. Jeśli Android zapyta, "
-"kliknij OK."
+msgstr "Volte para Configurações. Abra as opções do desenvolvedor. Em alguns telefones, abra primeiro Sistema e depois ative a depuração USB. Se o Android perguntar, toque em OK."
 
 #: src/pm-window.c:3628
 msgid "Turn on Wireless debugging"
-msgstr "Włącz debugowanie bezprzewodowe"
+msgstr "Ativar depuração sem fio"
 
 #: src/pm-window.c:3629
 msgid ""
 "Stay in Developer options. Turn on Wireless debugging. Keep your phone and "
 "this computer on the same network. If Android asks, tap Allow."
-msgstr ""
-"Pozostań w Opcjach programisty. Włącz debugowanie bezprzewodowe. Trzymaj "
-"telefon i ten komputer w tej samej sieci. Jeśli Android zapyta, kliknij "
-"Zezwól."
+msgstr "Permaneça nas opções do desenvolvedor. Ative a depuração sem fio. Mantenha seu telefone e este computador na mesma rede. Se o Android perguntar, toque em Permitir."
 
 #: src/pm-window.c:3632
 msgid "Get the pairing code"
-msgstr "Pobierz kod parowania"
+msgstr "Obter o código de pareamento"
 
 #: src/pm-window.c:3633
 msgid ""
 "Tap Wireless debugging, then Pair device with pairing code. Leave that "
 "screen open. On the home page, choose Set Up Device, enter the pairing "
 "address and code, then choose Pair & Connect."
-msgstr ""
-"Kliknij Debugowanie bezprzewodowe, a następnie Sparuj urządzenie za pomocą "
-"kodu parowania. Pozostaw ten ekran otwarty. Na stronie głównej wybierz "
-"Skonfiguruj urządzenie, wprowadź adres i kod parowania, a następnie wybierz "
-"Sparuj i połącz."
+msgstr "Toque em Depuração sem fio e depois em Parear dispositivo com código de pareamento. Deixe essa tela aberta. Na página inicial, escolha Configurar dispositivo, insira o endereço e o código de pareamento e escolha Parear e conectar."
 
 #: src/pm-window.c:3647
 msgid "Welcome"
-msgstr "Witamy"
+msgstr "Bem-vindo"
 
 #: src/pm-window.c:3648
 #, c-format
 msgid "Step %u of %u"
-msgstr "Krok %u z %u"
+msgstr "Etapa %u de %u"
 
 #: src/pm-window.c:3741
 msgid "Back"
-msgstr "Wstecz"
+msgstr "Voltar"
 
 #: src/pm-window.c:3781
 msgid "_Disconnect"
-msgstr "_Rozłącz"
+msgstr "_Desconectar"
 
 #: src/pm-window.c:3782
 msgid "_Lockscreen PIN…"
-msgstr "_PIN ekranu blokady…"
+msgstr "_PIN da tela de bloqueio…"
 
 #: src/pm-window.c:3783
 msgid "_First Time Setup"
-msgstr "_Konfiguracja początkowa"
+msgstr "_Configuração inicial"
 
 #: src/pm-window.c:3789
 msgid "_Manual Connection…"
-msgstr "Połączenie _ręczne…"
+msgstr "Conexão _manual…"
 
 #: src/pm-window.c:3790
 msgid "_Set Up Device…"
-msgstr "_Skonfiguruj urządzenie…"
+msgstr "_Configurar dispositivo…"
 
 #: src/pm-window.c:3796
 msgid "_Settings"
-msgstr "_Ustawienia"
+msgstr "_Configurações"
 
 #: src/pm-window.c:3797
 msgid "_About Phone Mirror"
-msgstr "_O programie Klonowanie Telefonu"
+msgstr "_Sobre o Espelhamento do telefone"
 
 #: src/pm-window.c:3802
 msgid "_Quit"
-msgstr "Za_kończ"
+msgstr "_Sair"
 
 #: src/pm-window.c:3886
 msgid "Keep controls visible"
-msgstr "Pokazuj elementy sterujące"
+msgstr "Manter os controles visíveis"
 
 #: src/pm-window.c:3901
 msgid "Press Connect to look for your paired device."
-msgstr "Naciśnij Połącz, aby wyszukać sparowane urządzenie."
+msgstr "Pressione Conectar para procurar seu dispositivo pareado."
 
 #: src/pm-window.c:3906
 msgid "Connect"
-msgstr "Połącz"
+msgstr "Conectar"
 
 #: src/pm-window.c:3913
 msgid "Set Up Device…"
-msgstr "Skonfiguruj urządzenie…"
+msgstr "Configurar dispositivo…"
 
 #: src/pm-connect-dialog.c:74
 msgid ""
 "OPTIONAL. Stored encrypted on this computer, keyed to the phone, and used to "
 "unlock its lockscreen automatically on connect. Otherwise, the app will show "
 "a black screen during unlocking phone."
-msgstr ""
-"OPCJONALNE. Przechowywany w postaci zaszyfrowanej na tym komputerze, "
-"powiązany z telefonem i używany do automatycznego odblokowywania jego ekranu "
-"blokady przy połączeniu. W przeciwnym razie aplikacja wyświetli czarny ekran "
-"podczas odblokowywania telefonu."
+msgstr "OPCIONAL. Armazenado de forma criptografada neste computador, vinculado ao telefone e usado para desbloquear automaticamente sua tela de bloqueio ao conectar. Caso contrário, o aplicativo mostrará uma tela preta durante o desbloqueio do telefone."
 
 #: src/pm-connect-dialog.c:104
 msgid "Enter the device IP address"
-msgstr "Wprowadź adres IP urządzenia"
+msgstr "Insira o endereço IP do dispositivo"
 
 #: src/pm-connect-dialog.c:176
 msgid "Enter pairing address (ip:port) and code"
-msgstr "Wprowadź adres parowania (ip:port) i kod"
+msgstr "Insira o endereço de pareamento (ip:porta) e o código"
 
 #: src/pm-connect-dialog.c:185
 msgid "Invalid pairing port"
-msgstr "Nieprawidłowy port parowania"
+msgstr "Porta de pareamento inválida"
 
 #: src/pm-connect-dialog.c:193
 msgid "Pairing…"
-msgstr "Parowanie…"
+msgstr "Pareando…"
 
 #: src/pm-connect-dialog.c:240
 msgid "Android 11+: enable Wireless debugging → Pair device with code."
-msgstr ""
-"Android 11+: włącz debugowanie bezprzewodowe → Sparuj urządzenie za pomocą "
-"kodu."
+msgstr "Android 11+: ative a depuração sem fio → Parear dispositivo com código."
 
 #: src/pm-connect-dialog.c:266
 msgid "Connection"
-msgstr "Połączenie"
+msgstr "Conexão"
 
 #: src/pm-connect-dialog.c:268
 msgid ""
 "Enter the Wi-Fi debugging address only if automatic discovery cannot find "
 "the phone."
-msgstr ""
-"Wprowadź adres debugowania Wi-Fi tylko wtedy, gdy automatyczne wykrywanie "
-"nie może znaleźć telefonu."
+msgstr "Insira o endereço de depuração Wi-Fi somente se a descoberta automática não conseguir encontrar o telefone."
 
 #: src/pm-connect-dialog.c:271
 msgid "IP address"
-msgstr "Adres IP"
+msgstr "Endereço IP"
 
 #: src/pm-connect-dialog.c:273
 msgid "Port (default 5555)"
-msgstr "Port (domyślnie 5555)"
+msgstr "Porta (padrão 5555)"
 
 #: src/pm-connect-dialog.c:283
 msgid "Connect manually"
-msgstr "Połącz ręcznie"
+msgstr "Conectar manualmente"
 
 #: src/pm-connect-dialog.c:296
 msgid "Manual connection"
-msgstr "Połączenie ręczne"
+msgstr "Conexão manual"
 
 #: src/pm-settings-dialog.c:86
 msgid "Display"
-msgstr "Wyświetlanie"
+msgstr "Tela"
 
 #: src/pm-settings-dialog.c:88
 msgid "Mirror"
-msgstr "Lustrzane odbicie"
+msgstr "Espelho"
 
 #: src/pm-settings-dialog.c:88
 msgid "Virtual"
-msgstr "Wirtualny"
+msgstr "Virtual"
 
 #: src/pm-settings-dialog.c:91
 msgid "Display mode"
-msgstr "Tryb wyświetlania"
+msgstr "Modo de exibição"
 
 #: src/pm-settings-dialog.c:93
 msgid ""
 "Mirror the phone's screen, or run a separate virtual display on the device."
-msgstr ""
-"Odbij lustrzanie ekran telefonu lub uruchom osobny wirtualny ekran na "
-"urządzeniu."
+msgstr "Espelhe a tela do telefone ou execute uma tela virtual separada no dispositivo."
 
 #: src/pm-settings-dialog.c:101
 msgid "Width"
-msgstr "Szerokość"
+msgstr "Largura"
 
 #: src/pm-settings-dialog.c:103
 msgid "Virtual display width in pixels."
-msgstr "Szerokość wirtualnego ekranu w pikselach."
+msgstr "Largura da tela virtual em pixels."
 
 #: src/pm-settings-dialog.c:107
 msgid "Height"
-msgstr "Wysokość"
+msgstr "Altura"
 
 #: src/pm-settings-dialog.c:109
 msgid "Virtual display height in pixels."
-msgstr "Wysokość wirtualnego ekranu w pikselach."
+msgstr "Altura da tela virtual em pixels."
 
 #: src/pm-settings-dialog.c:113
 msgid "Density (DPI)"
-msgstr "Gęstość (DPI)"
+msgstr "Densidade (DPI)"
 
 #: src/pm-settings-dialog.c:115
 msgid "Pixel density of the virtual display."
-msgstr "Gęstość pikseli wirtualnego ekranu."
+msgstr "Densidade de pixels da tela virtual."
 
 #: src/pm-settings-dialog.c:122
 msgid "Video bitrate (Mbps)"
-msgstr "Przepływność wideo (Mb/s)"
+msgstr "Taxa de bits do vídeo (Mbps)"
 
 #: src/pm-settings-dialog.c:124
 msgid "Lower it to save bandwidth. Reconnects to apply."
-msgstr ""
-"Zmniejsz, aby oszczędzać przepustowość. Wymaga ponownego połączenia, aby "
-"zastosować."
+msgstr "Reduza para economizar largura de banda. Reconecta para aplicar."
 
 #: src/pm-settings-dialog.c:132
 msgid "Turn off phone screen"
-msgstr "Wyłącz ekran telefonu"
+msgstr "Desligar a tela do telefone"
 
 #: src/pm-settings-dialog.c:134
 msgid ""
 "Dark the phone's panel to save battery once you unlock it. Reconnects to "
 "apply."
-msgstr ""
-"Wygaś panel telefonu, aby oszczędzać baterię po jego odblokowaniu. Wymaga "
-"ponownego połączenia, aby zastosować."
+msgstr "Escureça o painel do telefone para economizar bateria depois de desbloqueá-lo. Reconecta para aplicar."
 
 #: src/pm-settings-dialog.c:138
 msgid "Window"
-msgstr "Okno"
+msgstr "Janela"
 
 #: src/pm-settings-dialog.c:142
 msgid "Free resize"
-msgstr "Swobodna zmiana rozmiaru"
+msgstr "Redimensionamento livre"
 
 #: src/pm-settings-dialog.c:144
 msgid "Resize the window freely instead of keeping the phone's aspect ratio."
-msgstr ""
-"Zmieniaj rozmiar okna swobodnie zamiast zachowywać proporcje ekranu telefonu."
+msgstr "Redimensione a janela livremente em vez de manter a proporção do telefone."
 
 #: src/pm-settings-dialog.c:148
 msgid "Input"
-msgstr "Sterowanie"
+msgstr "Entrada"
 
 #: src/pm-settings-dialog.c:150
 msgid "Mouse"
-msgstr "Mysz"
+msgstr "Mouse"
 
 #: src/pm-settings-dialog.c:150
 msgid "Touch"
-msgstr "Dotyk"
+msgstr "Toque"
 
 #: src/pm-settings-dialog.c:153
 msgid "Pointer input"
-msgstr "Wprowadzanie wskaźnikiem"
+msgstr "Entrada do ponteiro"
 
 #: src/pm-settings-dialog.c:155
 msgid "How mouse input is sent to the phone."
-msgstr "Sposób przekazywania ruchu myszy do telefonu."
+msgstr "Como a entrada do mouse é enviada ao telefone."
 
 #: src/pm-settings-dialog.c:161
 msgid "Audio"
-msgstr "Dźwięk"
+msgstr "Áudio"
 
 #: src/pm-settings-dialog.c:165
 msgid "Play phone audio"
-msgstr "Odtwarzaj dźwięk telefonu"
+msgstr "Reproduzir o áudio do telefone"
 
 #: src/pm-settings-dialog.c:167
 msgid "Route the phone's sound to this computer. Reconnects to apply."
-msgstr ""
-"Przekieruj dźwięk telefonu na ten komputer. Wymaga ponownego połączenia, aby "
-"zastosować."
+msgstr "Direcione o som do telefone para este computador. Reconecta para aplicar."
 
 #: src/pm-session.c:186
 msgid "Mirroring a connected phone"
-msgstr "Wyświetlanie obrazu z podłączonego telefonu"
+msgstr "Espelhando um telefone conectado"
 
 #: src/pm-session.c:371
 #, c-format
 msgid "scrcpy-server exited with status %d"
-msgstr "Serwer scrcpy zakończył działanie z kodem %d"
+msgstr "scrcpy-server encerrou com status %d"
 
 #: src/pm-session.c:399
 #, c-format
 msgid "timed out waiting for scrcpy-server socket%s%s"
-msgstr "Przekroczono czas oczekiwania na gniazdo serwera scrcpy%s%s"
+msgstr "tempo esgotado aguardando o socket do scrcpy-server%s%s"
 
 #: src/pm-session.c:646
 msgid "Connecting to device…"
-msgstr "Łączenie z urządzeniem…"
+msgstr "Conectando ao dispositivo…"
 
 #: src/pm-session.c:653
 msgid ""
 "Could not find scrcpy-server. Install scrcpy or set PM_SERVER_JAR to the "
 "server path."
-msgstr ""
-"Nie znaleziono serwera scrcpy. Zainstaluj scrcpy lub ustaw zmienną "
-"PM_SERVER_JAR na ścieżkę do serwera."
+msgstr "Não foi possível encontrar o scrcpy-server. Instale o scrcpy ou defina PM_SERVER_JAR como o caminho do servidor."
 
 #: src/pm-session.c:660
 msgid ""
 "Could not determine scrcpy-server version. Install scrcpy or set "
 "PM_SCRCPY_VERSION to match your server."
-msgstr ""
-"Nie można ustalić wersji serwera scrcpy. Zainstaluj scrcpy lub ustaw zmienną "
-"PM_SCRCPY_VERSION zgodnie z wersją serwera."
+msgstr "Não foi possível determinar a versão do scrcpy-server. Instale o scrcpy ou defina PM_SCRCPY_VERSION para corresponder ao seu servidor."
 
 #: src/pm-session.c:718
 msgid "Connecting with adb…"
-msgstr "Łączenie przez adb…"
+msgstr "Conectando com adb…"
 
 #: src/pm-session.c:734
 msgid "Installing mirror server…"
-msgstr "Instalowanie serwera kopii lustrzanej…"
+msgstr "Instalando o servidor de espelhamento…"
 
 #: src/pm-session.c:740
 msgid "Opening mirror socket…"
-msgstr "Otwieranie gniazda kopii lustrzanej…"
+msgstr "Abrindo o socket de espelhamento…"
 
 #: src/pm-session.c:746
 msgid "Starting mirror server…"
-msgstr "Uruchamianie serwera kopii lustrzanej…"
+msgstr "Iniciando o servidor de espelhamento…"
 
 #: src/pm-session.c:753
 msgid "Connecting video stream…"
-msgstr "Łączenie strumienia wideo…"
+msgstr "Conectando o fluxo de vídeo…"
 
 #: src/pm-session.c:764
 msgid "Connecting audio stream…"
-msgstr "Łączenie strumienia dźwięku…"
+msgstr "Conectando o fluxo de áudio…"
 
 #: src/pm-session.c:771
 msgid "Connecting controls…"
-msgstr "Łączenie sterowania…"
+msgstr "Conectando os controles…"
 
 #: src/pm-session.c:782
 msgid "Reading video stream…"
-msgstr "Odczytywanie strumienia wideo…"
+msgstr "Lendo o fluxo de vídeo…"
 
 #: src/pm-session.c:929
 #, c-format
 msgid "%s failed: %s%s"
-msgstr "%s — niepowodzenie: %s%s"
+msgstr "%s falhou: %s%s"
 
 #: src/pm-session.c:931
 msgid "connection failed"
-msgstr "połączenie nie powiodło się"
+msgstr "falha na conexão"
 
 #: src/pm-session.c:994
 msgid "Found device — starting mirror server…"
-msgstr "Znaleziono urządzenie — uruchamianie serwera kopii lustrzanej…"
+msgstr "Dispositivo encontrado — iniciando o servidor de espelhamento…"
 
 #: src/pm-session.c:1063
 msgid ""
 "No phone found. Use Set Up Device to enter your phone's Wireless debugging "
 "address."
-msgstr ""
-"Nie znaleziono telefonu. Użyj opcji Skonfiguruj urządzenie, aby wprowadzić "
-"adres debugowania bezprzewodowego telefonu."
+msgstr "Nenhum telefone encontrado. Use Configurar dispositivo para inserir o endereço de depuração sem fio do seu telefone."

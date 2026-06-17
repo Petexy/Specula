@@ -6,9 +6,23 @@
   <project_license>GPL-3.0-or-later</project_license>
 
   <name>Phone Mirror</name>
+  <name xml:lang="de">Telefonspiegelung</name>
+  <name xml:lang="es">Espejo del teléfono</name>
+  <name xml:lang="fr">Miroir du téléphone</name>
+  <name xml:lang="hi">फ़ोन मिरर</name>
   <name xml:lang="pl">Klonowanie Telefonu</name>
+  <name xml:lang="pt_BR">Espelhamento do telefone</name>
+  <name xml:lang="ru">Зеркало телефона</name>
+  <name xml:lang="zh_CN">手机镜像</name>
   <summary>Wire-free Android screen mirroring and control</summary>
+  <summary xml:lang="de">Drahtlose Android-Bildschirmspiegelung und -steuerung</summary>
+  <summary xml:lang="es">Espejo y control inalámbrico de la pantalla de Android</summary>
+  <summary xml:lang="fr">Recopie et contrôle d'écran Android sans fil</summary>
+  <summary xml:lang="hi">वायर-मुक्त Android स्क्रीन मिररिंग और नियंत्रण</summary>
   <summary xml:lang="pl">Bezprzewodowe klonowanie i sterowanie ekranem Androida</summary>
+  <summary xml:lang="pt_BR">Espelhamento e controle de tela Android sem fios</summary>
+  <summary xml:lang="ru">Беспроводное зеркалирование и управление экраном Android</summary>
+  <summary xml:lang="zh_CN">无线 Android 屏幕镜像与控制</summary>
 
   <description>
     <p>
@@ -55,7 +69,7 @@
   <content_rating type="oars-1.1"/>
 
   <releases>
-    <release version="0.2.0" date="2026-06-17">
+    <release version="0.3.0" date="2026-06-17">
       <description>
         <p>Added localization support with a Polish translation; the interface
         follows the system language automatically.</p>
