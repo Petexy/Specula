@@ -1,0 +1,2 @@
+option('mdns', type : 'feature', value : 'auto',
+       description : 'mDNS/DNS-SD device discovery via Avahi')

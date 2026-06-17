@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Name=Phone Mirror
+GenericName=Phone Screen Mirror
+Comment=Wire-free Android screen mirroring and control
+Exec=specula
+Icon=io.github.petexy.Specula
+Terminal=false
+Categories=Network;RemoteAccess;GTK;
+Keywords=Android;scrcpy;mirror;cast;screen;phone;remote;
+StartupNotify=true

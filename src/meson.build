@@ -1,0 +1,27 @@
+specula_sources = files(
+  'main.c',
+  'pm-application.c',
+  'pm-window.c',
+  'pm-video-view.c',
+  'pm-connect-dialog.c',
+  'pm-settings-dialog.c',
+  'pm-session.c',
+  'adb.c',
+  'discovery.c',
+  'net.c',
+  'decoder.c',
+  'audio.c',
+  'input.c',
+  'failsafe.c',
+  'protocol.c',
+  'device.c',
+  'prefs.c',
+  'pinstore.c',
+)
+
+executable('specula',
+  specula_sources,
+  dependencies : project_deps,
+  include_directories : config_inc,
+  install : true,
+)

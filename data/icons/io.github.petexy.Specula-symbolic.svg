@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Phone Mirror: symbolic (monochrome) variant for menus / headerbars.
+     A phone with a wireless cast signal, echoing the full-colour icon.
+     Drawn at 16px in a single colour so GTK recolours it to the theme fg. -->
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
+  <g fill="none" stroke="#2e3436" stroke-width="1.1"
+     stroke-linecap="round" stroke-linejoin="round">
+    <!-- phone body -->
+    <rect x="2.2" y="2.4" width="6.4" height="11.2" rx="1.4"/>
+    <!-- home indicator -->
+    <path d="M4.2 12 H6.6"/>
+    <!-- cast / broadcast signal, radiating up-right -->
+    <path d="M9.82 10.44 A2 2 0 0 1 11.36 11.98"/>
+    <path d="M10.15 8.88 A3.6 3.6 0 0 1 12.92 11.65"/>
+  </g>
+  <circle cx="9.4" cy="12.4" r="0.85" fill="#2e3436"/>
+</svg>

@@ -1,0 +1,57 @@
+# Maintainer: Piotr Lewandowski <piotr.petexiness@gmail.com>
+
+pkgname=specula
+pkgver=0.1.0
+pkgrel=1
+pkgdesc="Wire-free Android screen mirroring and control for the Linux desktop (Phone Mirror): GTK4/libadwaita, Wayland-native, FFmpeg decode"
+arch=('x86_64' 'aarch64')
+url="https://github.com/Petexy/specula"
+license=('GPL-3.0-or-later')
+
+depends=(
+  'gtk4'          # UI toolkit (>= 4.10)
+  'libadwaita'    # GNOME platform library (>= 1.4)
+  'ffmpeg'
+  'libpulse'      # libpulse-simple, audio playback (PipeWire's shim works too)
+  'glib2'
+  'avahi'
+  'android-tools'
+  'scrcpy'
+)
+
+makedepends=(
+  'meson'
+  'ninja'
+  'pkgconf'
+  'git'
+)
+
+optdepends=(
+  'desktop-file-utils: desktop-file-validate test + desktop database refresh'
+  'appstream: metainfo validation test'
+)
+
+provides=('specula')
+conflicts=('specula-git')
+install="$pkgname.install"
+source=("git+$url.git")
+sha256sums=('SKIP')
+
+pkgver() {
+  cd "$srcdir/$pkgname"
+  git describe --long --tags 2>/dev/null | sed 's/^v//;s/\([^-]*-g\)/r\1/;s/-/./g' \
+    || printf '0.1.0.r%s.%s' "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
+}
+
+build() {
+  arch-meson "$pkgname" build
+  meson compile -C build
+}
+
+check() {
+  meson test -C build --print-errorlogs
+}
+
+package() {
+  meson install -C build --destdir "$pkgdir"
+}

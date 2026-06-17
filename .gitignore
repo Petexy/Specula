@@ -1,0 +1,18 @@
+# Build output
+/build/
+/builddir/
+*.o
+*.a
+*.so
+
+# Editor / IDE
+.cache/
+compile_commands.json
+.vscode/
+*.swp
+
+# Vendored Android server binary (fetched separately, see README)
+/data/scrcpy-server*
+
+# Python venv used to run meson (project-local convenience)
+/.meson-venv/

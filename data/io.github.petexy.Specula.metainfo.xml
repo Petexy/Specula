@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2026 Phone Mirror contributors -->
+<component type="desktop-application">
+  <id>io.github.petexy.Specula</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-3.0-or-later</project_license>
+
+  <name>Phone Mirror</name>
+  <summary>Wire-free Android screen mirroring and control</summary>
+
+  <description>
+    <p>
+      Phone Mirror displays your Android phone's screen on the Linux desktop and
+      lets you control it with your mouse and keyboard, wire-free over your
+      local network. It is built natively for the modern desktop with GTK4 and
+      libadwaita, runs on Wayland, and decodes the video stream with FFmpeg.
+    </p>
+    <p>Features:</p>
+    <ul>
+      <li>Live, low-latency mirroring of the phone screen onto the desktop</li>
+      <li>Mouse, scroll and keyboard control, including UTF-8 text input</li>
+      <li>The phone's audio played through the desktop's speakers</li>
+      <li>Automatic device discovery on the local network (mDNS/DNS-SD)</li>
+      <li>One-time pairing with persisted, reconnectable devices</li>
+      <li>HiDPI-correct input mapping and a distraction-free, undecorated mirror window</li>
+    </ul>
+  </description>
+
+  <launchable type="desktop-id">io.github.petexy.Specula.desktop</launchable>
+
+  <categories>
+    <category>Network</category>
+    <category>RemoteAccess</category>
+  </categories>
+
+  <keywords>
+    <keyword>Android</keyword>
+    <keyword>scrcpy</keyword>
+    <keyword>mirror</keyword>
+    <keyword>cast</keyword>
+    <keyword>screen</keyword>
+    <keyword>phone</keyword>
+    <keyword>remote</keyword>
+  </keywords>
+
+  <url type="homepage">https://github.com/Petexy/specula</url>
+  <url type="bugtracker">https://github.com/Petexy/specula/issues</url>
+
+  <developer id="io.github.petexy">
+    <name>Phone Mirror contributors</name>
+  </developer>
+
+  <content_rating type="oars-1.1"/>
+
+  <releases>
+    <release version="0.1.0" date="2026-06-15">
+      <description>
+        <p>Initial development release: working UI, device discovery and
+        pairing, and the live mirroring pipeline.</p>
+      </description>
+    </release>
+  </releases>
+</component>
