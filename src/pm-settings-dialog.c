@@ -1,5 +1,6 @@
 /* pm-settings-dialog.c - app settings as a bottom-sheet dialog. */
 #include "pm-settings-dialog.h"
+#include <glib/gi18n.h>
 
 /* AdwComboRow indices for the pointer-input mode. */
 enum { PM_POINTER_MOUSE = 0, PM_POINTER_TOUCH = 1 };
@@ -72,7 +73,7 @@ on_setting_changed (GObject *object, GParamSpec *pspec, gpointer user_data)
 static void
 pm_settings_dialog_init (PmSettingsDialog *self)
 {
-  adw_dialog_set_title (ADW_DIALOG (self), "Settings");
+  adw_dialog_set_title (ADW_DIALOG (self), _("Settings"));
   adw_dialog_set_content_width (ADW_DIALOG (self), 420);
 
   /* Always slide up from the bottom, regardless of window size - matches the
@@ -82,14 +83,14 @@ pm_settings_dialog_init (PmSettingsDialog *self)
   AdwPreferencesPage *page = ADW_PREFERENCES_PAGE (adw_preferences_page_new ());
 
   AdwPreferencesGroup *display_group = ADW_PREFERENCES_GROUP (adw_preferences_group_new ());
-  adw_preferences_group_set_title (display_group, "Display");
+  adw_preferences_group_set_title (display_group, _("Display"));
 
-  const char *display_modes[] = { "Mirror", "Virtual", NULL };
+  const char *display_modes[] = { _("Mirror"), _("Virtual"), NULL };
   self->display_row = ADW_COMBO_ROW (adw_combo_row_new ());
   adw_preferences_row_set_title (ADW_PREFERENCES_ROW (self->display_row),
-                                 "Display mode");
+                                 _("Display mode"));
   adw_action_row_set_subtitle (ADW_ACTION_ROW (self->display_row),
-    "Mirror the phone's screen, or run a separate virtual display on the device.");
+    _("Mirror the phone's screen, or run a separate virtual display on the device."));
   adw_combo_row_set_model (self->display_row,
                            G_LIST_MODEL (gtk_string_list_new (display_modes)));
   adw_preferences_group_add (display_group, GTK_WIDGET (self->display_row));
@@ -97,30 +98,30 @@ pm_settings_dialog_init (PmSettingsDialog *self)
   /* Virtual-display geometry. Hidden unless the Virtual mode is selected (see
    * update_virtual_rows_visible). Even dimensions keep the H.264 encoder happy. */
   self->width_row = ADW_SPIN_ROW (adw_spin_row_new_with_range (320, 7680, 2));
-  adw_preferences_row_set_title (ADW_PREFERENCES_ROW (self->width_row), "Width");
+  adw_preferences_row_set_title (ADW_PREFERENCES_ROW (self->width_row), _("Width"));
   adw_action_row_set_subtitle (ADW_ACTION_ROW (self->width_row),
-    "Virtual display width in pixels.");
+    _("Virtual display width in pixels."));
   adw_preferences_group_add (display_group, GTK_WIDGET (self->width_row));
 
   self->height_row = ADW_SPIN_ROW (adw_spin_row_new_with_range (240, 4320, 2));
-  adw_preferences_row_set_title (ADW_PREFERENCES_ROW (self->height_row), "Height");
+  adw_preferences_row_set_title (ADW_PREFERENCES_ROW (self->height_row), _("Height"));
   adw_action_row_set_subtitle (ADW_ACTION_ROW (self->height_row),
-    "Virtual display height in pixels.");
+    _("Virtual display height in pixels."));
   adw_preferences_group_add (display_group, GTK_WIDGET (self->height_row));
 
   self->dpi_row = ADW_SPIN_ROW (adw_spin_row_new_with_range (96, 640, 1));
-  adw_preferences_row_set_title (ADW_PREFERENCES_ROW (self->dpi_row), "Density (DPI)");
+  adw_preferences_row_set_title (ADW_PREFERENCES_ROW (self->dpi_row), _("Density (DPI)"));
   adw_action_row_set_subtitle (ADW_ACTION_ROW (self->dpi_row),
-    "Pixel density of the virtual display.");
+    _("Pixel density of the virtual display."));
   adw_preferences_group_add (display_group, GTK_WIDGET (self->dpi_row));
 
   /* Video bitrate, in Mbps. scrcpy defaults to 8; lowering it trades image
    * quality for less bandwidth. Always shown (applies to mirror and virtual). */
   self->bitrate_row = ADW_SPIN_ROW (adw_spin_row_new_with_range (1, 50, 1));
   adw_preferences_row_set_title (ADW_PREFERENCES_ROW (self->bitrate_row),
-                                 "Video bitrate (Mbps)");
+                                 _("Video bitrate (Mbps)"));
   adw_action_row_set_subtitle (ADW_ACTION_ROW (self->bitrate_row),
-    "Lower it to save bandwidth. Reconnects to apply.");
+    _("Lower it to save bandwidth. Reconnects to apply."));
   adw_preferences_group_add (display_group, GTK_WIDGET (self->bitrate_row));
 
   /* Blank the phone's own panel while mirroring to save its battery. The stream
@@ -128,42 +129,42 @@ pm_settings_dialog_init (PmSettingsDialog *self)
    * Reconnects to apply, like the other connect-time display options. */
   self->screen_off_row = ADW_SWITCH_ROW (adw_switch_row_new ());
   adw_preferences_row_set_title (ADW_PREFERENCES_ROW (self->screen_off_row),
-                                 "Turn off phone screen");
+                                 _("Turn off phone screen"));
   adw_action_row_set_subtitle (ADW_ACTION_ROW (self->screen_off_row),
-    "Dark the phone's panel to save battery once you unlock it. Reconnects to apply.");
+    _("Dark the phone's panel to save battery once you unlock it. Reconnects to apply."));
   adw_preferences_group_add (display_group, GTK_WIDGET (self->screen_off_row));
 
   AdwPreferencesGroup *window_group = ADW_PREFERENCES_GROUP (adw_preferences_group_new ());
-  adw_preferences_group_set_title (window_group, "Window");
+  adw_preferences_group_set_title (window_group, _("Window"));
 
   self->free_resize_row = ADW_SWITCH_ROW (adw_switch_row_new ());
   adw_preferences_row_set_title (ADW_PREFERENCES_ROW (self->free_resize_row),
-                                 "Free resize");
+                                 _("Free resize"));
   adw_action_row_set_subtitle (ADW_ACTION_ROW (self->free_resize_row),
-    "Resize the window freely instead of keeping the phone's aspect ratio.");
+    _("Resize the window freely instead of keeping the phone's aspect ratio."));
   adw_preferences_group_add (window_group, GTK_WIDGET (self->free_resize_row));
 
   AdwPreferencesGroup *input_group = ADW_PREFERENCES_GROUP (adw_preferences_group_new ());
-  adw_preferences_group_set_title (input_group, "Input");
+  adw_preferences_group_set_title (input_group, _("Input"));
 
-  const char *pointer_modes[] = { "Mouse", "Touch", NULL };
+  const char *pointer_modes[] = { _("Mouse"), _("Touch"), NULL };
   self->pointer_row = ADW_COMBO_ROW (adw_combo_row_new ());
   adw_preferences_row_set_title (ADW_PREFERENCES_ROW (self->pointer_row),
-                                 "Pointer input");
+                                 _("Pointer input"));
   adw_action_row_set_subtitle (ADW_ACTION_ROW (self->pointer_row),
-    "How mouse input is sent to the phone.");
+    _("How mouse input is sent to the phone."));
   adw_combo_row_set_model (self->pointer_row,
                            G_LIST_MODEL (gtk_string_list_new (pointer_modes)));
   adw_preferences_group_add (input_group, GTK_WIDGET (self->pointer_row));
 
   AdwPreferencesGroup *audio_group = ADW_PREFERENCES_GROUP (adw_preferences_group_new ());
-  adw_preferences_group_set_title (audio_group, "Audio");
+  adw_preferences_group_set_title (audio_group, _("Audio"));
 
   self->audio_row = ADW_SWITCH_ROW (adw_switch_row_new ());
   adw_preferences_row_set_title (ADW_PREFERENCES_ROW (self->audio_row),
-                                 "Play phone audio");
+                                 _("Play phone audio"));
   adw_action_row_set_subtitle (ADW_ACTION_ROW (self->audio_row),
-    "Route the phone's sound to this computer. Reconnects to apply.");
+    _("Route the phone's sound to this computer. Reconnects to apply."));
   adw_preferences_group_add (audio_group, GTK_WIDGET (self->audio_row));
 
   adw_preferences_page_add (page, display_group);

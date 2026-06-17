@@ -1,0 +1,706 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR Piotr Lewandowski
+# This file is distributed under the same license as the specula package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: specula 0.1.0\n"
+"Report-Msgid-Bugs-To: piotr.petexiness@gmail.com\n"
+"POT-Creation-Date: 2026-06-17 18:07+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: src/pm-window.c:1070
+msgid "Press Connect to find your phone automatically."
+msgstr ""
+
+#: src/pm-window.c:1078
+msgid "Searching…"
+msgstr ""
+
+#: src/pm-window.c:1080
+msgid "Looking for your phone on the local network."
+msgstr ""
+
+#: src/pm-window.c:1088
+msgid "Connecting…"
+msgstr ""
+
+#: src/pm-window.c:1090
+msgid "Starting the mirror server on your device."
+msgstr ""
+
+#: src/pm-window.c:1110
+msgid "Connection failed"
+msgstr ""
+
+#: src/pm-window.c:1112
+msgid "Could not reach the device."
+msgstr ""
+
+#: src/pm-window.c:1651 src/pm-window.c:1664 src/pm-connect-dialog.c:79
+msgid "Lockscreen PIN"
+msgstr ""
+
+#: src/pm-window.c:1658 src/pm-connect-dialog.c:72
+msgid "Auto-unlock"
+msgstr ""
+
+#: src/pm-window.c:1660
+msgid ""
+"Stored encrypted on this computer, tied to this phone, and used to unlock it "
+"automatically when it connects."
+msgstr ""
+
+#: src/pm-window.c:1673
+msgid "Save"
+msgstr ""
+
+#: src/pm-window.c:1676
+msgid "Remove"
+msgstr ""
+
+#: src/pm-window.c:1804
+msgid "Network & internet"
+msgstr ""
+
+#: src/pm-window.c:1804
+msgid "Wi-Fi, SIM, hotspot"
+msgstr ""
+
+#: src/pm-window.c:1805
+msgid "Connected devices"
+msgstr ""
+
+#: src/pm-window.c:1805
+msgid "Bluetooth, pairing"
+msgstr ""
+
+#: src/pm-window.c:1806
+msgid "Apps"
+msgstr ""
+
+#: src/pm-window.c:1806
+msgid "Permissions and defaults"
+msgstr ""
+
+#: src/pm-window.c:1807
+msgid "Notifications"
+msgstr ""
+
+#: src/pm-window.c:1807
+msgid "History and conversations"
+msgstr ""
+
+#: src/pm-window.c:1808
+msgid "Battery"
+msgstr ""
+
+#: src/pm-window.c:1808
+msgid "87%, until 10:30 PM"
+msgstr ""
+
+#: src/pm-window.c:1809
+msgid "System"
+msgstr ""
+
+#: src/pm-window.c:1809
+msgid "Languages, gestures, time"
+msgstr ""
+
+#: src/pm-window.c:1810 src/pm-window.c:2860 src/pm-window.c:2893
+#: src/pm-window.c:2970
+msgid "About phone"
+msgstr ""
+
+#: src/pm-window.c:1810
+msgid "Model, Android version"
+msgstr ""
+
+#: src/pm-window.c:1811 src/pm-window.c:2983 src/pm-window.c:3040
+msgid "Developer options"
+msgstr ""
+
+#: src/pm-window.c:1811
+msgid "Debugging and input"
+msgstr ""
+
+#: src/pm-window.c:1821 src/pm-window.c:3025
+msgid "Device name"
+msgstr ""
+
+#: src/pm-window.c:1821
+msgid "Pixel phone"
+msgstr ""
+
+#: src/pm-window.c:1822
+msgid "Android version"
+msgstr ""
+
+#: src/pm-window.c:1822
+msgid "Version and security update"
+msgstr ""
+
+#: src/pm-window.c:1823
+msgid "Build number"
+msgstr ""
+
+#: src/pm-window.c:1823
+msgid "Tap seven times"
+msgstr ""
+
+#: src/pm-window.c:1840
+msgid "Use developer options"
+msgstr ""
+
+#: src/pm-window.c:1840 src/pm-window.c:3085
+msgid "On"
+msgstr ""
+
+#: src/pm-window.c:1841
+msgid "USB debugging"
+msgstr ""
+
+#: src/pm-window.c:1841
+msgid "Debug mode when USB is connected"
+msgstr ""
+
+#: src/pm-window.c:1842 src/pm-window.c:3050 src/pm-window.c:3100
+msgid "Wireless debugging"
+msgstr ""
+
+#: src/pm-window.c:1842
+msgid "Debug over Wi-Fi"
+msgstr ""
+
+#: src/pm-window.c:1843
+msgid "Revoke debugging authorizations"
+msgstr ""
+
+#: src/pm-window.c:2217
+msgid "Phone"
+msgstr ""
+
+#: src/pm-window.c:2218
+msgid "Messages"
+msgstr ""
+
+#: src/pm-window.c:2219
+msgid "Photos"
+msgstr ""
+
+#: src/pm-window.c:2220
+msgid "Camera"
+msgstr ""
+
+#: src/pm-window.c:2221 src/pm-window.c:2818 src/pm-window.c:2850
+#: src/pm-window.c:2957 src/pm-settings-dialog.c:76
+msgid "Settings"
+msgstr ""
+
+#: src/pm-window.c:2222
+msgid "Files"
+msgstr ""
+
+#: src/pm-window.c:2245
+msgid "Search your phone"
+msgstr ""
+
+#: src/pm-window.c:2623
+msgid "Cancel"
+msgstr ""
+
+#: src/pm-window.c:2902
+#, c-format
+msgid "Tap %d of 7"
+msgstr ""
+
+#: src/pm-window.c:2927
+msgid "You are now a developer!"
+msgstr ""
+
+#: src/pm-window.c:3007
+msgid "Allow USB debugging?"
+msgstr ""
+
+#: src/pm-window.c:3008
+msgid "Computer RSA key fingerprint"
+msgstr ""
+
+#: src/pm-window.c:3009
+msgid "OK"
+msgstr ""
+
+#: src/pm-window.c:3023 src/pm-window.c:3085
+msgid "Use wireless debugging"
+msgstr ""
+
+#: src/pm-window.c:3023
+msgid "Current Wi-Fi network"
+msgstr ""
+
+#: src/pm-window.c:3024
+msgid "Wi-Fi network"
+msgstr ""
+
+#: src/pm-window.c:3024
+msgid "Same network as Linux"
+msgstr ""
+
+#: src/pm-window.c:3025
+msgid "Android device"
+msgstr ""
+
+#: src/pm-window.c:3069
+msgid "Allow wireless debugging?"
+msgstr ""
+
+#: src/pm-window.c:3070
+msgid "Allow on this Wi-Fi network"
+msgstr ""
+
+#: src/pm-window.c:3071
+msgid "Allow"
+msgstr ""
+
+#: src/pm-window.c:3086
+msgid "Pair device with code"
+msgstr ""
+
+#: src/pm-window.c:3086
+msgid "Shows code and address"
+msgstr ""
+
+#: src/pm-window.c:3087
+msgid "IP address & port"
+msgstr ""
+
+#: src/pm-window.c:3090 src/pm-window.c:3282 src/pm-connect-dialog.c:246
+msgid "Pairing code"
+msgstr ""
+
+#: src/pm-window.c:3091
+msgid "Pairing address"
+msgstr ""
+
+#: src/pm-window.c:3092
+msgid "Keep this screen open"
+msgstr ""
+
+#: src/pm-window.c:3092
+msgid "Code expires soon"
+msgstr ""
+
+#: src/pm-window.c:3110
+msgid "Pair device"
+msgstr ""
+
+#: src/pm-window.c:3246 src/pm-connect-dialog.c:257
+msgid "Set up device"
+msgstr ""
+
+#: src/pm-window.c:3257 src/pm-connect-dialog.c:238
+msgid "Pairing"
+msgstr ""
+
+#: src/pm-window.c:3267
+msgid "Android 11+: Pair device with code."
+msgstr ""
+
+#: src/pm-window.c:3279 src/pm-connect-dialog.c:244
+msgid "Pairing address (ip:port)"
+msgstr ""
+
+#: src/pm-window.c:3296 src/pm-connect-dialog.c:254
+msgid "Pair & Connect"
+msgstr ""
+
+#: src/pm-window.c:3537
+msgid "Go to Home"
+msgstr ""
+
+#: src/pm-window.c:3538 src/pm-window.c:3746
+msgid "Continue"
+msgstr ""
+
+#: src/pm-window.c:3541
+msgid "First Time Setup"
+msgstr ""
+
+#: src/pm-window.c:3608
+msgid "Welcome to Phone Mirror"
+msgstr ""
+
+#: src/pm-window.c:3609
+msgid ""
+"We will help you prepare your Android phone. Keep your phone nearby and "
+"connect it to the same Wi-Fi network as this computer."
+msgstr ""
+
+#: src/pm-window.c:3612
+msgid "Open Settings"
+msgstr ""
+
+#: src/pm-window.c:3613
+msgid "Unlock your Android phone. Find the Settings app and open it."
+msgstr ""
+
+#: src/pm-window.c:3616
+msgid "Find About phone"
+msgstr ""
+
+#: src/pm-window.c:3617
+msgid ""
+"In Settings, scroll toward the bottom. Tap About phone. On some phones, open "
+"System first, then tap About phone."
+msgstr ""
+
+#: src/pm-window.c:3620
+msgid "Turn on Developer options"
+msgstr ""
+
+#: src/pm-window.c:3621
+msgid ""
+"Find Build number. Tap Build number seven times. If Android asks for your "
+"PIN, enter it. Stop when the phone says you are now a developer."
+msgstr ""
+
+#: src/pm-window.c:3624
+msgid "Turn on USB debugging"
+msgstr ""
+
+#: src/pm-window.c:3625
+msgid ""
+"Go back to Settings. Open Developer options. On some phones, open System "
+"first, then turn on USB debugging. If Android asks, tap OK."
+msgstr ""
+
+#: src/pm-window.c:3628
+msgid "Turn on Wireless debugging"
+msgstr ""
+
+#: src/pm-window.c:3629
+msgid ""
+"Stay in Developer options. Turn on Wireless debugging. Keep your phone and "
+"this computer on the same network. If Android asks, tap Allow."
+msgstr ""
+
+#: src/pm-window.c:3632
+msgid "Get the pairing code"
+msgstr ""
+
+#: src/pm-window.c:3633
+msgid ""
+"Tap Wireless debugging, then Pair device with pairing code. Leave that "
+"screen open. On the home page, choose Set Up Device, enter the pairing "
+"address and code, then choose Pair & Connect."
+msgstr ""
+
+#: src/pm-window.c:3647
+msgid "Welcome"
+msgstr ""
+
+#: src/pm-window.c:3648
+#, c-format
+msgid "Step %u of %u"
+msgstr ""
+
+#: src/pm-window.c:3741
+msgid "Back"
+msgstr ""
+
+#: src/pm-window.c:3781
+msgid "_Disconnect"
+msgstr ""
+
+#: src/pm-window.c:3782
+msgid "_Lockscreen PIN…"
+msgstr ""
+
+#: src/pm-window.c:3783
+msgid "_First Time Setup"
+msgstr ""
+
+#: src/pm-window.c:3789
+msgid "_Manual Connection…"
+msgstr ""
+
+#: src/pm-window.c:3790
+msgid "_Set Up Device…"
+msgstr ""
+
+#: src/pm-window.c:3796
+msgid "_Settings"
+msgstr ""
+
+#: src/pm-window.c:3797
+msgid "_About Phone Mirror"
+msgstr ""
+
+#: src/pm-window.c:3802
+msgid "_Quit"
+msgstr ""
+
+#: src/pm-window.c:3886
+msgid "Keep controls visible"
+msgstr ""
+
+#: src/pm-window.c:3901
+msgid "Press Connect to look for your paired device."
+msgstr ""
+
+#: src/pm-window.c:3906
+msgid "Connect"
+msgstr ""
+
+#: src/pm-window.c:3913
+msgid "Set Up Device…"
+msgstr ""
+
+#: src/pm-connect-dialog.c:74
+msgid ""
+"OPTIONAL. Stored encrypted on this computer, keyed to the phone, and used to "
+"unlock its lockscreen automatically on connect. Otherwise, the app will show "
+"a black screen during unlocking phone."
+msgstr ""
+
+#: src/pm-connect-dialog.c:104
+msgid "Enter the device IP address"
+msgstr ""
+
+#: src/pm-connect-dialog.c:176
+msgid "Enter pairing address (ip:port) and code"
+msgstr ""
+
+#: src/pm-connect-dialog.c:185
+msgid "Invalid pairing port"
+msgstr ""
+
+#: src/pm-connect-dialog.c:193
+msgid "Pairing…"
+msgstr ""
+
+#: src/pm-connect-dialog.c:240
+msgid "Android 11+: enable Wireless debugging → Pair device with code."
+msgstr ""
+
+#: src/pm-connect-dialog.c:266
+msgid "Connection"
+msgstr ""
+
+#: src/pm-connect-dialog.c:268
+msgid ""
+"Enter the Wi-Fi debugging address only if automatic discovery cannot find "
+"the phone."
+msgstr ""
+
+#: src/pm-connect-dialog.c:271
+msgid "IP address"
+msgstr ""
+
+#: src/pm-connect-dialog.c:273
+msgid "Port (default 5555)"
+msgstr ""
+
+#: src/pm-connect-dialog.c:283
+msgid "Connect manually"
+msgstr ""
+
+#: src/pm-connect-dialog.c:296
+msgid "Manual connection"
+msgstr ""
+
+#: src/pm-settings-dialog.c:86
+msgid "Display"
+msgstr ""
+
+#: src/pm-settings-dialog.c:88
+msgid "Mirror"
+msgstr ""
+
+#: src/pm-settings-dialog.c:88
+msgid "Virtual"
+msgstr ""
+
+#: src/pm-settings-dialog.c:91
+msgid "Display mode"
+msgstr ""
+
+#: src/pm-settings-dialog.c:93
+msgid ""
+"Mirror the phone's screen, or run a separate virtual display on the device."
+msgstr ""
+
+#: src/pm-settings-dialog.c:101
+msgid "Width"
+msgstr ""
+
+#: src/pm-settings-dialog.c:103
+msgid "Virtual display width in pixels."
+msgstr ""
+
+#: src/pm-settings-dialog.c:107
+msgid "Height"
+msgstr ""
+
+#: src/pm-settings-dialog.c:109
+msgid "Virtual display height in pixels."
+msgstr ""
+
+#: src/pm-settings-dialog.c:113
+msgid "Density (DPI)"
+msgstr ""
+
+#: src/pm-settings-dialog.c:115
+msgid "Pixel density of the virtual display."
+msgstr ""
+
+#: src/pm-settings-dialog.c:122
+msgid "Video bitrate (Mbps)"
+msgstr ""
+
+#: src/pm-settings-dialog.c:124
+msgid "Lower it to save bandwidth. Reconnects to apply."
+msgstr ""
+
+#: src/pm-settings-dialog.c:132
+msgid "Turn off phone screen"
+msgstr ""
+
+#: src/pm-settings-dialog.c:134
+msgid ""
+"Dark the phone's panel to save battery once you unlock it. Reconnects to "
+"apply."
+msgstr ""
+
+#: src/pm-settings-dialog.c:138
+msgid "Window"
+msgstr ""
+
+#: src/pm-settings-dialog.c:142
+msgid "Free resize"
+msgstr ""
+
+#: src/pm-settings-dialog.c:144
+msgid "Resize the window freely instead of keeping the phone's aspect ratio."
+msgstr ""
+
+#: src/pm-settings-dialog.c:148
+msgid "Input"
+msgstr ""
+
+#: src/pm-settings-dialog.c:150
+msgid "Mouse"
+msgstr ""
+
+#: src/pm-settings-dialog.c:150
+msgid "Touch"
+msgstr ""
+
+#: src/pm-settings-dialog.c:153
+msgid "Pointer input"
+msgstr ""
+
+#: src/pm-settings-dialog.c:155
+msgid "How mouse input is sent to the phone."
+msgstr ""
+
+#: src/pm-settings-dialog.c:161
+msgid "Audio"
+msgstr ""
+
+#: src/pm-settings-dialog.c:165
+msgid "Play phone audio"
+msgstr ""
+
+#: src/pm-settings-dialog.c:167
+msgid "Route the phone's sound to this computer. Reconnects to apply."
+msgstr ""
+
+#: src/pm-session.c:186
+msgid "Mirroring a connected phone"
+msgstr ""
+
+#: src/pm-session.c:371
+#, c-format
+msgid "scrcpy-server exited with status %d"
+msgstr ""
+
+#: src/pm-session.c:399
+#, c-format
+msgid "timed out waiting for scrcpy-server socket%s%s"
+msgstr ""
+
+#: src/pm-session.c:646
+msgid "Connecting to device…"
+msgstr ""
+
+#: src/pm-session.c:653
+msgid ""
+"Could not find scrcpy-server. Install scrcpy or set PM_SERVER_JAR to the "
+"server path."
+msgstr ""
+
+#: src/pm-session.c:660
+msgid ""
+"Could not determine scrcpy-server version. Install scrcpy or set "
+"PM_SCRCPY_VERSION to match your server."
+msgstr ""
+
+#: src/pm-session.c:718
+msgid "Connecting with adb…"
+msgstr ""
+
+#: src/pm-session.c:734
+msgid "Installing mirror server…"
+msgstr ""
+
+#: src/pm-session.c:740
+msgid "Opening mirror socket…"
+msgstr ""
+
+#: src/pm-session.c:746
+msgid "Starting mirror server…"
+msgstr ""
+
+#: src/pm-session.c:753
+msgid "Connecting video stream…"
+msgstr ""
+
+#: src/pm-session.c:764
+msgid "Connecting audio stream…"
+msgstr ""
+
+#: src/pm-session.c:771
+msgid "Connecting controls…"
+msgstr ""
+
+#: src/pm-session.c:782
+msgid "Reading video stream…"
+msgstr ""
+
+#: src/pm-session.c:929
+#, c-format
+msgid "%s failed: %s%s"
+msgstr ""
+
+#: src/pm-session.c:931
+msgid "connection failed"
+msgstr ""
+
+#: src/pm-session.c:994
+msgid "Found device — starting mirror server…"
+msgstr ""
+
+#: src/pm-session.c:1063
+msgid ""
+"No phone found. Use Set Up Device to enter your phone's Wireless debugging "
+"address."
+msgstr ""

@@ -25,6 +25,7 @@
 
 #include <math.h>
 #include <string.h>
+#include <glib/gi18n.h>
 
 #ifdef GDK_WINDOWING_X11
 #include <gdk/x11/gdkx.h>
@@ -1066,7 +1067,7 @@ pm_window_apply_state (PmWindow   *self,
       adw_view_stack_set_visible_child_name (self->stack, "searching");
       adw_status_page_set_title (self->status_page, "Phone Mirror");
       adw_status_page_set_description (self->status_page,
-        "Press Connect to find your phone automatically.");
+        _("Press Connect to find your phone automatically."));
       gtk_spinner_set_spinning (self->spinner, FALSE);
       gtk_widget_set_visible (GTK_WIDGET (self->connect_button), TRUE);
       break;
@@ -1074,9 +1075,9 @@ pm_window_apply_state (PmWindow   *self,
     case PM_STATE_SEARCHING:
       pm_window_reset_window_shape (self);
       adw_view_stack_set_visible_child_name (self->stack, "searching");
-      adw_status_page_set_title (self->status_page, "Searching…");
+      adw_status_page_set_title (self->status_page, _("Searching…"));
       adw_status_page_set_description (self->status_page,
-        "Looking for your phone on the local network.");
+        _("Looking for your phone on the local network."));
       gtk_spinner_set_spinning (self->spinner, TRUE);
       gtk_widget_set_visible (GTK_WIDGET (self->connect_button), FALSE);
       break;
@@ -1084,9 +1085,9 @@ pm_window_apply_state (PmWindow   *self,
     case PM_STATE_CONNECTING:
       pm_window_reset_window_shape (self);
       adw_view_stack_set_visible_child_name (self->stack, "searching");
-      adw_status_page_set_title (self->status_page, "Connecting…");
+      adw_status_page_set_title (self->status_page, _("Connecting…"));
       adw_status_page_set_description (self->status_page,
-        message ? message : "Starting the mirror server on your device.");
+        message ? message : _("Starting the mirror server on your device."));
       gtk_spinner_set_spinning (self->spinner, TRUE);
       gtk_widget_set_visible (GTK_WIDGET (self->connect_button), FALSE);
       break;
@@ -1106,9 +1107,9 @@ pm_window_apply_state (PmWindow   *self,
     case PM_STATE_ERROR:
       pm_window_reset_window_shape (self);
       adw_view_stack_set_visible_child_name (self->stack, "searching");
-      adw_status_page_set_title (self->status_page, "Connection failed");
+      adw_status_page_set_title (self->status_page, _("Connection failed"));
       adw_status_page_set_description (self->status_page,
-        message ? message : "Could not reach the device.");
+        message ? message : _("Could not reach the device."));
       gtk_spinner_set_spinning (self->spinner, FALSE);
       gtk_widget_set_visible (GTK_WIDGET (self->connect_button), TRUE);
       break;
@@ -1647,20 +1648,20 @@ on_lockscreen_pin_action (GSimpleAction *action, GVariant *param, gpointer user_
   /* A bottom-sheet AdwDialog matching the Settings / device-setup sheets, rather
    * than a floating alert. */
   AdwDialog *dialog = adw_dialog_new ();
-  adw_dialog_set_title (dialog, "Lockscreen PIN");
+  adw_dialog_set_title (dialog, _("Lockscreen PIN"));
   adw_dialog_set_content_width (dialog, 420);
   adw_dialog_set_presentation_mode (dialog, ADW_DIALOG_BOTTOM_SHEET);
 
   AdwPreferencesPage *page = ADW_PREFERENCES_PAGE (adw_preferences_page_new ());
 
   AdwPreferencesGroup *grp = ADW_PREFERENCES_GROUP (adw_preferences_group_new ());
-  adw_preferences_group_set_title (grp, "Auto-unlock");
+  adw_preferences_group_set_title (grp, _("Auto-unlock"));
   adw_preferences_group_set_description (grp,
-    "Stored encrypted on this computer, tied to this phone, and used to unlock "
-    "it automatically when it connects.");
+    _("Stored encrypted on this computer, tied to this phone, and used to unlock "
+      "it automatically when it connects."));
 
   AdwPasswordEntryRow *row = ADW_PASSWORD_ENTRY_ROW (adw_password_entry_row_new ());
-  adw_preferences_row_set_title (ADW_PREFERENCES_ROW (row), "Lockscreen PIN");
+  adw_preferences_row_set_title (ADW_PREFERENCES_ROW (row), _("Lockscreen PIN"));
   adw_preferences_group_add (grp, GTK_WIDGET (row));
 
   PinDialogCtx *ctx = g_new0 (PinDialogCtx, 1);
@@ -1669,10 +1670,10 @@ on_lockscreen_pin_action (GSimpleAction *action, GVariant *param, gpointer user_
   ctx->dialog = dialog;
 
   adw_preferences_group_add (grp,
-    pin_action_button ("Save", "suggested-action",
+    pin_action_button (_("Save"), "suggested-action",
                        G_CALLBACK (on_pin_save_clicked), ctx));
   adw_preferences_group_add (grp,
-    pin_action_button ("Remove", "destructive-action",
+    pin_action_button (_("Remove"), "destructive-action",
                        G_CALLBACK (on_pin_remove_clicked), ctx));
   adw_preferences_page_add (page, grp);
 
@@ -1800,14 +1801,14 @@ enum {
 };
 
 static const PmSetupDrawRow pm_setup_main_settings_rows[] = {
-  { "Net", "Network & internet", "Wi-Fi, SIM, hotspot", FALSE, 0.0 },
-  { "BT", "Connected devices", "Bluetooth, pairing", FALSE, 0.0 },
-  { "App", "Apps", "Permissions and defaults", FALSE, 0.0 },
-  { "Bell", "Notifications", "History and conversations", FALSE, 0.0 },
-  { "Bat", "Battery", "87%, until 10:30 PM", FALSE, 0.0 },
-  { "Sys", "System", "Languages, gestures, time", FALSE, 0.0 },
-  { "Info", "About phone", "Model, Android version", FALSE, 0.0 },
-  { "Dev", "Developer options", "Debugging and input", FALSE, 0.0 },
+  { "Net", N_("Network & internet"), N_("Wi-Fi, SIM, hotspot"), FALSE, 0.0 },
+  { "BT", N_("Connected devices"), N_("Bluetooth, pairing"), FALSE, 0.0 },
+  { "App", N_("Apps"), N_("Permissions and defaults"), FALSE, 0.0 },
+  { "Bell", N_("Notifications"), N_("History and conversations"), FALSE, 0.0 },
+  { "Bat", N_("Battery"), N_("87%, until 10:30 PM"), FALSE, 0.0 },
+  { "Sys", N_("System"), N_("Languages, gestures, time"), FALSE, 0.0 },
+  { "Info", N_("About phone"), N_("Model, Android version"), FALSE, 0.0 },
+  { "Dev", N_("Developer options"), N_("Debugging and input"), FALSE, 0.0 },
 };
 
 enum {
@@ -1817,9 +1818,9 @@ enum {
 };
 
 static const PmSetupDrawRow pm_setup_about_phone_rows[] = {
-  { "ID", "Device name", "Pixel phone", FALSE, 0.0 },
-  { "A", "Android version", "Version and security update", FALSE, 0.0 },
-  { "123", "Build number", "Tap seven times", FALSE, 0.0 },
+  { "ID", N_("Device name"), N_("Pixel phone"), FALSE, 0.0 },
+  { "A", N_("Android version"), N_("Version and security update"), FALSE, 0.0 },
+  { "123", N_("Build number"), N_("Tap seven times"), FALSE, 0.0 },
 };
 
 enum {
@@ -1836,10 +1837,10 @@ pm_setup_developer_rows_for_state (PmSetupDrawRow rows[PM_SETUP_DEVELOPER_N_ROWS
                                    double         wireless_progress)
 {
   const PmSetupDrawRow base[] = {
-    { "Dev", "Use developer options", "On", TRUE, 1.0 },
-    { "USB", "USB debugging", "Debug mode when USB is connected", TRUE, 0.0 },
-    { "Wi", "Wireless debugging", "Debug over Wi-Fi", TRUE, 0.0 },
-    { "ADB", "Revoke debugging authorizations", NULL, FALSE, 0.0 },
+    { "Dev", N_("Use developer options"), N_("On"), TRUE, 1.0 },
+    { "USB", N_("USB debugging"), N_("Debug mode when USB is connected"), TRUE, 0.0 },
+    { "Wi", N_("Wireless debugging"), N_("Debug over Wi-Fi"), TRUE, 0.0 },
+    { "ADB", N_("Revoke debugging authorizations"), NULL, FALSE, 0.0 },
   };
 
   memcpy (rows, base, sizeof base);
@@ -2213,12 +2214,12 @@ pm_setup_draw_home_screen (cairo_t      *cr,
     double      green;
     double      blue;
   } apps[] = {
-    { "Phone", "Ph", 0.77, 0.94, 0.82 },
-    { "Messages", "Msg", 0.81, 0.89, 1.00 },
-    { "Photos", "Pic", 1.00, 0.86, 0.72 },
-    { "Camera", "Cam", 0.90, 0.86, 1.00 },
-    { "Settings", "Set", 0.84, 0.87, 0.92 },
-    { "Files", "File", 1.00, 0.94, 0.70 },
+    { N_("Phone"), "Ph", 0.77, 0.94, 0.82 },
+    { N_("Messages"), "Msg", 0.81, 0.89, 1.00 },
+    { N_("Photos"), "Pic", 1.00, 0.86, 0.72 },
+    { N_("Camera"), "Cam", 0.90, 0.86, 1.00 },
+    { N_("Settings"), "Set", 0.84, 0.87, 0.92 },
+    { N_("Files"), "File", 1.00, 0.94, 0.70 },
   };
   double start_x = screen.x + 19.0;
   double start_y = screen.y + 84.0;
@@ -2241,7 +2242,7 @@ pm_setup_draw_home_screen (cairo_t      *cr,
                          1.0,
                          0.85);
   pm_setup_draw_text (cr,
-                      "Search your phone",
+                      _("Search your phone"),
                       screen.x + 29.0,
                       screen.y + 57.0,
                       9.0,
@@ -2259,7 +2260,7 @@ pm_setup_draw_home_screen (cairo_t      *cr,
                             x,
                             y,
                             size,
-                            apps[i].label,
+                            gettext (apps[i].label),
                             apps[i].abbr,
                             apps[i].red,
                             apps[i].green,
@@ -2366,7 +2367,7 @@ pm_setup_draw_settings_row (cairo_t             *cr,
                              0.24,
                              0.85);
   pm_setup_draw_text_fit (cr,
-                          row->title,
+                          gettext (row->title),
                           text_x,
                           y + 15.0,
                           text_w,
@@ -2378,7 +2379,7 @@ pm_setup_draw_settings_row (cairo_t             *cr,
                           1.0);
   if (row->detail != NULL)
     pm_setup_draw_text_fit (cr,
-                            row->detail,
+                            gettext (row->detail),
                             text_x,
                             y + 27.0,
                             text_w,
@@ -2619,7 +2620,7 @@ pm_setup_draw_dialog (cairo_t     *cr,
                           0.46,
                           alpha);
   pm_setup_draw_text_fit (cr,
-                          "Cancel",
+                          _("Cancel"),
                           x + w - 76.0,
                           y + h - 17.0,
                           38.0,
@@ -2814,7 +2815,7 @@ pm_setup_draw_open_settings_scene (cairo_t *cr,
   cairo_translate (cr, (1.0 - open) * screen.w, 0.0);
   pm_setup_draw_settings_screen (cr,
                                  screen,
-                                 "Settings",
+                                 _("Settings"),
                                  pm_setup_main_settings_rows,
                                  G_N_ELEMENTS (pm_setup_main_settings_rows),
                                  -1,
@@ -2846,7 +2847,7 @@ pm_setup_draw_about_scene (cairo_t *cr,
   cairo_translate (cr, -open * screen.w, 0.0);
   pm_setup_draw_settings_screen (cr,
                                  screen,
-                                 "Settings",
+                                 _("Settings"),
                                  pm_setup_main_settings_rows,
                                  G_N_ELEMENTS (pm_setup_main_settings_rows),
                                  PM_SETUP_SETTINGS_ROW_ABOUT,
@@ -2856,7 +2857,7 @@ pm_setup_draw_about_scene (cairo_t *cr,
   cairo_translate (cr, screen.w, 0.0);
   pm_setup_draw_settings_screen (cr,
                                  screen,
-                                 "About phone",
+                                 _("About phone"),
                                  pm_setup_about_phone_rows,
                                  G_N_ELEMENTS (pm_setup_about_phone_rows),
                                  -1,
@@ -2889,7 +2890,7 @@ pm_setup_draw_build_scene (cairo_t *cr,
 
   pm_setup_draw_settings_screen (cr,
                                  screen,
-                                 "About phone",
+                                 _("About phone"),
                                  pm_setup_about_phone_rows,
                                  G_N_ELEMENTS (pm_setup_about_phone_rows),
                                  PM_SETUP_ABOUT_PHONE_ROW_BUILD,
@@ -2898,7 +2899,7 @@ pm_setup_draw_build_scene (cairo_t *cr,
                                  TRUE);
   if (t > 0.7 && t < 2.45) {
     char label[32];
-    g_snprintf (label, sizeof label, "Tap %d of 7", count);
+    g_snprintf (label, sizeof label, _("Tap %d of 7"), count);
     pm_setup_draw_touch (cr, screen.x + screen.w / 2.0, build_y, tap_progress);
     pm_setup_fill_rounded (cr,
                            screen.x + 38.0,
@@ -2923,7 +2924,7 @@ pm_setup_draw_build_scene (cairo_t *cr,
   }
   pm_setup_draw_toast (cr,
                        screen,
-                       "You are now a developer!",
+                       _("You are now a developer!"),
                        pm_setup_interval (t, 2.65, 3.35));
 }
 
@@ -2953,7 +2954,7 @@ pm_setup_draw_usb_scene (cairo_t *cr,
   cairo_translate (cr, settings_x, 0.0);
   pm_setup_draw_settings_screen (cr,
                                  screen,
-                                 "Settings",
+                                 _("Settings"),
                                  pm_setup_main_settings_rows,
                                  G_N_ELEMENTS (pm_setup_main_settings_rows),
                                  PM_SETUP_SETTINGS_ROW_DEVELOPER,
@@ -2966,7 +2967,7 @@ pm_setup_draw_usb_scene (cairo_t *cr,
   cairo_translate (cr, about_x, 0.0);
   pm_setup_draw_settings_screen (cr,
                                  screen,
-                                 "About phone",
+                                 _("About phone"),
                                  pm_setup_about_phone_rows,
                                  G_N_ELEMENTS (pm_setup_about_phone_rows),
                                  PM_SETUP_ABOUT_PHONE_ROW_BUILD,
@@ -2979,7 +2980,7 @@ pm_setup_draw_usb_scene (cairo_t *cr,
   cairo_translate (cr, developer_x, 0.0);
   pm_setup_draw_settings_screen (cr,
                                  screen,
-                                 "Developer options",
+                                 _("Developer options"),
                                  developer_rows,
                                  PM_SETUP_DEVELOPER_N_ROWS,
                                  PM_SETUP_DEVELOPER_ROW_USB,
@@ -3003,9 +3004,9 @@ pm_setup_draw_usb_scene (cairo_t *cr,
                        pm_setup_interval (t, 3.0, 3.75));
   pm_setup_draw_dialog (cr,
                         screen,
-                        "Allow USB debugging?",
-                        "Computer RSA key fingerprint",
-                        "OK",
+                        _("Allow USB debugging?"),
+                        _("Computer RSA key fingerprint"),
+                        _("OK"),
                         pm_setup_interval (t, 4.2, 5.0));
   pm_setup_draw_touch (cr,
                        screen.x + screen.w - 36.0,
@@ -3019,9 +3020,9 @@ pm_setup_draw_wireless_scene (cairo_t *cr,
 {
   PmSetupDrawRow developer_rows[PM_SETUP_DEVELOPER_N_ROWS];
   PmSetupDrawRow wireless_rows[] = {
-    { "Wi", "Use wireless debugging", "Current Wi-Fi network", TRUE, 0.0 },
-    { "Net", "Wi-Fi network", "Same network as Linux", FALSE, 0.0 },
-    { "Name", "Device name", "Android device", FALSE, 0.0 },
+    { "Wi", N_("Use wireless debugging"), N_("Current Wi-Fi network"), TRUE, 0.0 },
+    { "Net", N_("Wi-Fi network"), N_("Same network as Linux"), FALSE, 0.0 },
+    { "Name", N_("Device name"), N_("Android device"), FALSE, 0.0 },
   };
   PmSetupRect phone = { 73.0, 10.0, 174.0, 270.0 };
   PmSetupRect screen = pm_setup_draw_phone_shell (cr, phone.x, phone.y, phone.w, phone.h);
@@ -3036,7 +3037,7 @@ pm_setup_draw_wireless_scene (cairo_t *cr,
   cairo_translate (cr, -open * screen.w, 0.0);
   pm_setup_draw_settings_screen (cr,
                                  screen,
-                                 "Developer options",
+                                 _("Developer options"),
                                  developer_rows,
                                  PM_SETUP_DEVELOPER_N_ROWS,
                                  PM_SETUP_DEVELOPER_ROW_WIRELESS,
@@ -3046,7 +3047,7 @@ pm_setup_draw_wireless_scene (cairo_t *cr,
   cairo_translate (cr, screen.w, 0.0);
   pm_setup_draw_settings_screen (cr,
                                  screen,
-                                 "Wireless debugging",
+                                 _("Wireless debugging"),
                                  wireless_rows,
                                  G_N_ELEMENTS (wireless_rows),
                                  0,
@@ -3065,9 +3066,9 @@ pm_setup_draw_wireless_scene (cairo_t *cr,
                        pm_setup_interval (t, 1.75, 2.45));
   pm_setup_draw_dialog (cr,
                         screen,
-                        "Allow wireless debugging?",
-                        "Allow on this Wi-Fi network",
-                        "Allow",
+                        _("Allow wireless debugging?"),
+                        _("Allow on this Wi-Fi network"),
+                        _("Allow"),
                         pm_setup_interval (t, 3.1, 3.9));
   pm_setup_draw_touch (cr,
                        screen.x + screen.w - 38.0,
@@ -3081,14 +3082,14 @@ pm_setup_draw_pairing_phone_screen (cairo_t     *cr,
                                     double       opened)
 {
   PmSetupDrawRow wireless_rows[] = {
-    { "Wi", "Use wireless debugging", "On", TRUE, 1.0 },
-    { "Pair", "Pair device with code", "Shows code and address", FALSE, 0.0 },
-    { "IP", "IP address & port", "192.168.1.25:5555", FALSE, 0.0 },
+    { "Wi", N_("Use wireless debugging"), N_("On"), TRUE, 1.0 },
+    { "Pair", N_("Pair device with code"), N_("Shows code and address"), FALSE, 0.0 },
+    { "IP", N_("IP address & port"), "192.168.1.25:5555", FALSE, 0.0 },
   };
   PmSetupDrawRow code_rows[] = {
-    { "Code", "123456", "Pairing code", FALSE, 0.0 },
-    { "IP", "192.168.1.25:37123", "Pairing address", FALSE, 0.0 },
-    { "Time", "Keep this screen open", "Code expires soon", FALSE, 0.0 },
+    { "Code", "123456", N_("Pairing code"), FALSE, 0.0 },
+    { "IP", "192.168.1.25:37123", N_("Pairing address"), FALSE, 0.0 },
+    { "Time", N_("Keep this screen open"), N_("Code expires soon"), FALSE, 0.0 },
   };
 
   cairo_save (cr);
@@ -3096,7 +3097,7 @@ pm_setup_draw_pairing_phone_screen (cairo_t     *cr,
   cairo_translate (cr, -opened * screen.w, 0.0);
   pm_setup_draw_settings_screen (cr,
                                  screen,
-                                 "Wireless debugging",
+                                 _("Wireless debugging"),
                                  wireless_rows,
                                  G_N_ELEMENTS (wireless_rows),
                                  1,
@@ -3106,7 +3107,7 @@ pm_setup_draw_pairing_phone_screen (cairo_t     *cr,
   cairo_translate (cr, screen.w, 0.0);
   pm_setup_draw_settings_screen (cr,
                                  screen,
-                                 "Pair device",
+                                 _("Pair device"),
                                  code_rows,
                                  G_N_ELEMENTS (code_rows),
                                  0,
@@ -3242,7 +3243,7 @@ pm_setup_draw_connect_device_sheet (cairo_t     *cr,
   cairo_restore (cr);
 
   pm_setup_draw_text_center (cr,
-                             "Set up device",
+                             _("Set up device"),
                              x + w / 2.0,
                              y + 19.5,
                              7.2,
@@ -3253,7 +3254,7 @@ pm_setup_draw_connect_device_sheet (cairo_t     *cr,
                              1.0);
 
   pm_setup_draw_text (cr,
-                      "Pairing",
+                      _("Pairing"),
                       x + 9.0,
                       y + 52.0,
                       7.2,
@@ -3263,7 +3264,7 @@ pm_setup_draw_connect_device_sheet (cairo_t     *cr,
                       1.0,
                       1.0);
   pm_setup_draw_text_fit (cr,
-                          "Android 11+: Pair device with code.",
+                          _("Android 11+: Pair device with code."),
                           x + 9.0,
                           y + 63.0,
                           w - 18.0,
@@ -3275,10 +3276,10 @@ pm_setup_draw_connect_device_sheet (cairo_t     *cr,
                           1.0);
   pm_setup_draw_adw_entry_group (cr,
                                  pair_group,
-                                 "Pairing address (ip:port)",
+                                 _("Pairing address (ip:port)"),
                                  "192.168.1.25:37123",
                                  pm_setup_interval (copy_progress, 0.0, 0.55),
-                                 "Pairing code",
+                                 _("Pairing code"),
                                  "123456",
                                  pm_setup_interval (copy_progress, 0.35, 0.9));
   pm_setup_fill_rounded (cr,
@@ -3292,7 +3293,7 @@ pm_setup_draw_connect_device_sheet (cairo_t     *cr,
                          0.90,
                          1.0);
   pm_setup_draw_text_center (cr,
-                             "Pair & Connect",
+                             _("Pair & Connect"),
                              x + w / 2.0,
                              y + 153.0,
                              5.8,
@@ -3533,11 +3534,11 @@ pm_window_show_setup_step (PmWindow *self, guint step)
                           self->setup_step != PM_SETUP_WELCOME);
   gtk_button_set_label (GTK_BUTTON (self->setup_next_button),
                         self->setup_step + 1 >= PM_SETUP_N_STEPS
-                          ? "Go to Home"
-                          : "Continue");
+                          ? _("Go to Home")
+                          : _("Continue"));
 
   pm_window_reset_setup_animation (self, self->setup_step);
-  adw_window_title_set_title (self->title, "First Time Setup");
+  adw_window_title_set_title (self->title, _("First Time Setup"));
   adw_window_title_set_subtitle (self->title, NULL);
 }
 
@@ -3604,32 +3605,32 @@ typedef struct {
 
 static const PmSetupText pm_setup_texts[PM_SETUP_N_STEPS] = {
   [PM_SETUP_WELCOME] = {
-    "Welcome to Phone Mirror",
-    "We will help you prepare your Android phone. Keep your phone nearby and connect it to the same Wi-Fi network as this computer.",
+    N_("Welcome to Phone Mirror"),
+    N_("We will help you prepare your Android phone. Keep your phone nearby and connect it to the same Wi-Fi network as this computer."),
   },
   [PM_SETUP_SETTINGS] = {
-    "Open Settings",
-    "Unlock your Android phone. Find the Settings app and open it.",
+    N_("Open Settings"),
+    N_("Unlock your Android phone. Find the Settings app and open it."),
   },
   [PM_SETUP_ABOUT] = {
-    "Find About phone",
-    "In Settings, scroll toward the bottom. Tap About phone. On some phones, open System first, then tap About phone.",
+    N_("Find About phone"),
+    N_("In Settings, scroll toward the bottom. Tap About phone. On some phones, open System first, then tap About phone."),
   },
   [PM_SETUP_BUILD_NUMBER] = {
-    "Turn on Developer options",
-    "Find Build number. Tap Build number seven times. If Android asks for your PIN, enter it. Stop when the phone says you are now a developer.",
+    N_("Turn on Developer options"),
+    N_("Find Build number. Tap Build number seven times. If Android asks for your PIN, enter it. Stop when the phone says you are now a developer."),
   },
   [PM_SETUP_USB_DEBUGGING] = {
-    "Turn on USB debugging",
-    "Go back to Settings. Open Developer options. On some phones, open System first, then turn on USB debugging. If Android asks, tap OK.",
+    N_("Turn on USB debugging"),
+    N_("Go back to Settings. Open Developer options. On some phones, open System first, then turn on USB debugging. If Android asks, tap OK."),
   },
   [PM_SETUP_WIRELESS_DEBUGGING] = {
-    "Turn on Wireless debugging",
-    "Stay in Developer options. Turn on Wireless debugging. Keep your phone and this computer on the same network. If Android asks, tap Allow.",
+    N_("Turn on Wireless debugging"),
+    N_("Stay in Developer options. Turn on Wireless debugging. Keep your phone and this computer on the same network. If Android asks, tap Allow."),
   },
   [PM_SETUP_PAIRING] = {
-    "Get the pairing code",
-    "Tap Wireless debugging, then Pair device with pairing code. Leave that screen open. On the home page, choose Set Up Device, enter the pairing address and code, then choose Pair & Connect.",
+    N_("Get the pairing code"),
+    N_("Tap Wireless debugging, then Pair device with pairing code. Leave that screen open. On the home page, choose Set Up Device, enter the pairing address and code, then choose Pair & Connect."),
   },
 };
 
@@ -3643,19 +3644,19 @@ setup_instruction_new (PmSetupStep step)
 
   g_autofree char *step_text =
     step == PM_SETUP_WELCOME
-      ? g_strdup ("Welcome")
-      : g_strdup_printf ("Step %u of %u", step, PM_SETUP_N_STEPS - 1);
+      ? g_strdup (_("Welcome"))
+      : g_strdup_printf (_("Step %u of %u"), step, PM_SETUP_N_STEPS - 1);
   GtkWidget *step_label = phone_label_new (step_text, "specula-setup-step");
   gtk_label_set_xalign (GTK_LABEL (step_label), 0.5);
   gtk_box_append (GTK_BOX (box), step_label);
 
-  GtkWidget *title_label = phone_label_new (pm_setup_texts[step].title,
+  GtkWidget *title_label = phone_label_new (gettext (pm_setup_texts[step].title),
                                             "specula-setup-title");
   gtk_label_set_xalign (GTK_LABEL (title_label), 0.5);
   gtk_label_set_justify (GTK_LABEL (title_label), GTK_JUSTIFY_CENTER);
   gtk_box_append (GTK_BOX (box), title_label);
 
-  GtkWidget *body_label = phone_label_new (pm_setup_texts[step].body,
+  GtkWidget *body_label = phone_label_new (gettext (pm_setup_texts[step].body),
                                            "specula-setup-body");
   gtk_label_set_xalign (GTK_LABEL (body_label), 0.5);
   gtk_label_set_justify (GTK_LABEL (body_label), GTK_JUSTIFY_CENTER);
@@ -3737,12 +3738,12 @@ setup_root_new (PmWindow *self)
   gtk_widget_set_margin_top (buttons, 6);
 
   self->setup_back_button =
-    setup_nav_button_new ("Back", FALSE,
+    setup_nav_button_new (_("Back"), FALSE,
                           G_CALLBACK (on_setup_back_clicked), self);
   gtk_box_append (GTK_BOX (buttons), self->setup_back_button);
 
   self->setup_next_button =
-    setup_nav_button_new ("Continue", TRUE,
+    setup_nav_button_new (_("Continue"), TRUE,
                           G_CALLBACK (on_setup_next_clicked), self);
   gtk_box_append (GTK_BOX (buttons), self->setup_next_button);
 
@@ -3777,28 +3778,28 @@ build_header_menu (void)
    * exclusive, so this one section renders correctly in either state and its
    * separator disappears with it when empty. */
   GMenu *state_section = g_menu_new ();
-  menu_append_state_item (state_section, "_Disconnect", "win.disconnect");
-  menu_append_state_item (state_section, "_Lockscreen PIN…", "win.lockscreen-pin");
-  menu_append_state_item (state_section, "_First Time Setup", "win.first-setup");
+  menu_append_state_item (state_section, _("_Disconnect"), "win.disconnect");
+  menu_append_state_item (state_section, _("_Lockscreen PIN…"), "win.lockscreen-pin");
+  menu_append_state_item (state_section, _("_First Time Setup"), "win.first-setup");
   g_menu_append_section (menu, NULL, G_MENU_MODEL (state_section));
   g_object_unref (state_section);
 
   /* Connection actions - always available. */
   GMenu *connect_section = g_menu_new ();
-  g_menu_append (connect_section, "_Manual Connection…", "win.manual-connect");
-  g_menu_append (connect_section, "_Set Up Device…", "win.setup");
+  g_menu_append (connect_section, _("_Manual Connection…"), "win.manual-connect");
+  g_menu_append (connect_section, _("_Set Up Device…"), "win.setup");
   g_menu_append_section (menu, NULL, G_MENU_MODEL (connect_section));
   g_object_unref (connect_section);
 
   /* App-level entries. */
   GMenu *app_section = g_menu_new ();
-  g_menu_append (app_section, "_Settings", "win.settings");
-  g_menu_append (app_section, "_About Phone Mirror", "app.about");
+  g_menu_append (app_section, _("_Settings"), "win.settings");
+  g_menu_append (app_section, _("_About Phone Mirror"), "app.about");
   g_menu_append_section (menu, NULL, G_MENU_MODEL (app_section));
   g_object_unref (app_section);
 
   GMenu *quit_section = g_menu_new ();
-  g_menu_append (quit_section, "_Quit", "app.quit");
+  g_menu_append (quit_section, _("_Quit"), "app.quit");
   g_menu_append_section (menu, NULL, G_MENU_MODEL (quit_section));
   g_object_unref (quit_section);
 
@@ -3882,7 +3883,7 @@ pm_window_init (PmWindow *self)
   self->pin_image = GTK_IMAGE (gtk_image_new ());
   gtk_image_set_pixel_size (self->pin_image, 16);
   gtk_button_set_child (GTK_BUTTON (self->pin_button), GTK_WIDGET (self->pin_image));
-  gtk_widget_set_tooltip_text (GTK_WIDGET (self->pin_button), "Keep controls visible");
+  gtk_widget_set_tooltip_text (GTK_WIDGET (self->pin_button), _("Keep controls visible"));
   gtk_widget_add_css_class (GTK_WIDGET (self->pin_button), "flat");
   gtk_widget_add_css_class (GTK_WIDGET (self->pin_button), "image-button");
   gtk_widget_add_css_class (GTK_WIDGET (self->pin_button), "specula-pin-button");
@@ -3897,19 +3898,19 @@ pm_window_init (PmWindow *self)
   adw_status_page_set_icon_name (self->status_page, "phone-symbolic");
   adw_status_page_set_title (self->status_page, "Phone Mirror");
   adw_status_page_set_description (self->status_page,
-    "Press Connect to look for your paired device.");
+    _("Press Connect to look for your paired device."));
 
   self->spinner = GTK_SPINNER (gtk_spinner_new ());
   gtk_widget_set_size_request (GTK_WIDGET (self->spinner), 32, 32);
 
-  self->connect_button = GTK_BUTTON (gtk_button_new_with_label ("Connect"));
+  self->connect_button = GTK_BUTTON (gtk_button_new_with_label (_("Connect")));
   gtk_widget_add_css_class (GTK_WIDGET (self->connect_button), "pill");
   gtk_widget_add_css_class (GTK_WIDGET (self->connect_button), "suggested-action");
   gtk_widget_set_halign (GTK_WIDGET (self->connect_button), GTK_ALIGN_CENTER);
   g_signal_connect (self->connect_button, "clicked",
                     G_CALLBACK (on_connect_clicked), self);
 
-  GtkWidget *setup_button = gtk_button_new_with_label ("Set Up Device…");
+  GtkWidget *setup_button = gtk_button_new_with_label (_("Set Up Device…"));
   gtk_widget_add_css_class (setup_button, "pill");
   gtk_widget_set_halign (setup_button, GTK_ALIGN_CENTER);
   gtk_actionable_set_action_name (GTK_ACTIONABLE (setup_button), "win.setup");

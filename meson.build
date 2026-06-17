@@ -42,6 +42,9 @@ m_dep = cc.find_library('m', required : false)
 # refresh.
 gnome = import('gnome')
 
+# Internationalisation: gettext-based translations live under po/.
+i18n = import('i18n')
+
 project_deps = [
   gtk_dep, adw_dep,
   avcodec_dep, avformat_dep, avutil_dep, swscale_dep,
@@ -62,6 +65,9 @@ conf.set_quoted('PM_APP_ID', 'io.github.petexy.Specula')
 # hicolor theme.
 conf.set_quoted('PM_SOURCE_ICONS_DIR', meson.project_source_root() / 'data' / 'icons')
 conf.set_quoted('GETTEXT_PACKAGE', 'specula')
+# Where the compiled .mo catalogs are installed; used at runtime for
+# bindtextdomain() so translations resolve from the system locale dir.
+conf.set_quoted('PM_LOCALEDIR', get_option('prefix') / get_option('localedir'))
 conf.set10('PM_HAVE_AVAHI', have_avahi)
 configure_file(output : 'pm-config.h', configuration : conf)
 config_inc = include_directories('.')
@@ -83,4 +89,5 @@ add_project_arguments(
 )
 
 subdir('data')
+subdir('po')
 subdir('src')

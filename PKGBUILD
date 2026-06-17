@@ -1,9 +1,9 @@
-# Maintainer: Piotr Lewandowski <piotr.petexiness@gmail.com>
+# Maintainer: Piotr 'Linexy' Lewandowski <piotr.petexiness@gmail.com>
 
 pkgname=specula
 pkgver=0.1.0
 pkgrel=1
-pkgdesc="Wire-free Android screen mirroring and control for the Linux desktop (Phone Mirror): GTK4/libadwaita, Wayland-native, FFmpeg decode"
+pkgdesc="Wire-free Android screen mirroring and control for the Linux desktop."
 arch=('x86_64' 'aarch64')
 url="https://github.com/Petexy/specula"
 license=('GPL-3.0-or-later')

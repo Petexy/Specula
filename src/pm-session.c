@@ -12,6 +12,7 @@
 #include "pinstore.h"
 
 #include <string.h>
+#include <glib/gi18n.h>
 
 /* Local TCP port for the forwarded device socket. */
 #define PM_LOCAL_PORT     27183
@@ -182,7 +183,7 @@ pm_session_inhibit_sleep (PmSession *self)
     gtk_application_inhibit (GTK_APPLICATION (app), window,
                             GTK_APPLICATION_INHIBIT_SUSPEND |
                             GTK_APPLICATION_INHIBIT_IDLE,
-                            "Mirroring a connected phone");
+                            _("Mirroring a connected phone"));
   if (self->inhibit_cookie == 0)
     g_debug ("sleep inhibit: session manager refused; desktop may suspend mid-mirror");
 }
@@ -367,7 +368,7 @@ connect_server_socket (GSubprocess  *server,
   for (int i = 0; i < PM_SERVER_SOCKET_ATTEMPTS; i++) {
     if (g_subprocess_get_if_exited (server)) {
       g_set_error (error, G_IO_ERROR, G_IO_ERROR_FAILED,
-                   "scrcpy-server exited with status %d",
+                   _("scrcpy-server exited with status %d"),
                    g_subprocess_get_exit_status (server));
       return FALSE;
     }
@@ -395,7 +396,7 @@ connect_server_socket (GSubprocess  *server,
   }
 
   g_set_error (error, G_IO_ERROR, G_IO_ERROR_TIMED_OUT,
-               "timed out waiting for scrcpy-server socket%s%s",
+               _("timed out waiting for scrcpy-server socket%s%s"),
                last_error ? ": " : "",
                last_error ? last_error->message : "");
   return FALSE;
@@ -642,21 +643,21 @@ live_worker (gpointer data)
   g_autofree char *bitrate_arg = NULL;
   const char *step = "Starting connection";
 
-  post_state (self, PM_STATE_CONNECTING, "Connecting to device…");
+  post_state (self, PM_STATE_CONNECTING, _("Connecting to device…"));
 
   step = "Locating scrcpy-server";
   g_message ("%s", step);
   jar = find_server_jar ();
   if (jar == NULL) {
     g_set_error_literal (&error, G_IO_ERROR, G_IO_ERROR_NOT_FOUND,
-                         "Could not find scrcpy-server. Install scrcpy or set PM_SERVER_JAR to the server path.");
+                         _("Could not find scrcpy-server. Install scrcpy or set PM_SERVER_JAR to the server path."));
     goto fail;
   }
 
   version = find_scrcpy_version ();
   if (version == NULL) {
     g_set_error_literal (&error, G_IO_ERROR, G_IO_ERROR_NOT_FOUND,
-                         "Could not determine scrcpy-server version. Install scrcpy or set PM_SCRCPY_VERSION to match your server.");
+                         _("Could not determine scrcpy-server version. Install scrcpy or set PM_SCRCPY_VERSION to match your server."));
     goto fail;
   }
 
@@ -714,7 +715,7 @@ live_worker (gpointer data)
    * new_display_arg, the genuinely optional tail. */
 
   step = "Connecting with adb";
-  post_state (self, PM_STATE_CONNECTING, "Connecting with adb…");
+  post_state (self, PM_STATE_CONNECTING, _("Connecting with adb…"));
   g_message ("%s: %s:%u", step, self->target.host, self->target.port);
   if (!pm_adb_connect (self->target.host, self->target.port, &error))
     goto fail;
@@ -730,26 +731,26 @@ live_worker (gpointer data)
   maybe_unlock_device (serial);
 
   step = "Pushing scrcpy-server";
-  post_state (self, PM_STATE_CONNECTING, "Installing mirror server…");
+  post_state (self, PM_STATE_CONNECTING, _("Installing mirror server…"));
   g_message ("%s: %s", step, jar);
   if (!pm_adb_push (serial, jar, PM_REMOTE_JAR, &error))
     goto fail;
 
   step = "Forwarding scrcpy socket";
-  post_state (self, PM_STATE_CONNECTING, "Opening mirror socket…");
+  post_state (self, PM_STATE_CONNECTING, _("Opening mirror socket…"));
   g_message ("%s", step);
   if (!pm_adb_forward (serial, PM_LOCAL_PORT, PM_REMOTE_SOCKET, &error))
     goto fail;
 
   step = "Starting scrcpy-server";
-  post_state (self, PM_STATE_CONNECTING, "Starting mirror server…");
+  post_state (self, PM_STATE_CONNECTING, _("Starting mirror server…"));
   g_message ("%s %s", step, version);
   self->server = pm_adb_spawn_server (serial, PM_REMOTE_JAR, PM_SERVER_CLASS, server_args, &error);
   if (self->server == NULL)
     goto fail;
 
   step = "Connecting video socket";
-  post_state (self, PM_STATE_CONNECTING, "Connecting video stream…");
+  post_state (self, PM_STATE_CONNECTING, _("Connecting video stream…"));
   g_message ("%s", step);
   if (!connect_server_socket (self->server, TRUE, &self->video_net, &error))
     goto fail;
@@ -760,14 +761,14 @@ live_worker (gpointer data)
    * thread once the pipeline is live. */
   if (want_audio) {
     step = "Connecting audio socket";
-    post_state (self, PM_STATE_CONNECTING, "Connecting audio stream…");
+    post_state (self, PM_STATE_CONNECTING, _("Connecting audio stream…"));
     g_message ("%s", step);
     if (!connect_server_socket (self->server, FALSE, &self->audio_net, &error))
       goto fail;
   }
 
   step = "Connecting control socket";
-  post_state (self, PM_STATE_CONNECTING, "Connecting controls…");
+  post_state (self, PM_STATE_CONNECTING, _("Connecting controls…"));
   g_message ("%s", step);
   if (!connect_server_socket (self->server, FALSE, &self->control_net, &error))
     goto fail;
@@ -778,7 +779,7 @@ live_worker (gpointer data)
   pm_failsafe_arm (pm_net_get_fd (self->control_net));
 
   step = "Reading stream metadata";
-  post_state (self, PM_STATE_CONNECTING, "Reading video stream…");
+  post_state (self, PM_STATE_CONNECTING, _("Reading video stream…"));
   g_message ("%s", step);
   if (!read_stream_meta (self, &device_name, &error))
     goto fail;
@@ -925,9 +926,9 @@ fail:
     g_clear_pointer (&self->control_net, pm_net_free);
 
     g_autofree char *message =
-      g_strdup_printf ("%s failed: %s%s",
+      g_strdup_printf (_("%s failed: %s%s"),
                        step,
-                       error ? error->message : "connection failed",
+                       error ? error->message : _("connection failed"),
                        server_note ? server_note : "");
     g_message ("%s", message);
     if (self->silent)
@@ -990,7 +991,7 @@ static void
 begin_connect (PmSession *self)
 {
   pm_session_set_state (self, PM_STATE_CONNECTING,
-                        "Found device — starting mirror server…");
+                        _("Found device — starting mirror server…"));
 
   if (demo_mode_enabled ())
     self->demo_timer = g_timeout_add (1400, demo_to_mirroring, self);
@@ -1059,7 +1060,7 @@ discovery_timeout (gpointer data)
       pm_session_set_state (self, PM_STATE_IDLE, NULL);
     else
       pm_session_set_state (self, PM_STATE_ERROR,
-                            "No phone found. Use Set Up Device to enter your phone's Wireless debugging address.");
+                            _("No phone found. Use Set Up Device to enter your phone's Wireless debugging address."));
   }
   return G_SOURCE_REMOVE;
 }

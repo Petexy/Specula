@@ -4,6 +4,7 @@
 #include "adb.h"
 #include "pinstore.h"
 #include <string.h>
+#include <glib/gi18n.h>
 
 struct _PmConnectDialog {
   AdwDialog        parent_instance;
@@ -68,14 +69,14 @@ static void
 add_pin_group (PmConnectDialog *self, AdwPreferencesPage *page)
 {
   AdwPreferencesGroup *grp = ADW_PREFERENCES_GROUP (adw_preferences_group_new ());
-  adw_preferences_group_set_title (grp, "Auto-unlock");
+  adw_preferences_group_set_title (grp, _("Auto-unlock"));
   adw_preferences_group_set_description (grp,
-    "OPTIONAL. Stored encrypted on this computer, keyed to the phone, and used "
-    "to unlock its lockscreen automatically on connect. Otherwise, the app will show a black screen during unlocking phone.");
+    _("OPTIONAL. Stored encrypted on this computer, keyed to the phone, and used "
+      "to unlock its lockscreen automatically on connect. Otherwise, the app will show a black screen during unlocking phone."));
 
   self->pin_row = ADW_PASSWORD_ENTRY_ROW (adw_password_entry_row_new ());
   adw_preferences_row_set_title (ADW_PREFERENCES_ROW (self->pin_row),
-                                 "Lockscreen PIN");
+                                 _("Lockscreen PIN"));
   adw_preferences_group_add (grp, GTK_WIDGET (self->pin_row));
 
   adw_preferences_page_add (page, grp);
@@ -100,7 +101,7 @@ on_connect_clicked (GtkButton *button, gpointer user_data)
   const char *host = row_text (self->host_row);
 
   if (host == NULL || *g_strchomp ((char *) host) == '\0') {
-    toast (self, "Enter the device IP address");
+    toast (self, _("Enter the device IP address"));
     return;
   }
 
@@ -172,7 +173,7 @@ on_pair_clicked (GtkButton *button, gpointer user_data)
 
   const char *colon = addr ? strrchr (addr, ':') : NULL;
   if (colon == NULL || code == NULL || *code == '\0') {
-    toast (self, "Enter pairing address (ip:port) and code");
+    toast (self, _("Enter pairing address (ip:port) and code"));
     return;
   }
 
@@ -181,7 +182,7 @@ on_pair_clicked (GtkButton *button, gpointer user_data)
   p->port = parse_port (colon + 1, 0);
   p->code = g_strdup (code);
   if (p->port == 0) {
-    toast (self, "Invalid pairing port");
+    toast (self, _("Invalid pairing port"));
     pair_data_free (p);
     return;
   }
@@ -189,7 +190,7 @@ on_pair_clicked (GtkButton *button, gpointer user_data)
   stash_pin (self);
 
   gtk_widget_set_sensitive (self->pair_button, FALSE);
-  toast (self, "Pairing…");
+  toast (self, _("Pairing…"));
 
   GTask *task = g_task_new (self, NULL, pair_done, self);
   g_task_set_task_data (task, p, pair_data_free);
@@ -234,15 +235,15 @@ build_pairing_page (PmConnectDialog *self)
   AdwPreferencesPage *page = ADW_PREFERENCES_PAGE (adw_preferences_page_new ());
 
   AdwPreferencesGroup *pg = ADW_PREFERENCES_GROUP (adw_preferences_group_new ());
-  adw_preferences_group_set_title (pg, "Pairing");
+  adw_preferences_group_set_title (pg, _("Pairing"));
   adw_preferences_group_set_description (pg,
-    "Android 11+: enable Wireless debugging → Pair device with code.");
+    _("Android 11+: enable Wireless debugging → Pair device with code."));
 
   self->pair_addr_row = ADW_ENTRY_ROW (adw_entry_row_new ());
   adw_preferences_row_set_title (ADW_PREFERENCES_ROW (self->pair_addr_row),
-                                 "Pairing address (ip:port)");
+                                 _("Pairing address (ip:port)"));
   self->code_row = ADW_ENTRY_ROW (adw_entry_row_new ());
-  adw_preferences_row_set_title (ADW_PREFERENCES_ROW (self->code_row), "Pairing code");
+  adw_preferences_row_set_title (ADW_PREFERENCES_ROW (self->code_row), _("Pairing code"));
 
   adw_preferences_group_add (pg, GTK_WIDGET (self->pair_addr_row));
   adw_preferences_group_add (pg, GTK_WIDGET (self->code_row));
@@ -250,10 +251,10 @@ build_pairing_page (PmConnectDialog *self)
 
   add_pin_group (self, page);
 
-  self->pair_button = action_button ("Pair & Connect", TRUE, G_CALLBACK (on_pair_clicked), self);
+  self->pair_button = action_button (_("Pair & Connect"), TRUE, G_CALLBACK (on_pair_clicked), self);
   add_button_group (page, self->pair_button);
 
-  set_page (self, "Set up device", page);
+  set_page (self, _("Set up device"), page);
 }
 
 static void
@@ -262,14 +263,14 @@ build_connection_page (PmConnectDialog *self)
   AdwPreferencesPage *page = ADW_PREFERENCES_PAGE (adw_preferences_page_new ());
 
   AdwPreferencesGroup *cg = ADW_PREFERENCES_GROUP (adw_preferences_group_new ());
-  adw_preferences_group_set_title (cg, "Connection");
+  adw_preferences_group_set_title (cg, _("Connection"));
   adw_preferences_group_set_description (cg,
-    "Enter the Wi-Fi debugging address only if automatic discovery cannot find the phone.");
+    _("Enter the Wi-Fi debugging address only if automatic discovery cannot find the phone."));
 
   self->host_row = ADW_ENTRY_ROW (adw_entry_row_new ());
-  adw_preferences_row_set_title (ADW_PREFERENCES_ROW (self->host_row), "IP address");
+  adw_preferences_row_set_title (ADW_PREFERENCES_ROW (self->host_row), _("IP address"));
   self->port_row = ADW_ENTRY_ROW (adw_entry_row_new ());
-  adw_preferences_row_set_title (ADW_PREFERENCES_ROW (self->port_row), "Port (default 5555)");
+  adw_preferences_row_set_title (ADW_PREFERENCES_ROW (self->port_row), _("Port (default 5555)"));
 
   adw_preferences_group_add (cg, GTK_WIDGET (self->host_row));
   adw_preferences_group_add (cg, GTK_WIDGET (self->port_row));
@@ -279,7 +280,7 @@ build_connection_page (PmConnectDialog *self)
    * or set later from the main menu (Lockscreen PIN…), keeping a quick manual
    * connection friction-free. */
   add_button_group (page,
-    action_button ("Connect manually", TRUE, G_CALLBACK (on_connect_clicked), self));
+    action_button (_("Connect manually"), TRUE, G_CALLBACK (on_connect_clicked), self));
 
   if (pm_device_has_pairing ()) {
     PmDeviceInfo saved = { 0 };
@@ -292,7 +293,7 @@ build_connection_page (PmConnectDialog *self)
     pm_device_info_clear (&saved);
   }
 
-  set_page (self, "Manual connection", page);
+  set_page (self, _("Manual connection"), page);
 }
 
 static void

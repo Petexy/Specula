@@ -4,7 +4,7 @@
   <img src="data/icons/io.github.petexy.Specula.svg" alt="Phone Mirror icon" width="128" height="128">
 </p>
 
-Wire-free Android screen mirroring and control for the Linux desktop. Written in
+Wire-free Android screen mirroring and control for the Linux desktop. An open-source alternative for iPhone Mirroring for Android and Linux. Written in
 pure C with GTK4 and libadwaita.
 
 > Phone Mirror is the user-facing name; the project's internal name (binary,

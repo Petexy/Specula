@@ -49,7 +49,10 @@ on_about_action (GSimpleAction *action,
                  gpointer       user_data)
 {
   GtkApplication *app = GTK_APPLICATION (user_data);
-  const char *developers[] = { "Phone Mirror contributors", NULL };
+  const char *developers[] = {
+    "Piotr 'Linexy' Lewandowski https://github.com/Petexy",
+    NULL
+  };
 
   adw_show_about_dialog (GTK_WIDGET (gtk_application_get_active_window (app)),
                          "application-name", "Phone Mirror",
