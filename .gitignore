@@ -16,3 +16,6 @@ compile_commands.json
 
 # Python venv used to run meson (project-local convenience)
 /.meson-venv/
+
+# Local stable-release packaging (separate gitignored PKGBUILD)
+/dist/

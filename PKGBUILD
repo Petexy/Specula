@@ -1,7 +1,6 @@
 # Maintainer: Piotr 'Linexy' Lewandowski <piotr.petexiness@gmail.com>
 
-pkgname=specula
-pkgver=0.2.0
+pkgname=specula-git
 pkgrel=1
 pkgdesc="Wire-free Android screen mirroring and control for the Linux desktop."
 arch=('x86_64' 'aarch64')
@@ -32,9 +31,9 @@ optdepends=(
 )
 
 provides=('specula')
-conflicts=('specula-git')
-install="$pkgname.install"
-source=("git+$url.git")
+conflicts=('specula')
+install=specula.install
+source=("$pkgname::git+$url.git")
 sha256sums=('SKIP')
 
 pkgver() {
