@@ -84,6 +84,29 @@ For renderer/UI demos without a phone, run:
 PM_DEMO=1 ./build/src/specula
 ```
 
+## Localization
+
+Phone Mirror is localized with gettext and ships with a **Polish** translation.
+The interface follows your system language automatically (from the `LANG` /
+`LC_*` environment) — no in-app setting to change. Translations live under
+[`po/`](po/): `specula.pot` is the message template and each `<lang>.po` a
+translated catalog (currently `pl.po`).
+
+To add another language, append its code to [`po/LINGUAS`](po/LINGUAS) and drop
+in a `<code>.po` (e.g. `msginit -i po/specula.pot -l de -o po/de.po`); meson
+compiles and installs the `.mo` catalogs on build.
+
+When running **uninstalled** from the build tree, gettext looks under the
+install prefix rather than `build/po`, so set `SPECULA_LOCALEDIR` to point at
+the in-tree catalogs (and make sure the target locale is generated):
+
+```sh
+LANG=pl_PL.UTF-8 SPECULA_LOCALEDIR="$PWD/build/po" ./build/src/specula
+```
+
+Once installed (`meson install -C build`), the system locale is picked up with
+no extra environment.
+
 ## Layout
 
 ```
@@ -110,6 +133,7 @@ src/
   prefs.{c,h}          persisted user preferences
   pm-types.h           shared types
 data/                  desktop entry, metainfo, icons
+po/                    gettext translations (template + per-language .po)
 ARCHITECTURE.md        design blueprint, threading model, roadmap
 ```
 

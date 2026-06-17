@@ -1,5 +1,5 @@
 project('specula', 'c',
-  version : '0.1.0',
+  version : '0.2.0',
   license : 'GPL-3.0-or-later',
   meson_version : '>= 1.0.0',
   default_options : [
@@ -64,7 +64,8 @@ conf.set_quoted('PM_APP_ID', 'io.github.petexy.Specula')
 # Source icons dir for uninstalled runs; the installed copy lives in the
 # hicolor theme.
 conf.set_quoted('PM_SOURCE_ICONS_DIR', meson.project_source_root() / 'data' / 'icons')
-conf.set_quoted('GETTEXT_PACKAGE', 'specula')
+gettext_package = 'specula'
+conf.set_quoted('GETTEXT_PACKAGE', gettext_package)
 # Where the compiled .mo catalogs are installed; used at runtime for
 # bindtextdomain() so translations resolve from the system locale dir.
 conf.set_quoted('PM_LOCALEDIR', get_option('prefix') / get_option('localedir'))
