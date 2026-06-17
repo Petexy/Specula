@@ -51,14 +51,14 @@ work is pushed to a worker and results are marshalled back.
 
 ```
 ┌──────────────────────────── GTK main thread ────────────────────────────┐
-│  AdwApplication loop · all widgets · PmSession state machine             │
-│  receives: state changes, decoded GdkTextures (via g_main_context_invoke)│
+│ AdwApplication loop · all widgets · PmSession state machine             │
+│ receives: state changes, decoded GdkTextures (via g_main_context_invoke)│
 └─────────────▲───────────────────────────────────────────▲───────────────┘
               │ post_state() / deliver_frame()              │ input writes
               │ (g_main_context_invoke_full, thread-safe)   │ (tiny, inline)
 ┌─────────────┴───────────────┐                  ┌──────────┴──────────────┐
 │   Discovery thread          │   handoff        │  Session worker thread  │
-│   (probe / mDNS browse)     ├─────────────────▶│  adb → forward → server │
+│   (probe / mDNS browse)     ├────────────────▶│  adb → forward → server │
 │   one-shot: "device found"  │                  │  → net read loop → feed │
 └─────────────────────────────┘                  │     decoder             │
                                                  └──────────┬──────────────┘
@@ -102,7 +102,7 @@ Synchronisation primitives in use: `g_atomic_int` (stop flags),
 
 ```
  IDLE ──user "Connect"──▶ SEARCHING ──device found──▶ CONNECTING ──stream up──▶ MIRRORING
-   ▲                          │                            │                       │
+   ▲                           │                            │                       │
    └──────────────── stop / error / disconnect ◀───────────┴───────────────────────┘
 ```
 

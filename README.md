@@ -1,19 +1,20 @@
 # Phone Mirror
 
+<p align="center">
+  <img src="data/icons/io.github.petexy.Specula.svg" alt="Phone Mirror icon" width="128" height="128">
+</p>
+
 Wire-free Android screen mirroring and control for the Linux desktop. Written in
-pure C with GTK4 and libadwaita, Wayland-native, FFmpeg decode, scrcpy-style
-on-device server. The phone's audio is forwarded too, so the desktop acts as its
-headphones.
+pure C with GTK4 and libadwaita.
 
 > Phone Mirror is the user-facing name; the project's internal name (binary,
 > app id, source) is Specula, much like GNOME *Files* is *Nautilus*. The
 > binary is `specula` and the application id is `io.github.petexy.Specula`.
-> Source: <https://github.com/Petexy/specula>.
 
-> Status: working implementation. Compiles cleanly, launches, and runs the full
-> UI state machine (Searching, Connecting, Mirroring). Already real:
-> mDNS/DNS-SD discovery (Avahi) with a TCP-probe fallback, a device
-> setup dialog (connect by IP, one-time `adb pair`), persisted pairing,
+> Status: working implementation. Already real:
+> mDNS/DNS-SD discovery (Avahi) with a TCP-probe fallback, a guided first-run
+> setup wizard (it walks you through enabling wireless debugging on the phone)
+> and a device setup dialog (connect by IP, in-app one-time pairing), persisted pairing,
 > HiDPI-correct touch/scroll/keyboard input (incl. UTF-8 text injection),
 > forwarded audio, optional lockscreen-PIN auto-unlock, a battery-saving
 > screen-off mode, and a distraction-free mirror window (undecorated, with
@@ -33,7 +34,7 @@ ninja -C build
 
 ### Dependencies
 
-Runtime/build libraries (all detected via `pkg-config`):
+Runtime/build libraries:
 
 - `gtk4` ≥ 4.10, `libadwaita-1` ≥ 1.4
 - `libavcodec`, `libavformat`, `libavutil`, `libswscale` (FFmpeg)
@@ -44,7 +45,7 @@ Runtime/build libraries (all detected via `pkg-config`):
 On Arch/CachyOS:
 
 ```sh
-sudo pacman -S gtk4 libadwaita ffmpeg libpulse android-tools meson avahi
+sudo pacman -S gtk4 libadwaita ffmpeg libpulse android-tools meson avahi scrcpy
 ```
 
 mDNS discovery uses Avahi (`avahi-client`, `avahi-glib`) and the running
@@ -53,20 +54,27 @@ host:port.
 
 ## Running the live pipeline
 
-1. **Pair once** (either method):
-   - *Wi-Fi (Android 11+):* enable Wireless debugging, then
-     `adb pair <ip>:<pair-port>` with the on-device code.
-   - *USB handoff:* `adb tcpip 5555` while plugged in, then unplug.
-2. **Server component:** install `scrcpy` so the app can find its bundled
-   server and version, or download a matching `scrcpy-server` jar and point the
-   app at it (the wire protocol is version-coupled, see [ARCHITECTURE.md §6](ARCHITECTURE.md)):
+1. **Pair once.** On first launch the app shows a guided setup wizard that walks
+   you through enabling **Developer options** and **Wireless debugging** on the
+   phone (Android 11+), then pairs in-app — enter the phone's `ip:port` and the
+   on-device pairing code in the dialog; the app runs the pairing for you, no
+   terminal needed. If you'd rather pair by hand, `adb pair <ip>:<pair-port>`
+   from a shell works too, and a USB handoff (`adb tcpip 5555` while plugged in,
+   then unplug) is also accepted.
+2. **Server component.** With `scrcpy` installed the app finds its bundled
+   `scrcpy-server` automatically (it probes `/usr/share/scrcpy` and
+   `/usr/local/share/scrcpy`) and reads the matching version from
+   `scrcpy --version`. To point at a standalone server file instead, set
+   `PM_SERVER_JAR` (or `SCRCPY_SERVER_PATH`); the wire protocol is
+   version-coupled (see [ARCHITECTURE.md §6](ARCHITECTURE.md)):
    ```sh
    PM_SERVER_JAR=/path/to/scrcpy-server ./build/src/specula
    ```
    If you provide a standalone server file without the `scrcpy` binary on
    `PATH`, also set `PM_SCRCPY_VERSION` to that server's version.
-3. Click **Connect**. The app runs `adb connect → push → forward → app_process`,
-   opens the video/control sockets, decodes, and renders.
+3. Click **Connect**. The app runs `adb connect`, best-effort auto-unlocks the
+   phone if a PIN was saved for it, then `push → forward → app_process`, opens
+   the video/(audio)/control sockets, decodes, and renders.
 
 Persisted pairing lives at `$XDG_CONFIG_HOME/specula/device.ini`.
 

@@ -3609,7 +3609,7 @@ static const PmSetupText pm_setup_texts[PM_SETUP_N_STEPS] = {
   },
   [PM_SETUP_SETTINGS] = {
     "Open Settings",
-    "Unlock your Android phone. Find the Settings app. It usually looks like a small gear. Tap it once.",
+    "Unlock your Android phone. Find the Settings app and open it.",
   },
   [PM_SETUP_ABOUT] = {
     "Find About phone",
@@ -3621,11 +3621,11 @@ static const PmSetupText pm_setup_texts[PM_SETUP_N_STEPS] = {
   },
   [PM_SETUP_USB_DEBUGGING] = {
     "Turn on USB debugging",
-    "Go back to Settings. Open Developer options. Turn on USB debugging. If Android asks, tap OK.",
+    "Go back to Settings. Open Developer options. On some phones, open System first, then turn on USB debugging. If Android asks, tap OK.",
   },
   [PM_SETUP_WIRELESS_DEBUGGING] = {
     "Turn on Wireless debugging",
-    "Stay in Developer options. Turn on Wireless debugging. Keep your phone and this computer on the same Wi-Fi network. If Android asks, tap Allow.",
+    "Stay in Developer options. Turn on Wireless debugging. Keep your phone and this computer on the same network. If Android asks, tap Allow.",
   },
   [PM_SETUP_PAIRING] = {
     "Get the pairing code",

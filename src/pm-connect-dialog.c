@@ -70,8 +70,8 @@ add_pin_group (PmConnectDialog *self, AdwPreferencesPage *page)
   AdwPreferencesGroup *grp = ADW_PREFERENCES_GROUP (adw_preferences_group_new ());
   adw_preferences_group_set_title (grp, "Auto-unlock");
   adw_preferences_group_set_description (grp,
-    "Optional. Stored encrypted on this computer, keyed to the phone, and used "
-    "to unlock its lockscreen automatically on connect.");
+    "OPTIONAL. Stored encrypted on this computer, keyed to the phone, and used "
+    "to unlock its lockscreen automatically on connect. Otherwise, the app will show a black screen during unlocking phone.");
 
   self->pin_row = ADW_PASSWORD_ENTRY_ROW (adw_password_entry_row_new ());
   adw_preferences_row_set_title (ADW_PREFERENCES_ROW (self->pin_row),
