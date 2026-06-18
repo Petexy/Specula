@@ -22,7 +22,7 @@
 #define PM_DISCOVERY_TIMEOUT_MS 8000
 #define PM_SERVER_SOCKET_ATTEMPTS 100
 #define PM_SERVER_SOCKET_DELAY_MS 100
-/* Grace window for the server to read the teardown lock (the KEYCODE_POWER press
+/* Grace window for the server to read the teardown lock (the KEYCODE_SLEEP press
  * in finalize_screen, plus any panel restore) off the control socket before it
  * is force-killed on a clean disconnect, so the phone actually locks. */
 #define PM_LOCK_DRAIN_US (300 * 1000)
@@ -58,6 +58,7 @@ struct _PmSession {
   GSubprocess  *server;
   PmDecoder    *decoder;
   GThread      *audio_worker;  /* reads audio_net -> PmAudio; child of worker  */
+  GThread      *unlock_worker; /* drives auto-unlock concurrently; child of worker */
   PmAudio      *audio;         /* owned by audio_worker once playback starts   */
   PmInput      *input;
   PmDeviceInfo  target;
@@ -147,7 +148,8 @@ find_scrcpy_version (void)
   return NULL;
 }
 
-enum { SIG_STATE_CHANGED, SIG_STREAM_CHANGED, SIG_STARTUP_CHECK_FAILED, N_SIGNALS };
+enum { SIG_STATE_CHANGED, SIG_STREAM_CHANGED, SIG_STARTUP_CHECK_FAILED,
+       SIG_UNLOCKING, N_SIGNALS };
 static guint signals[N_SIGNALS];
 
 G_DEFINE_FINAL_TYPE (PmSession, pm_session, G_TYPE_OBJECT)
@@ -339,6 +341,36 @@ post_state (PmSession *self, PmState state, const char *message)
   m->message = g_strdup (message);
   g_main_context_invoke_full (NULL, G_PRIORITY_DEFAULT,
                               apply_state_idle, m, state_msg_free);
+}
+
+/* Marshal an "unlocking" edge (TRUE = started, FALSE = finished) from a worker
+ * thread to the main thread, where the UI shows/hides the unlock alert. */
+typedef struct { PmSession *self; gboolean active; } UnlockMsg;
+
+static gboolean
+emit_unlocking_idle (gpointer data)
+{
+  UnlockMsg *m = data;
+  g_signal_emit (m->self, signals[SIG_UNLOCKING], 0, m->active);
+  return G_SOURCE_REMOVE;
+}
+
+static void
+unlock_msg_free (gpointer data)
+{
+  UnlockMsg *m = data;
+  g_object_unref (m->self);
+  g_free (m);
+}
+
+static void
+post_unlocking (PmSession *self, gboolean active)
+{
+  UnlockMsg *m = g_new0 (UnlockMsg, 1);
+  m->self = g_object_ref (self);
+  m->active = active;
+  g_main_context_invoke_full (NULL, G_PRIORITY_DEFAULT,
+                              emit_unlocking_idle, m, unlock_msg_free);
 }
 
 /* Decoder delivers textures on the main thread; push them to the view. */
@@ -553,10 +585,12 @@ blank_screen (PmSession *self)
  *
  * The server is launched WITHOUT power_off_on_close (it can't tell a settings
  * reconnect from a real disconnect, so it would lock on every reconnect), so the
- * phone is locked here by injecting KEYCODE_POWER. That key toggles, so it is
- * pressed only from a known screen-on state: a blanked panel has its display
- * power restored first, so the press then puts a lit, interactive screen to
- * sleep (locking it) rather than waking a dark one.
+ * phone is locked here by injecting KEYCODE_SLEEP. Unlike POWER's toggle, SLEEP
+ * always sleeps (never wakes), so it locks regardless of the current screen
+ * state - on slower panels (e.g. MIUI) the just-restored display has not lit yet
+ * when the key lands, and a POWER toggle would wake the dark screen instead of
+ * locking it. A blanked panel is still display-power-restored first so the phone
+ * is usable again on the next wake.
  *
  * Skipped during a reconnect: there the next session inherits a live, unlocked
  * phone rather than one locked in the gap. Best-effort over the control socket, so a
@@ -583,17 +617,17 @@ finalize_screen (PmSession *self)
   if (self->control_net == NULL)
     return FALSE;   /* socket already gone (e.g. a network drop) - can't lock */
 
-  /* Press and release the power key, exactly as scrcpy's own power-off does. */
+  /* Press and release the sleep key to put the phone to sleep (locking it). */
   guint8 buf[PM_CTRL_MSG_MAX];
   g_autoptr (GError) error = NULL;
-  gsize len = pm_protocol_write_key (buf, PM_KEY_DOWN, PM_ANDROID_KEYCODE_POWER, 0);
+  gsize len = pm_protocol_write_key (buf, PM_KEY_DOWN, PM_ANDROID_KEYCODE_SLEEP, 0);
   if (!pm_net_write_all (self->control_net, buf, len, &error)) {
-    g_debug ("lock: power-key down failed: %s", error ? error->message : "write failed");
+    g_debug ("lock: sleep-key down failed: %s", error ? error->message : "write failed");
     return FALSE;
   }
-  len = pm_protocol_write_key (buf, PM_KEY_UP, PM_ANDROID_KEYCODE_POWER, 0);
+  len = pm_protocol_write_key (buf, PM_KEY_UP, PM_ANDROID_KEYCODE_SLEEP, 0);
   if (!pm_net_write_all (self->control_net, buf, len, &error))
-    g_debug ("lock: power-key up failed: %s", error ? error->message : "write failed");
+    g_debug ("lock: sleep-key up failed: %s", error ? error->message : "write failed");
   return TRUE;
 }
 
@@ -602,7 +636,7 @@ finalize_screen (PmSession *self)
  * non-fatal: every failure path just leaves the phone as-is and logs at debug.
  * `serial` is the adb endpoint ("host:port"). */
 static void
-maybe_unlock_device (const char *serial)
+maybe_unlock_device (PmSession *self, const char *serial)
 {
   g_autofree char *mac = pm_adb_query_mac (serial);
   if (mac == NULL) {
@@ -618,14 +652,38 @@ maybe_unlock_device (const char *serial)
   if (pin == NULL)
     return;   /* no PIN saved for this device - nothing to do */
 
+  /* A PIN is stored, so the keyguard is about to be driven (several adb round
+   * trips plus deliberate settle delays, during which Android blanks the secure
+   * screen). Bracket it with the UI notice so the "Unlocking…" alert floats over
+   * the live mirror for exactly as long as the attempt runs. */
+  post_unlocking (self, TRUE);
+
   g_message ("auto-unlock: attempting to unlock device %s", mac);
   g_autoptr (GError) unlock_err = NULL;
   if (!pm_adb_unlock_with_pin (serial, pin, &unlock_err))
     g_debug ("auto-unlock: unlock attempt failed: %s",
              unlock_err ? unlock_err->message : "(unknown)");
 
+  post_unlocking (self, FALSE);
+
   /* Don't leave the plaintext PIN lingering in this buffer longer than needed. */
   memset (pin, 0, strlen (pin));
+}
+
+/* Auto-unlock runs on its own short-lived thread (started once the stream is
+ * live) so its adb round trips and settle delays never stall the frame loop -
+ * the user watches the unlock happen under the alert instead of a frozen frame.
+ * Owns its serial copy; joined by the worker's teardown. */
+typedef struct { PmSession *self; char *serial; } UnlockCtx;
+
+static gpointer
+unlock_worker (gpointer data)
+{
+  UnlockCtx *ctx = data;
+  maybe_unlock_device (ctx->self, ctx->serial);
+  g_free (ctx->serial);
+  g_free (ctx);
+  return NULL;
 }
 
 static gpointer
@@ -722,14 +780,6 @@ live_worker (gpointer data)
 
   serial = g_strdup_printf ("%s:%u", self->target.host, self->target.port);
 
-  /* Auto-unlock: the device's Wi-Fi MAC is the stable key for its saved PIN (its
-   * IP may have changed on a new DHCP lease). Read the MAC, commit any PIN that
-   * was entered in the setup dialog before the MAC was known, then - if a PIN is
-   * stored - best-effort dismiss the keyguard. All of this is non-fatal: a phone
-   * with no saved PIN, an unreadable MAC, or an OEM lockscreen that resists the
-   * input just continues to the normal connect path. */
-  maybe_unlock_device (serial);
-
   step = "Pushing scrcpy-server";
   post_state (self, PM_STATE_CONNECTING, _("Installing mirror server…"));
   g_message ("%s: %s", step, jar);
@@ -811,6 +861,19 @@ live_worker (gpointer data)
   if (self->audio_net != NULL)
     self->audio_worker = g_thread_new ("pm-audio", audio_worker, self);
 
+  /* Auto-unlock now that the stream is live, on its own thread so the keyguard
+   * dance never stalls the frame loop below: the user watches the unlock happen
+   * under the "Unlocking…" alert instead of a black screen. The MAC is the stable
+   * key for the saved PIN (the IP may change across DHCP leases); a phone with no
+   * saved PIN, an unreadable MAC, or a stubborn OEM lockscreen just streams on.
+   * Joined in teardown. */
+  {
+    UnlockCtx *ctx = g_new0 (UnlockCtx, 1);
+    ctx->self = self;
+    ctx->serial = g_strdup (serial);
+    self->unlock_worker = g_thread_new ("pm-unlock", unlock_worker, ctx);
+  }
+
   /* Battery saver: blank the phone's physical panel while mirroring, but only
    * once the user has unlocked the device - otherwise it would just black out
    * an unusable lock screen they still have to get past. The panel stays on
@@ -890,6 +953,12 @@ live_worker (gpointer data)
   if (self->audio_worker != NULL) {
     g_thread_join (self->audio_worker);
     self->audio_worker = NULL;
+  }
+  /* Best-effort auto-unlock thread: join it so it never touches the session after
+   * teardown. It is short-lived (bounded adb round trips), so this won't hang. */
+  if (self->unlock_worker != NULL) {
+    g_thread_join (self->unlock_worker);
+    self->unlock_worker = NULL;
   }
   g_clear_pointer (&self->decoder, pm_decoder_free);
   g_clear_pointer (&self->video_net, pm_net_free);
@@ -1194,27 +1263,24 @@ pm_session_stop (PmSession *self)
      * the abnormal-exit case; this covers a clean close. */
     if (self->input != NULL)
       pm_input_release_all (self->input);
-    /* Lock the phone (restoring the panel first if it was blanked), so the
-     * device is secured as the session shuts down. Idempotent, so the worker's
-     * own teardown call is then a harmless no-op. */
-    gboolean locked = finalize_screen (self);
-    /* The lock keypress is injected asynchronously on the server's reader thread.
-     * Force-killing the server right away (below) could race it, dropping the
-     * press so the phone never locks. Give the server a brief, bounded window to
-     * drain it first - only when it was actually sent and the socket is live;
-     * never on a reconnect (finalize_screen returns FALSE there) so seamless
-     * swaps stay quick. */
-    if (locked && self->control_net != NULL)
-      g_usleep (PM_LOCK_DRAIN_US);
-    /* Disarm the crash fail-safe before the control socket is closed below. */
-    pm_failsafe_arm (-1);
-    /* Unblock every socket the worker (and its audio child) may be reading, so
-     * the join below can't deadlock on a half-open connection. The worker joins
-     * its own audio thread during teardown. */
+    /* Hand the lock + teardown to the worker rather than doing it here too.
+     * Closing only the video socket wakes the worker out of its blocking stream
+     * read so it falls through to its own teardown, which locks the phone over
+     * the still-open control socket, lets the SLEEP keypress drain, then
+     * force-kills the server and closes the remaining sockets.
+     *
+     * Both paths used to lock and tear down concurrently, racing on the one-shot
+     * screen_finalized claim. When the worker won that claim - e.g. it was inside
+     * the ~hundreds-of-ms keyguard poll (pm_adb_query_lock_state) when stop
+     * landed, so it left the loop and reached its own finalize first - this
+     * thread saw finalize_screen return FALSE, skipped the drain, and immediately
+     * closed the control socket / force-killed the server, cutting off the
+     * worker's just-issued SLEEP keypress before the device injected it. The
+     * phone then stayed fully awake. Leaving the worker as the sole owner of the
+     * lock and teardown removes the race; this thread only wakes the read it is
+     * blocked on and joins. (The fail-safe is disarmed inside the worker's
+     * teardown, before it closes the control socket.) */
     if (self->video_net) pm_net_close (self->video_net);
-    if (self->audio_net) pm_net_close (self->audio_net);
-    if (self->control_net) pm_net_close (self->control_net);
-    if (self->server) g_subprocess_force_exit (self->server);
     g_thread_join (self->worker);
     self->worker = NULL;
   }
@@ -1309,6 +1375,17 @@ pm_session_class_init (PmSessionClass *klass)
                   G_SIGNAL_RUN_FIRST,
                   0, NULL, NULL, NULL,
                   G_TYPE_NONE, 0);
+
+  /* TRUE when auto-unlock starts driving the keyguard, FALSE when it finishes.
+   * Runs while the stream is already live, so the window floats an "Unlocking…"
+   * alert over the mirror (black while Android keeps the secure screen blanked)
+   * and drops it once the phone is in. */
+  signals[SIG_UNLOCKING] =
+    g_signal_new ("unlocking",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_FIRST,
+                  0, NULL, NULL, NULL,
+                  G_TYPE_NONE, 1, G_TYPE_BOOLEAN);
 }
 
 static void

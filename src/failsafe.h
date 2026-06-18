@@ -8,11 +8,12 @@
  * This module installs fatal-signal handlers (SIGSEGV/SIGABRT/…) that, before
  * the process dies, write a small set of pre-serialised control messages straight
  * to the control socket: release any held pointer/keys, restore the panel if it
- * was blanked, and then lock the phone with a KEYCODE_POWER press. The server
+ * was blanked, and then lock the phone with a KEYCODE_SLEEP press. The server
  * is no longer launched with power_off_on_close (it can't tell a reconnect from a
- * real disconnect), so the handler must do the locking itself; re-lighting the
- * panel first keeps that toggle locking a lit screen rather than waking a dark
- * one. Everything the handler touches is prepared ahead of time and published
+ * real disconnect), so the handler must do the locking itself; SLEEP always
+ * sleeps regardless of screen state, so it locks even when a just-restored panel
+ * has not lit yet (a POWER toggle could wake the dark screen instead).
+ * Everything the handler touches is prepared ahead of time and published
  * through async-signal-safe primitives, so the handler itself only does
  * write()/raise().
  *

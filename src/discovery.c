@@ -6,18 +6,29 @@
  *      legacy `_adb._tcp`), resolve the first IPv4 hit, and report it. This
  *      runs asynchronously on the GTK main loop (avahi-glib poll).
  *   2. ADB-backed fallback: a worker thread asks the local adb server for
- *      already-known wireless devices and validates saved/manual host:port
- *      endpoints with `adb connect`. Covers paired devices when Avahi is not
- *      available and avoids mistaking Android's temporary pairing port for the
- *      real connect port.
+ *      already-known wireless devices, validates saved/manual host:port
+ *      endpoints with `adb connect`, and - when pairing supplied only the host
+ *      IP - scans that host for Android's dynamic wireless-debugging port.
+ *      Covers paired devices when Avahi is not available and avoids mistaking
+ *      Android's temporary pairing port for the real connect port.
  *
  * Whichever fires first wins; the found-callback is delivered on the main
  * thread. PmSession's handler is idempotent, so a rare double-report is benign.
  */
+#define _POSIX_C_SOURCE 200112L
+
 #include "discovery.h"
 #include "adb.h"
 #include "pm-config.h"
 #include <gio/gio.h>
+#include <errno.h>
+#include <fcntl.h>
+#include <netdb.h>
+#include <netinet/in.h>
+#include <poll.h>
+#include <string.h>
+#include <sys/socket.h>
+#include <unistd.h>
 
 #if PM_HAVE_AVAHI
 #include <avahi-client/client.h>
@@ -33,6 +44,9 @@
                                     * probe_failed_cb); the remaining attempts are
                                     * quiet retries that can still upgrade to a
                                     * live mirror if the phone comes online.    */
+#define PM_PORT_SCAN_TIMEOUT_MS 20
+#define PM_PORT_SCAN_LOW 30000
+#define PM_PORT_SCAN_HIGH 49999
 
 struct _PmDiscovery {
   PmDeviceInfo        target;       /* owned copy */
@@ -144,6 +158,122 @@ probe_failed_payload_free (gpointer data)
   g_free (p);
 }
 
+static void
+set_sockaddr_port (struct sockaddr *sa, guint16 port)
+{
+  if (sa->sa_family == AF_INET)
+    ((struct sockaddr_in *) sa)->sin_port = htons (port);
+  else if (sa->sa_family == AF_INET6)
+    ((struct sockaddr_in6 *) sa)->sin6_port = htons (port);
+}
+
+static gboolean
+tcp_port_open (const struct addrinfo *addrs, guint16 port, int timeout_ms)
+{
+  for (const struct addrinfo *ai = addrs; ai != NULL; ai = ai->ai_next) {
+    if (ai->ai_socktype != SOCK_STREAM)
+      continue;
+
+    struct sockaddr_storage ss;
+    if (ai->ai_addrlen > sizeof ss)
+      continue;
+    memcpy (&ss, ai->ai_addr, ai->ai_addrlen);
+    set_sockaddr_port ((struct sockaddr *) &ss, port);
+
+    int fd = socket (ai->ai_family, ai->ai_socktype, ai->ai_protocol);
+    if (fd < 0)
+      continue;
+
+    int fd_flags = fcntl (fd, F_GETFD, 0);
+    if (fd_flags >= 0)
+      fcntl (fd, F_SETFD, fd_flags | FD_CLOEXEC);
+
+    int flags = fcntl (fd, F_GETFL, 0);
+    if (flags >= 0)
+      fcntl (fd, F_SETFL, flags | O_NONBLOCK);
+
+    int rc = connect (fd, (struct sockaddr *) &ss, ai->ai_addrlen);
+    if (rc == 0) {
+      close (fd);
+      return TRUE;
+    }
+
+    if (errno == EINPROGRESS) {
+      struct pollfd pfd = { .fd = fd, .events = POLLOUT };
+      if (poll (&pfd, 1, timeout_ms) > 0) {
+        int err = 0;
+        socklen_t len = sizeof err;
+        if (getsockopt (fd, SOL_SOCKET, SO_ERROR, &err, &len) == 0 && err == 0) {
+          close (fd);
+          return TRUE;
+        }
+      }
+    }
+
+    close (fd);
+  }
+
+  return FALSE;
+}
+
+static gboolean
+try_report_target_port (PmDiscovery *self,
+                        guint16      port)
+{
+  if (g_atomic_int_get (&self->stop))
+    return FALSE;
+  if (self->target.host == NULL || port == 0)
+    return FALSE;
+
+  if (!pm_adb_connect (self->target.host, port, NULL))
+    return FALSE;
+
+  PmDeviceInfo info = {
+    .serial = self->target.serial,
+    .name   = self->target.name,
+    .host   = self->target.host,
+    .port   = port,
+  };
+  return report_found_from_thread (self, &info);
+}
+
+static gboolean
+scan_pairing_host (PmDiscovery *self)
+{
+  if (self->target.host == NULL)
+    return FALSE;
+
+  g_message ("discovery: scanning %s for wireless debugging port", self->target.host);
+
+  struct addrinfo hints = {
+    .ai_family = AF_UNSPEC,
+    .ai_socktype = SOCK_STREAM,
+  };
+  struct addrinfo *addrs = NULL;
+  if (getaddrinfo (self->target.host, NULL, &hints, &addrs) != 0)
+    return FALSE;
+
+  if (tcp_port_open (addrs, 5555, PM_PORT_SCAN_TIMEOUT_MS) &&
+      try_report_target_port (self, 5555)) {
+    freeaddrinfo (addrs);
+    return TRUE;
+  }
+
+  for (guint port = PM_PORT_SCAN_LOW;
+       port <= PM_PORT_SCAN_HIGH && !g_atomic_int_get (&self->stop);
+       port++) {
+    if (!tcp_port_open (addrs, (guint16) port, PM_PORT_SCAN_TIMEOUT_MS))
+      continue;
+    if (try_report_target_port (self, (guint16) port)) {
+      freeaddrinfo (addrs);
+      return TRUE;
+    }
+  }
+
+  freeaddrinfo (addrs);
+  return FALSE;
+}
+
 static gpointer
 probe_thread (gpointer data)
 {
@@ -152,6 +282,13 @@ probe_thread (gpointer data)
   int attempts = 0;
 
   while (!g_atomic_int_get (&self->stop)) {
+    /* A saved/manual endpoint is the user's strongest signal. Try it before
+     * accepting whatever adb may already know from previous sessions. */
+    if (self->target.host != NULL && self->target.port != 0) {
+      if (try_report_target_port (self, self->target.port))
+        break;
+    }
+
     PmDeviceInfo adb_info = { 0 };
     if (pm_adb_find_wireless_device (&adb_info, NULL)) {
       gboolean reported = report_found_from_thread (self, &adb_info);
@@ -161,9 +298,8 @@ probe_thread (gpointer data)
     } else
       pm_device_info_clear (&adb_info);
 
-    if (self->target.host != NULL &&
-        pm_adb_connect (self->target.host, self->target.port, NULL)) {
-      if (report_found_from_thread (self, &self->target))
+    if (self->target.host != NULL) {
+      if (scan_pairing_host (self))
         break;
     }
 
@@ -293,7 +429,7 @@ pm_discovery_new (const PmDeviceInfo *target,
   self->target.serial = g_strdup (target->serial);
   self->target.name   = g_strdup (target->name);
   self->target.host   = g_strdup (target->host);
-  self->target.port   = target->port ? target->port : 5555;
+  self->target.port   = (target->host == NULL && target->port == 0) ? 5555 : target->port;
   self->cb = cb;
   self->user_data = user_data;
   return self;

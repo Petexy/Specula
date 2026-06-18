@@ -38,6 +38,65 @@ parse_port (const char *s, guint16 fallback)
   return (v > 0 && v <= G_MAXUINT16) ? (guint16) v : fallback;
 }
 
+static gboolean
+parse_endpoint (const char *s,
+                guint16     fallback_port,
+                char      **out_host,
+                guint16    *out_port)
+{
+  g_return_val_if_fail (out_host != NULL, FALSE);
+  g_return_val_if_fail (out_port != NULL, FALSE);
+
+  g_autofree char *trimmed = g_strdup (s ? s : "");
+  g_strstrip (trimmed);
+  if (*trimmed == '\0')
+    return FALSE;
+
+  const char *host_start = trimmed;
+  const char *host_end = trimmed + strlen (trimmed);
+  guint16 port = fallback_port;
+
+  if (*trimmed == '[') {
+    const char *close = strchr (trimmed, ']');
+    if (close == NULL || close == trimmed + 1)
+      return FALSE;
+    host_start = trimmed + 1;
+    host_end = close;
+    if (close[1] == ':') {
+      guint64 parsed = g_ascii_strtoull (close + 2, NULL, 10);
+      if (parsed == 0 || parsed > G_MAXUINT16)
+        return FALSE;
+      port = (guint16) parsed;
+    } else if (close[1] != '\0') {
+      return FALSE;
+    }
+  } else {
+    const char *first_colon = strchr (trimmed, ':');
+    const char *last_colon = strrchr (trimmed, ':');
+
+    /* A single colon means host:port. Multiple colons are treated as a bare
+     * IPv6 literal and use the separate/default port. */
+    if (first_colon != NULL && first_colon == last_colon) {
+      if (last_colon == trimmed || last_colon[1] == '\0')
+        return FALSE;
+      guint64 parsed = g_ascii_strtoull (last_colon + 1, NULL, 10);
+      if (parsed == 0 || parsed > G_MAXUINT16)
+        return FALSE;
+      host_end = last_colon;
+      port = (guint16) parsed;
+    }
+  }
+
+  g_autofree char *host = g_strndup (host_start, host_end - host_start);
+  g_strstrip (host);
+  if (*host == '\0')
+    return FALSE;
+
+  *out_host = g_steal_pointer (&host);
+  *out_port = port ? port : 5555;
+  return TRUE;
+}
+
 static void
 toast (PmConnectDialog *self, const char *text)
 {
@@ -62,17 +121,17 @@ stash_pin (PmConnectDialog *self)
     g_warning ("connect-dialog: could not stash PIN: %s", error->message);
 }
 
-/* Add a masked, optional PIN entry to `page`, in its own group whose description
- * explains how the PIN is stored. AdwPasswordEntryRow (an AdwEntryRow) has no
- * per-row subtitle, so the explanation lives on the group. Shared by both pages. */
+/* Add a masked, optional PIN entry to `page`. AdwPasswordEntryRow (an
+ * AdwEntryRow) has no per-row subtitle, so the explanation lives on the group.
+ * Shared by both pages. */
 static void
 add_pin_group (PmConnectDialog *self, AdwPreferencesPage *page)
 {
   AdwPreferencesGroup *grp = ADW_PREFERENCES_GROUP (adw_preferences_group_new ());
   adw_preferences_group_set_title (grp, _("Auto-unlock"));
   adw_preferences_group_set_description (grp,
-    _("OPTIONAL. Stored encrypted on this computer, keyed to the phone, and used "
-      "to unlock its lockscreen automatically on connect. Otherwise, the app will show a black screen during unlocking phone."));
+    _("Optional. Unlocks your phone automatically when it connects. Otherwise, "
+      "the app will show a black screen while you unlock your phone."));
 
   self->pin_row = ADW_PASSWORD_ENTRY_ROW (adw_password_entry_row_new ());
   adw_preferences_row_set_title (ADW_PREFERENCES_ROW (self->pin_row),
@@ -98,16 +157,17 @@ static void
 on_connect_clicked (GtkButton *button, gpointer user_data)
 {
   PmConnectDialog *self = user_data;
-  const char *host = row_text (self->host_row);
+  const char *entered_host = row_text (self->host_row);
+  guint16 fallback_port = parse_port (row_text (self->port_row), 5555);
+  g_autofree char *host = NULL;
+  guint16 port = 0;
 
-  if (host == NULL || *g_strchomp ((char *) host) == '\0') {
+  if (!parse_endpoint (entered_host, fallback_port, &host, &port)) {
     toast (self, _("Enter the device IP address"));
     return;
   }
 
-  guint16 port = parse_port (row_text (self->port_row), 5555);
-
-  PmDeviceInfo info = { .host = (char *) host, .port = port,
+  PmDeviceInfo info = { .host = host, .port = port,
                         .serial = NULL, .name = NULL };
   g_autoptr (GError) error = NULL;
   if (!pm_device_save (&info, &error)) {
@@ -123,7 +183,11 @@ on_connect_clicked (GtkButton *button, gpointer user_data)
 
 /* --- pair (async) --------------------------------------------------------- */
 
-typedef struct { char *host; guint16 port; char *code; } PairData;
+typedef struct {
+  char *host;
+  guint16 port;
+  char *code;
+} PairData;
 
 static void
 pair_data_free (gpointer data)
@@ -149,6 +213,7 @@ static void
 pair_done (GObject *source, GAsyncResult *res, gpointer user_data)
 {
   PmConnectDialog *self = user_data;
+  PairData *p = g_task_get_task_data (G_TASK (res));
   g_autoptr (GError) error = NULL;
   gboolean ok = g_task_propagate_boolean (G_TASK (res), &error);
 
@@ -159,7 +224,7 @@ pair_done (GObject *source, GAsyncResult *res, gpointer user_data)
   }
 
   if (self->cb != NULL)
-    self->cb (NULL, 0, NULL, self->user_data);
+    self->cb (p->host, 0, NULL, self->user_data);
 
   adw_dialog_close (ADW_DIALOG (self));
 }
@@ -237,7 +302,7 @@ build_pairing_page (PmConnectDialog *self)
   AdwPreferencesGroup *pg = ADW_PREFERENCES_GROUP (adw_preferences_group_new ());
   adw_preferences_group_set_title (pg, _("Pairing"));
   adw_preferences_group_set_description (pg,
-    _("Android 11+: enable Wireless debugging → Pair device with code."));
+    _("Enable Wireless debugging → Pair device with code."));
 
   self->pair_addr_row = ADW_ENTRY_ROW (adw_entry_row_new ());
   adw_preferences_row_set_title (ADW_PREFERENCES_ROW (self->pair_addr_row),
@@ -268,7 +333,7 @@ build_connection_page (PmConnectDialog *self)
     _("Enter the Wi-Fi debugging address only if automatic discovery cannot find the phone."));
 
   self->host_row = ADW_ENTRY_ROW (adw_entry_row_new ());
-  adw_preferences_row_set_title (ADW_PREFERENCES_ROW (self->host_row), _("IP address"));
+  adw_preferences_row_set_title (ADW_PREFERENCES_ROW (self->host_row), _("IP address or ip:port"));
   self->port_row = ADW_ENTRY_ROW (adw_entry_row_new ());
   adw_preferences_row_set_title (ADW_PREFERENCES_ROW (self->port_row), _("Port (default 5555)"));
 

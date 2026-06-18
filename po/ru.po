@@ -4,9 +4,9 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: specula 0.3.0\n"
-"Report-Msgid-Bugs-To: piotr.petexiness@gmail.com\n"
-"POT-Creation-Date: 2026-06-17 20:34+0200\n"
+"Project-Id-Version: specula 0.4.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-06-18 03:26+0200\n"
 "PO-Revision-Date: 2026-06-17 21:30+0200\n"
 "Last-Translator: Specula <piotr.petexiness@gmail.com>\n"
 "Language-Team: Russian\n"
@@ -14,511 +14,539 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
-
-#: src/pm-application.c:59 src/pm-window.c:1060 src/pm-window.c:1068
-#: src/pm-window.c:3856 src/pm-window.c:3875
+#: src/pm-application.c:59 src/pm-window.c:1135 src/pm-window.c:1143
+#: src/pm-window.c:3947 src/pm-window.c:3966
 msgid "Phone Mirror"
 msgstr "Зеркало телефона"
 
-#: src/pm-window.c:1070
+#: src/pm-window.c:1145
 msgid "Press Connect to find your phone automatically."
 msgstr "Нажмите «Подключить», чтобы найти телефон автоматически."
 
-#: src/pm-window.c:1078
+#: src/pm-window.c:1153
 msgid "Searching…"
 msgstr "Поиск…"
 
-#: src/pm-window.c:1080
+#: src/pm-window.c:1155
 msgid "Looking for your phone on the local network."
 msgstr "Поиск телефона в локальной сети."
 
-#: src/pm-window.c:1088
+#: src/pm-window.c:1163
 msgid "Connecting…"
 msgstr "Подключение…"
 
-#: src/pm-window.c:1090
+#: src/pm-window.c:1165
 msgid "Starting the mirror server on your device."
 msgstr "Запуск сервера зеркалирования на устройстве."
 
-#: src/pm-window.c:1110
+#: src/pm-window.c:1185
 msgid "Connection failed"
 msgstr "Не удалось подключиться"
 
-#: src/pm-window.c:1112
+#: src/pm-window.c:1187
 msgid "Could not reach the device."
 msgstr "Не удалось связаться с устройством."
 
-#: src/pm-window.c:1651 src/pm-window.c:1664 src/pm-connect-dialog.c:79
+#: src/pm-window.c:1745 src/pm-window.c:1758 src/pm-connect-dialog.c:138
 msgid "Lockscreen PIN"
 msgstr "PIN экрана блокировки"
 
-#: src/pm-window.c:1658 src/pm-connect-dialog.c:72
+#: src/pm-window.c:1752 src/pm-connect-dialog.c:131
 msgid "Auto-unlock"
 msgstr "Автоматическая разблокировка"
 
-#: src/pm-window.c:1660
+#: src/pm-window.c:1754
 msgid ""
 "Stored encrypted on this computer, tied to this phone, and used to unlock it "
 "automatically when it connects."
-msgstr "Хранится в зашифрованном виде на этом компьютере, привязан к этому телефону и используется для его автоматической разблокировки при подключении."
+msgstr ""
+"Хранится в зашифрованном виде на этом компьютере, привязан к этому телефону "
+"и используется для его автоматической разблокировки при подключении."
 
-#: src/pm-window.c:1673
+#: src/pm-window.c:1767
 msgid "Save"
 msgstr "Сохранить"
 
-#: src/pm-window.c:1676
+#: src/pm-window.c:1770
 msgid "Remove"
 msgstr "Удалить"
 
-#: src/pm-window.c:1804
+#: src/pm-window.c:1898
 msgid "Network & internet"
 msgstr "Сеть и Интернет"
 
-#: src/pm-window.c:1804
+#: src/pm-window.c:1898
 msgid "Wi-Fi, SIM, hotspot"
 msgstr "Wi-Fi, SIM, точка доступа"
 
-#: src/pm-window.c:1805
+#: src/pm-window.c:1899
 msgid "Connected devices"
 msgstr "Подключённые устройства"
 
-#: src/pm-window.c:1805
+#: src/pm-window.c:1899
 msgid "Bluetooth, pairing"
 msgstr "Bluetooth, сопряжение"
 
-#: src/pm-window.c:1806
+#: src/pm-window.c:1900
 msgid "Apps"
 msgstr "Приложения"
 
-#: src/pm-window.c:1806
+#: src/pm-window.c:1900
 msgid "Permissions and defaults"
 msgstr "Разрешения и приложения по умолчанию"
 
-#: src/pm-window.c:1807
+#: src/pm-window.c:1901
 msgid "Notifications"
 msgstr "Уведомления"
 
-#: src/pm-window.c:1807
+#: src/pm-window.c:1901
 msgid "History and conversations"
 msgstr "История и разговоры"
 
-#: src/pm-window.c:1808
+#: src/pm-window.c:1902
 msgid "Battery"
 msgstr "Батарея"
 
-#: src/pm-window.c:1808
+#: src/pm-window.c:1902
 msgid "87%, until 10:30 PM"
 msgstr "87 %, до 22:30"
 
-#: src/pm-window.c:1809
+#: src/pm-window.c:1903
 msgid "System"
 msgstr "Система"
 
-#: src/pm-window.c:1809
+#: src/pm-window.c:1903
 msgid "Languages, gestures, time"
 msgstr "Языки, жесты, время"
 
-#: src/pm-window.c:1810 src/pm-window.c:2860 src/pm-window.c:2893
-#: src/pm-window.c:2970
+#: src/pm-window.c:1904 src/pm-window.c:2951 src/pm-window.c:2984
+#: src/pm-window.c:3061
 msgid "About phone"
 msgstr "О телефоне"
 
-#: src/pm-window.c:1810
+#: src/pm-window.c:1904
 msgid "Model, Android version"
 msgstr "Модель, версия Android"
 
-#: src/pm-window.c:1811 src/pm-window.c:2983 src/pm-window.c:3040
+#: src/pm-window.c:1905 src/pm-window.c:3074 src/pm-window.c:3131
 msgid "Developer options"
 msgstr "Параметры разработчика"
 
-#: src/pm-window.c:1811
+#: src/pm-window.c:1905
 msgid "Debugging and input"
 msgstr "Отладка и ввод"
 
-#: src/pm-window.c:1821 src/pm-window.c:3025
+#: src/pm-window.c:1915 src/pm-window.c:3116
 msgid "Device name"
 msgstr "Имя устройства"
 
-#: src/pm-window.c:1821
+#: src/pm-window.c:1915
 msgid "Pixel phone"
 msgstr "Телефон Pixel"
 
-#: src/pm-window.c:1822
+#: src/pm-window.c:1916
 msgid "Android version"
 msgstr "Версия Android"
 
-#: src/pm-window.c:1822
+#: src/pm-window.c:1916
 msgid "Version and security update"
 msgstr "Версия и обновление безопасности"
 
-#: src/pm-window.c:1823
+#: src/pm-window.c:1917
 msgid "Build number"
 msgstr "Номер сборки"
 
-#: src/pm-window.c:1823
+#: src/pm-window.c:1917
 msgid "Tap seven times"
 msgstr "Нажмите семь раз"
 
-#: src/pm-window.c:1840
+#: src/pm-window.c:1934
 msgid "Use developer options"
 msgstr "Использовать параметры разработчика"
 
-#: src/pm-window.c:1840 src/pm-window.c:3085
+#: src/pm-window.c:1934 src/pm-window.c:3176
 msgid "On"
 msgstr "Вкл."
 
-#: src/pm-window.c:1841
+#: src/pm-window.c:1935
 msgid "USB debugging"
 msgstr "Отладка по USB"
 
-#: src/pm-window.c:1841
+#: src/pm-window.c:1935
 msgid "Debug mode when USB is connected"
 msgstr "Режим отладки при подключении по USB"
 
-#: src/pm-window.c:1842 src/pm-window.c:3050 src/pm-window.c:3100
+#: src/pm-window.c:1936 src/pm-window.c:3141 src/pm-window.c:3191
 msgid "Wireless debugging"
 msgstr "Беспроводная отладка"
 
-#: src/pm-window.c:1842
+#: src/pm-window.c:1936
 msgid "Debug over Wi-Fi"
 msgstr "Отладка по Wi-Fi"
 
-#: src/pm-window.c:1843
+#: src/pm-window.c:1937
 msgid "Revoke debugging authorizations"
 msgstr "Отозвать разрешения на отладку"
 
-#: src/pm-window.c:2217
+#: src/pm-window.c:2308
 msgid "Phone"
 msgstr "Телефон"
 
-#: src/pm-window.c:2218
+#: src/pm-window.c:2309
 msgid "Messages"
 msgstr "Сообщения"
 
-#: src/pm-window.c:2219
+#: src/pm-window.c:2310
 msgid "Photos"
 msgstr "Фото"
 
-#: src/pm-window.c:2220
+#: src/pm-window.c:2311
 msgid "Camera"
 msgstr "Камера"
 
-#: src/pm-window.c:2221 src/pm-window.c:2818 src/pm-window.c:2850
-#: src/pm-window.c:2957 src/pm-settings-dialog.c:76
+#: src/pm-window.c:2312 src/pm-window.c:2909 src/pm-window.c:2941
+#: src/pm-window.c:3048 src/pm-settings-dialog.c:76
 msgid "Settings"
 msgstr "Настройки"
 
-#: src/pm-window.c:2222
+#: src/pm-window.c:2313
 msgid "Files"
 msgstr "Файлы"
 
-#: src/pm-window.c:2245
+#: src/pm-window.c:2336
 msgid "Search your phone"
 msgstr "Поиск по телефону"
 
-#: src/pm-window.c:2623
+#: src/pm-window.c:2714
 msgid "Cancel"
 msgstr "Отмена"
 
-#: src/pm-window.c:2902
+#: src/pm-window.c:2993
 #, c-format
 msgid "Tap %d of 7"
 msgstr "Нажатие %d из 7"
 
-#: src/pm-window.c:2927
+#: src/pm-window.c:3018
 msgid "You are now a developer!"
 msgstr "Теперь вы разработчик!"
 
-#: src/pm-window.c:3007
+#: src/pm-window.c:3098
 msgid "Allow USB debugging?"
 msgstr "Разрешить отладку по USB?"
 
-#: src/pm-window.c:3008
+#: src/pm-window.c:3099
 msgid "Computer RSA key fingerprint"
 msgstr "Отпечаток ключа RSA компьютера"
 
-#: src/pm-window.c:3009
+#: src/pm-window.c:3100
 msgid "OK"
 msgstr "ОК"
 
-#: src/pm-window.c:3023 src/pm-window.c:3085
+#: src/pm-window.c:3114 src/pm-window.c:3176
 msgid "Use wireless debugging"
 msgstr "Использовать беспроводную отладку"
 
-#: src/pm-window.c:3023
+#: src/pm-window.c:3114
 msgid "Current Wi-Fi network"
 msgstr "Текущая сеть Wi-Fi"
 
-#: src/pm-window.c:3024
+#: src/pm-window.c:3115
 msgid "Wi-Fi network"
 msgstr "Сеть Wi-Fi"
 
-#: src/pm-window.c:3024
+#: src/pm-window.c:3115
 msgid "Same network as Linux"
 msgstr "Та же сеть, что и Linux"
 
-#: src/pm-window.c:3025
+#: src/pm-window.c:3116
 msgid "Android device"
 msgstr "Устройство Android"
 
-#: src/pm-window.c:3069
+#: src/pm-window.c:3160
 msgid "Allow wireless debugging?"
 msgstr "Разрешить беспроводную отладку?"
 
-#: src/pm-window.c:3070
+#: src/pm-window.c:3161
 msgid "Allow on this Wi-Fi network"
 msgstr "Разрешить в этой сети Wi-Fi"
 
-#: src/pm-window.c:3071
+#: src/pm-window.c:3162
 msgid "Allow"
 msgstr "Разрешить"
 
-#: src/pm-window.c:3086
+#: src/pm-window.c:3177
 msgid "Pair device with code"
 msgstr "Сопряжение устройства по коду"
 
-#: src/pm-window.c:3086
+#: src/pm-window.c:3177
 msgid "Shows code and address"
 msgstr "Показывает код и адрес"
 
-#: src/pm-window.c:3087
+#: src/pm-window.c:3178
 msgid "IP address & port"
 msgstr "IP-адрес и порт"
 
-#: src/pm-window.c:3090 src/pm-window.c:3282 src/pm-connect-dialog.c:246
+#: src/pm-window.c:3181 src/pm-window.c:3373 src/pm-connect-dialog.c:311
 msgid "Pairing code"
 msgstr "Код сопряжения"
 
-#: src/pm-window.c:3091
+#: src/pm-window.c:3182
 msgid "Pairing address"
 msgstr "Адрес сопряжения"
 
-#: src/pm-window.c:3092
+#: src/pm-window.c:3183
 msgid "Keep this screen open"
 msgstr "Не закрывайте этот экран"
 
-#: src/pm-window.c:3092
+#: src/pm-window.c:3183
 msgid "Code expires soon"
 msgstr "Срок действия кода скоро истечёт"
 
-#: src/pm-window.c:3110
+#: src/pm-window.c:3201
 msgid "Pair device"
 msgstr "Сопряжение устройства"
 
-#: src/pm-window.c:3246 src/pm-connect-dialog.c:257
+#: src/pm-window.c:3337 src/pm-connect-dialog.c:322
 msgid "Set up device"
 msgstr "Настроить устройство"
 
-#: src/pm-window.c:3257 src/pm-connect-dialog.c:238
+#: src/pm-window.c:3348 src/pm-connect-dialog.c:303
 msgid "Pairing"
 msgstr "Сопряжение"
 
-#: src/pm-window.c:3267
-msgid "Android 11+: Pair device with code."
-msgstr "Android 11+: выполните сопряжение устройства по коду."
+#: src/pm-window.c:3358
+msgid "Pair device with code."
+msgstr "Выполните сопряжение устройства по коду."
 
-#: src/pm-window.c:3279 src/pm-connect-dialog.c:244
+#: src/pm-window.c:3370 src/pm-connect-dialog.c:309
 msgid "Pairing address (ip:port)"
 msgstr "Адрес сопряжения (ip:порт)"
 
-#: src/pm-window.c:3296 src/pm-connect-dialog.c:254
+#: src/pm-window.c:3387 src/pm-connect-dialog.c:319
 msgid "Pair & Connect"
 msgstr "Сопрячь и подключить"
 
-#: src/pm-window.c:3537
+#: src/pm-window.c:3628
 msgid "Go to Home"
 msgstr "Перейти на главный экран"
 
-#: src/pm-window.c:3538 src/pm-window.c:3746
+#: src/pm-window.c:3629 src/pm-window.c:3837
 msgid "Continue"
 msgstr "Продолжить"
 
-#: src/pm-window.c:3541
+#: src/pm-window.c:3632
 msgid "First Time Setup"
 msgstr "Первоначальная настройка"
 
-#: src/pm-window.c:3608
+#: src/pm-window.c:3699
 msgid "Welcome to Phone Mirror"
 msgstr "Добро пожаловать в Зеркало телефона"
 
-#: src/pm-window.c:3609
+#: src/pm-window.c:3700
 msgid ""
 "We will help you prepare your Android phone. Keep your phone nearby and "
 "connect it to the same Wi-Fi network as this computer."
-msgstr "Мы поможем вам подготовить ваш телефон Android. Держите телефон поблизости и подключите его к той же сети Wi-Fi, что и этот компьютер."
+msgstr ""
+"Мы поможем вам подготовить ваш телефон Android. Держите телефон поблизости и "
+"подключите его к той же сети Wi-Fi, что и этот компьютер."
 
-#: src/pm-window.c:3612
+#: src/pm-window.c:3703
 msgid "Open Settings"
 msgstr "Открыть настройки"
 
-#: src/pm-window.c:3613
+#: src/pm-window.c:3704
 msgid "Unlock your Android phone. Find the Settings app and open it."
-msgstr "Разблокируйте телефон Android. Найдите приложение «Настройки» и откройте его."
+msgstr ""
+"Разблокируйте телефон Android. Найдите приложение «Настройки» и откройте его."
 
-#: src/pm-window.c:3616
+#: src/pm-window.c:3707
 msgid "Find About phone"
 msgstr "Найдите «О телефоне»"
 
-#: src/pm-window.c:3617
+#: src/pm-window.c:3708
 msgid ""
 "In Settings, scroll toward the bottom. Tap About phone. On some phones, open "
 "System first, then tap About phone."
-msgstr "В настройках прокрутите вниз. Нажмите «О телефоне». На некоторых телефонах сначала откройте «Система», затем нажмите «О телефоне»."
+msgstr ""
+"В настройках прокрутите вниз. Нажмите «О телефоне». На некоторых телефонах "
+"сначала откройте «Система», затем нажмите «О телефоне»."
 
-#: src/pm-window.c:3620
+#: src/pm-window.c:3711
 msgid "Turn on Developer options"
 msgstr "Включите параметры разработчика"
 
-#: src/pm-window.c:3621
+#: src/pm-window.c:3712
 msgid ""
 "Find Build number. Tap Build number seven times. If Android asks for your "
 "PIN, enter it. Stop when the phone says you are now a developer."
-msgstr "Найдите «Номер сборки». Нажмите «Номер сборки» семь раз. Если Android запросит PIN-код, введите его. Остановитесь, когда телефон сообщит, что вы стали разработчиком."
+msgstr ""
+"Найдите «Номер сборки». Нажмите «Номер сборки» семь раз. Если Android "
+"запросит PIN-код, введите его. Остановитесь, когда телефон сообщит, что вы "
+"стали разработчиком."
 
-#: src/pm-window.c:3624
+#: src/pm-window.c:3715
 msgid "Turn on USB debugging"
 msgstr "Включите отладку по USB"
 
-#: src/pm-window.c:3625
+#: src/pm-window.c:3716
 msgid ""
 "Go back to Settings. Open Developer options. On some phones, open System "
 "first, then turn on USB debugging. If Android asks, tap OK."
-msgstr "Вернитесь в настройки. Откройте параметры разработчика. На некоторых телефонах сначала откройте «Система», затем включите отладку по USB. Если Android спросит, нажмите OK."
+msgstr ""
+"Вернитесь в настройки. Откройте параметры разработчика. На некоторых "
+"телефонах сначала откройте «Система», затем включите отладку по USB. Если "
+"Android спросит, нажмите OK."
 
-#: src/pm-window.c:3628
+#: src/pm-window.c:3719
 msgid "Turn on Wireless debugging"
 msgstr "Включите беспроводную отладку"
 
-#: src/pm-window.c:3629
+#: src/pm-window.c:3720
 msgid ""
 "Stay in Developer options. Turn on Wireless debugging. Keep your phone and "
 "this computer on the same network. If Android asks, tap Allow."
-msgstr "Оставайтесь в параметрах разработчика. Включите беспроводную отладку. Держите телефон и этот компьютер в одной сети. Если Android спросит, нажмите «Разрешить»."
+msgstr ""
+"Оставайтесь в параметрах разработчика. Включите беспроводную отладку. "
+"Держите телефон и этот компьютер в одной сети. Если Android спросит, нажмите "
+"«Разрешить»."
 
-#: src/pm-window.c:3632
+#: src/pm-window.c:3723
 msgid "Get the pairing code"
 msgstr "Получите код сопряжения"
 
-#: src/pm-window.c:3633
+#: src/pm-window.c:3724
 msgid ""
 "Tap Wireless debugging, then Pair device with pairing code. Leave that "
 "screen open. On the home page, choose Set Up Device, enter the pairing "
 "address and code, then choose Pair & Connect."
-msgstr "Нажмите «Беспроводная отладка», затем «Сопряжение устройства по коду». Не закрывайте этот экран. На главной странице выберите «Настроить устройство», введите адрес и код сопряжения, затем выберите «Сопрячь и подключить»."
+msgstr ""
+"Нажмите «Беспроводная отладка», затем «Сопряжение устройства по коду». Не "
+"закрывайте этот экран. На главной странице выберите «Настроить устройство», "
+"введите адрес и код сопряжения, затем выберите «Сопрячь и подключить»."
 
-#: src/pm-window.c:3647
+#: src/pm-window.c:3738
 msgid "Welcome"
 msgstr "Добро пожаловать"
 
-#: src/pm-window.c:3648
+#: src/pm-window.c:3739
 #, c-format
 msgid "Step %u of %u"
 msgstr "Шаг %u из %u"
 
-#: src/pm-window.c:3741
+#: src/pm-window.c:3832
 msgid "Back"
 msgstr "Назад"
 
-#: src/pm-window.c:3781
+#: src/pm-window.c:3872
 msgid "_Disconnect"
 msgstr "Отключить (_D)"
 
-#: src/pm-window.c:3782
+#: src/pm-window.c:3873
 msgid "_Lockscreen PIN…"
 msgstr "PIN экрана блокировки (_L)…"
 
-#: src/pm-window.c:3783
+#: src/pm-window.c:3874
 msgid "_First Time Setup"
 msgstr "Первоначальная настройка (_F)"
 
-#: src/pm-window.c:3789
+#: src/pm-window.c:3880
 msgid "_Manual Connection…"
 msgstr "Ручное подключение (_M)…"
 
-#: src/pm-window.c:3790
+#: src/pm-window.c:3881
 msgid "_Set Up Device…"
 msgstr "Настроить устройство (_S)…"
 
-#: src/pm-window.c:3796
+#: src/pm-window.c:3887
 msgid "_Settings"
 msgstr "Настройки (_S)"
 
-#: src/pm-window.c:3797
+#: src/pm-window.c:3888
 msgid "_About Phone Mirror"
 msgstr "О приложении Зеркало телефона (_A)"
 
-#: src/pm-window.c:3802
+#: src/pm-window.c:3893
 msgid "_Quit"
 msgstr "Выйти (_Q)"
 
-#: src/pm-window.c:3886
+#: src/pm-window.c:3977
 msgid "Keep controls visible"
 msgstr "Не скрывать элементы управления"
 
-#: src/pm-window.c:3901
+#: src/pm-window.c:3994
 msgid "Press Connect to look for your paired device."
 msgstr "Нажмите «Подключить», чтобы найти сопряжённое устройство."
 
-#: src/pm-window.c:3906
+#: src/pm-window.c:3999
 msgid "Connect"
 msgstr "Подключить"
 
-#: src/pm-window.c:3913
+#: src/pm-window.c:4006
 msgid "Set Up Device…"
 msgstr "Настроить устройство…"
 
-#: src/pm-connect-dialog.c:74
-msgid ""
-"OPTIONAL. Stored encrypted on this computer, keyed to the phone, and used to "
-"unlock its lockscreen automatically on connect. Otherwise, the app will show "
-"a black screen during unlocking phone."
-msgstr "НЕОБЯЗАТЕЛЬНО. Хранится в зашифрованном виде на этом компьютере, привязан к телефону и используется для автоматической разблокировки его экрана блокировки при подключении. В противном случае во время разблокировки телефона приложение покажет чёрный экран."
+#: src/pm-window.c:4031
+msgid "Unlocking your phone…"
+msgstr "Разблокировка телефона…"
 
-#: src/pm-connect-dialog.c:104
+#: src/pm-connect-dialog.c:133
+msgid ""
+"Optional. Unlocks your phone automatically when it connects. Otherwise, the "
+"app will show a black screen while you unlock your phone."
+msgstr ""
+"Необязательно. Автоматически разблокирует телефон при подключении. В "
+"противном случае приложение покажет чёрный экран, пока вы разблокируете "
+"телефон."
+
+#: src/pm-connect-dialog.c:166
 msgid "Enter the device IP address"
 msgstr "Введите IP-адрес устройства"
 
-#: src/pm-connect-dialog.c:176
+#: src/pm-connect-dialog.c:241
 msgid "Enter pairing address (ip:port) and code"
 msgstr "Введите адрес сопряжения (ip:порт) и код"
 
-#: src/pm-connect-dialog.c:185
+#: src/pm-connect-dialog.c:250
 msgid "Invalid pairing port"
 msgstr "Недопустимый порт сопряжения"
 
-#: src/pm-connect-dialog.c:193
+#: src/pm-connect-dialog.c:258
 msgid "Pairing…"
 msgstr "Сопряжение…"
 
-#: src/pm-connect-dialog.c:240
-msgid "Android 11+: enable Wireless debugging → Pair device with code."
-msgstr "Android 11+: включите беспроводную отладку → Сопряжение устройства по коду."
+#: src/pm-connect-dialog.c:305
+msgid "Enable Wireless debugging → Pair device with code."
+msgstr "Включите беспроводную отладку → Сопряжение устройства по коду."
 
-#: src/pm-connect-dialog.c:266
+#: src/pm-connect-dialog.c:331
 msgid "Connection"
 msgstr "Подключение"
 
-#: src/pm-connect-dialog.c:268
+#: src/pm-connect-dialog.c:333
 msgid ""
 "Enter the Wi-Fi debugging address only if automatic discovery cannot find "
 "the phone."
-msgstr "Введите адрес отладки по Wi-Fi только если автоматическое обнаружение не находит телефон."
+msgstr ""
+"Введите адрес отладки по Wi-Fi только если автоматическое обнаружение не "
+"находит телефон."
 
-#: src/pm-connect-dialog.c:271
-msgid "IP address"
-msgstr "IP-адрес"
+#: src/pm-connect-dialog.c:336
+#, fuzzy
+msgid "IP address or ip:port"
+msgstr "IP-адрес и порт"
 
-#: src/pm-connect-dialog.c:273
+#: src/pm-connect-dialog.c:338
 msgid "Port (default 5555)"
 msgstr "Порт (по умолчанию 5555)"
 
-#: src/pm-connect-dialog.c:283
+#: src/pm-connect-dialog.c:348
 msgid "Connect manually"
 msgstr "Подключиться вручную"
 
-#: src/pm-connect-dialog.c:296
+#: src/pm-connect-dialog.c:361
 msgid "Manual connection"
 msgstr "Ручное подключение"
 
@@ -541,7 +569,9 @@ msgstr "Режим экрана"
 #: src/pm-settings-dialog.c:93
 msgid ""
 "Mirror the phone's screen, or run a separate virtual display on the device."
-msgstr "Зеркалируйте экран телефона или запустите отдельный виртуальный экран на устройстве."
+msgstr ""
+"Зеркалируйте экран телефона или запустите отдельный виртуальный экран на "
+"устройстве."
 
 #: src/pm-settings-dialog.c:101
 msgid "Width"
@@ -573,7 +603,9 @@ msgstr "Битрейт видео (Мбит/с)"
 
 #: src/pm-settings-dialog.c:124
 msgid "Lower it to save bandwidth. Reconnects to apply."
-msgstr "Уменьшите его, чтобы сэкономить пропускную способность. Применяется при повторном подключении."
+msgstr ""
+"Уменьшите его, чтобы сэкономить пропускную способность. Применяется при "
+"повторном подключении."
 
 #: src/pm-settings-dialog.c:132
 msgid "Turn off phone screen"
@@ -583,7 +615,9 @@ msgstr "Выключить экран телефона"
 msgid ""
 "Dark the phone's panel to save battery once you unlock it. Reconnects to "
 "apply."
-msgstr "Затемните панель телефона, чтобы экономить заряд после разблокировки. Применяется при повторном подключении."
+msgstr ""
+"Затемните панель телефона, чтобы экономить заряд после разблокировки. "
+"Применяется при повторном подключении."
 
 #: src/pm-settings-dialog.c:138
 msgid "Window"
@@ -595,7 +629,8 @@ msgstr "Свободное изменение размера"
 
 #: src/pm-settings-dialog.c:144
 msgid "Resize the window freely instead of keeping the phone's aspect ratio."
-msgstr "Изменяйте размер окна свободно, не сохраняя соотношение сторон телефона."
+msgstr ""
+"Изменяйте размер окна свободно, не сохраняя соотношение сторон телефона."
 
 #: src/pm-settings-dialog.c:148
 msgid "Input"
@@ -627,85 +662,96 @@ msgstr "Воспроизводить звук телефона"
 
 #: src/pm-settings-dialog.c:167
 msgid "Route the phone's sound to this computer. Reconnects to apply."
-msgstr "Перенаправьте звук телефона на этот компьютер. Применяется при повторном подключении."
+msgstr ""
+"Перенаправьте звук телефона на этот компьютер. Применяется при повторном "
+"подключении."
 
-#: src/pm-session.c:186
+#: src/pm-session.c:188
 msgid "Mirroring a connected phone"
 msgstr "Зеркалирование подключённого телефона"
 
-#: src/pm-session.c:371
+#: src/pm-session.c:403
 #, c-format
 msgid "scrcpy-server exited with status %d"
 msgstr "scrcpy-server завершился с кодом %d"
 
-#: src/pm-session.c:399
+#: src/pm-session.c:431
 #, c-format
 msgid "timed out waiting for scrcpy-server socket%s%s"
 msgstr "истекло время ожидания сокета scrcpy-server%s%s"
 
-#: src/pm-session.c:646
+#: src/pm-session.c:704
 msgid "Connecting to device…"
 msgstr "Подключение к устройству…"
 
-#: src/pm-session.c:653
+#: src/pm-session.c:711
 msgid ""
 "Could not find scrcpy-server. Install scrcpy or set PM_SERVER_JAR to the "
 "server path."
-msgstr "Не удалось найти scrcpy-server. Установите scrcpy или укажите путь к серверу в PM_SERVER_JAR."
+msgstr ""
+"Не удалось найти scrcpy-server. Установите scrcpy или укажите путь к серверу "
+"в PM_SERVER_JAR."
 
-#: src/pm-session.c:660
+#: src/pm-session.c:718
 msgid ""
 "Could not determine scrcpy-server version. Install scrcpy or set "
 "PM_SCRCPY_VERSION to match your server."
-msgstr "Не удалось определить версию scrcpy-server. Установите scrcpy или укажите в PM_SCRCPY_VERSION версию вашего сервера."
+msgstr ""
+"Не удалось определить версию scrcpy-server. Установите scrcpy или укажите в "
+"PM_SCRCPY_VERSION версию вашего сервера."
 
-#: src/pm-session.c:718
+#: src/pm-session.c:776
 msgid "Connecting with adb…"
 msgstr "Подключение через adb…"
 
-#: src/pm-session.c:734
+#: src/pm-session.c:784
 msgid "Installing mirror server…"
 msgstr "Установка сервера зеркалирования…"
 
-#: src/pm-session.c:740
+#: src/pm-session.c:790
 msgid "Opening mirror socket…"
 msgstr "Открытие сокета зеркалирования…"
 
-#: src/pm-session.c:746
+#: src/pm-session.c:796
 msgid "Starting mirror server…"
 msgstr "Запуск сервера зеркалирования…"
 
-#: src/pm-session.c:753
+#: src/pm-session.c:803
 msgid "Connecting video stream…"
 msgstr "Подключение видеопотока…"
 
-#: src/pm-session.c:764
+#: src/pm-session.c:814
 msgid "Connecting audio stream…"
 msgstr "Подключение аудиопотока…"
 
-#: src/pm-session.c:771
+#: src/pm-session.c:821
 msgid "Connecting controls…"
 msgstr "Подключение управления…"
 
-#: src/pm-session.c:782
+#: src/pm-session.c:832
 msgid "Reading video stream…"
 msgstr "Чтение видеопотока…"
 
-#: src/pm-session.c:929
+#: src/pm-session.c:998
 #, c-format
 msgid "%s failed: %s%s"
 msgstr "%s завершилось ошибкой: %s%s"
 
-#: src/pm-session.c:931
+#: src/pm-session.c:1000
 msgid "connection failed"
 msgstr "не удалось подключиться"
 
-#: src/pm-session.c:994
+#: src/pm-session.c:1063
 msgid "Found device — starting mirror server…"
 msgstr "Устройство найдено — запуск сервера зеркалирования…"
 
-#: src/pm-session.c:1063
+#: src/pm-session.c:1132
 msgid ""
 "No phone found. Use Set Up Device to enter your phone's Wireless debugging "
 "address."
-msgstr "Телефон не найден. Используйте «Настроить устройство», чтобы ввести адрес беспроводной отладки телефона."
+msgstr ""
+"Телефон не найден. Используйте «Настроить устройство», чтобы ввести адрес "
+"беспроводной отладки телефона."
+
+#~ msgid "IP address"
+#~ msgstr "IP-адрес"

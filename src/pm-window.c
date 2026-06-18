@@ -38,6 +38,7 @@
 #define PM_MIRROR_MIN_SHORT_EDGE 300
 #define PM_MIRROR_SCREEN_MARGIN 96
 #define PM_MIRROR_SCREEN_FRACTION 0.70
+#define PM_CONNECTION_MIN_WIDTH  420
 /* Width (px) of the edge band that initiates a client-driven aspect-locked
  * resize while mirroring. See the "live aspect-locked resize" block below. */
 #define PM_RESIZE_GRAB_PX       8
@@ -97,6 +98,8 @@ struct _PmWindow {
   AdwWindowTitle *title;
   GtkSpinner     *spinner;
   AdwStatusPage  *status_page;
+  GtkRevealer    *unlock_revealer;   /* "Unlocking…" alert floating over the mirror */
+  GtkSpinner     *unlock_spinner;
   GtkAspectFrame *mirror_frame;
   PmVideoView    *video_view;
   GtkButton      *connect_button;
@@ -551,7 +554,35 @@ pm_window_get_top_bar_min_width (PmWindow *self)
                       GTK_ORIENTATION_HORIZONTAL,
                       -1,
                       &min, &nat, NULL, NULL);
+  return MAX (0, MAX (min, nat));
+}
+
+static int
+pm_window_get_visible_min_width (PmWindow *self)
+{
+  int min = 0;
+  int nat = 0;
+
+  if (self->toolbar_view == NULL)
+    return 0;
+
+  gtk_widget_measure (GTK_WIDGET (self->toolbar_view),
+                      GTK_ORIENTATION_HORIZONTAL,
+                      -1,
+                      &min, &nat, NULL, NULL);
   return MAX (0, min);
+}
+
+static int
+pm_window_get_locked_min_width (PmWindow *self)
+{
+  int min_w = PM_MIRROR_MIN_SHORT_EDGE;
+
+  min_w = MAX (min_w, PM_CONNECTION_MIN_WIDTH);
+  min_w = MAX (min_w, pm_window_get_top_bar_min_width (self));
+  min_w = MAX (min_w, pm_window_get_visible_min_width (self));
+
+  return min_w;
 }
 
 static void
@@ -637,21 +668,65 @@ pm_window_get_mirror_resize_max_size (PmWindow *self, int *out_width, int *out_h
 }
 
 static void
-pm_window_clamp_to_aspect_min (PmWindow *self,
-                               double    aspect,
-                               int      *width,
-                               int      *height)
+pm_window_get_effective_aspect_min_size (PmWindow *self,
+                                         double    aspect,
+                                         int      *out_width,
+                                         int      *out_height)
 {
   int min_w, min_h;
+
   pm_window_get_aspect_min_size (aspect, &min_w, &min_h);
-  min_w = MAX (min_w, pm_window_get_top_bar_min_width (self));
+  min_w = MAX (min_w, pm_window_get_locked_min_width (self));
+  min_h = MAX (min_h, (int) ceil (min_w / aspect));
+  min_w = MAX (min_w, (int) ceil (min_h * aspect));
 
-  *width = MAX (min_w, *width);
-  *height = (int) round (*width / aspect);
+  *out_width = min_w;
+  *out_height = min_h;
+}
 
+static void
+pm_window_clamp_to_aspect_bounds (PmWindow *self,
+                                  double    aspect,
+                                  int      *width,
+                                  int      *height,
+                                  int       max_w,
+                                  int       max_h)
+{
+  int min_w, min_h;
+
+  pm_window_get_effective_aspect_min_size (self, aspect, &min_w, &min_h);
+
+  /* If the real GTK minimum cannot fit inside our preferred screen cap, the
+   * minimum wins. Otherwise we would request width < minimum and GTK would keep
+   * the wider allocation with a height computed for the narrower one. */
+  max_w = MAX (max_w, min_w);
+  max_h = MAX (max_h, min_h);
+
+  if (*width < min_w) {
+    *width = min_w;
+    *height = (int) ceil (*width / aspect);
+  }
   if (*height < min_h) {
     *height = min_h;
+    *width = (int) ceil (*height * aspect);
+  }
+
+  if (*width > max_w) {
+    *width = max_w;
+    *height = (int) round (*width / aspect);
+  }
+  if (*height > max_h) {
+    *height = max_h;
     *width = (int) round (*height * aspect);
+  }
+
+  if (*width < min_w) {
+    *width = min_w;
+    *height = (int) ceil (*width / aspect);
+  }
+  if (*height < min_h) {
+    *height = min_h;
+    *width = (int) ceil (*height * aspect);
   }
 }
 
@@ -662,17 +737,8 @@ pm_window_clamp_to_initial_aspect (PmWindow *self,
                                    int      *height)
 {
   int max_w, max_h;
-  pm_window_clamp_to_aspect_min (self, aspect, width, height);
   pm_window_get_mirror_max_size (self, &max_w, &max_h);
-
-  if (*width > max_w) {
-    *width = max_w;
-    *height = (int) round (*width / aspect);
-  }
-  if (*height > max_h) {
-    *height = max_h;
-    *width = (int) round (*height * aspect);
-  }
+  pm_window_clamp_to_aspect_bounds (self, aspect, width, height, max_w, max_h);
 }
 
 static void
@@ -682,17 +748,8 @@ pm_window_clamp_to_resize_aspect (PmWindow *self,
                                   int      *height)
 {
   int max_w, max_h;
-  pm_window_clamp_to_aspect_min (self, aspect, width, height);
   pm_window_get_mirror_resize_max_size (self, &max_w, &max_h);
-
-  if (*width > max_w) {
-    *width = max_w;
-    *height = (int) round (*width / aspect);
-  }
-  if (*height > max_h) {
-    *height = max_h;
-    *width = (int) round (*height * aspect);
-  }
+  pm_window_clamp_to_aspect_bounds (self, aspect, width, height, max_w, max_h);
 }
 
 static void
@@ -802,19 +859,19 @@ pm_window_reset_window_shape (PmWindow *self)
  * is treated as the one the user dragged; the other is rebuilt from the stream
  * aspect. Skipped in free-resize mode, where the window is unconstrained. */
 static void
-on_window_size_changed (GObject *object, GParamSpec *pspec, gpointer user_data)
+pm_window_snap_to_aspect_size (PmWindow *self,
+                               int       cur_w,
+                               int       cur_h)
 {
-  PmWindow *self = PM_WINDOW (user_data);
   double aspect = 0.0;
 
-  if (self->aspect_lock_applying || self->chrome_animating || self->free_resize ||
+  if (self->aspect_lock_applying || self->chrome_animating ||
+      self->resize_edge != PM_EDGE_NONE || self->free_resize ||
       self->session == NULL ||
       pm_session_get_state (self->session) != PM_STATE_MIRRORING ||
       !pm_window_get_stream_aspect (self, &aspect))
     return;
 
-  int cur_w = 0, cur_h = 0;
-  gtk_window_get_default_size (GTK_WINDOW (object), &cur_w, &cur_h);
   if (cur_w <= 0 || cur_h <= 0)
     return;
 
@@ -842,10 +899,19 @@ on_window_size_changed (GObject *object, GParamSpec *pspec, gpointer user_data)
   }
 
   self->aspect_lock_applying = TRUE;
-  gtk_window_set_default_size (GTK_WINDOW (object), target_w, target_h);
+  gtk_window_set_default_size (GTK_WINDOW (self), target_w, target_h);
   self->aspect_locked_w = target_w;
   self->aspect_locked_h = target_h;
   self->aspect_lock_applying = FALSE;
+}
+
+static void
+on_window_size_changed (GObject *object, GParamSpec *pspec, gpointer user_data)
+{
+  int cur_w = 0, cur_h = 0;
+
+  gtk_window_get_default_size (GTK_WINDOW (object), &cur_w, &cur_h);
+  pm_window_snap_to_aspect_size (PM_WINDOW (user_data), cur_w, cur_h);
 }
 
 /* --- live aspect-locked resize -------------------------------------------
@@ -967,6 +1033,12 @@ on_resize_drag_update (GtkGestureDrag *gesture,
     video_w = (int) round (video_h * aspect);
   }
 
+  int floor_w = pm_window_get_locked_min_width (self);
+  if (video_w < floor_w) {
+    video_w = floor_w;
+    video_h = (int) ceil (video_w / aspect);
+  }
+
   pm_window_clamp_to_resize_aspect (self, aspect, &video_w, &video_h);
   /* Records the new locked size and guards the snap-back handler. */
   pm_window_set_mirror_content_size (self, video_w, video_h);
@@ -1055,6 +1127,9 @@ pm_window_apply_state (PmWindow   *self,
 {
   gboolean mirroring = (state == PM_STATE_MIRRORING);
   pm_window_set_disconnect_available (self, mirroring);
+  gtk_widget_set_size_request (GTK_WIDGET (self->status_page),
+                               mirroring ? -1 : PM_CONNECTION_MIN_WIDTH,
+                               -1);
 
   if (!mirroring) {
     adw_window_title_set_title (self->title, _("Phone Mirror"));
@@ -1146,6 +1221,15 @@ pm_window_present_if_deferred (PmWindow *self)
   gtk_window_present (GTK_WINDOW (self));
 }
 
+/* Show/hide the "Unlocking…" alert floating over the mirror, spinning its wheel
+ * only while visible. */
+static void
+pm_window_set_unlock_alert (PmWindow *self, gboolean show)
+{
+  gtk_spinner_set_spinning (self->unlock_spinner, show);
+  gtk_revealer_set_reveal_child (self->unlock_revealer, show);
+}
+
 static void
 on_session_state_changed (PmSession  *session,
                           guint       state,
@@ -1170,6 +1254,16 @@ on_session_state_changed (PmSession  *session,
   pm_window_apply_state (self, pm_state, message);
   if (pm_state == PM_STATE_MIRRORING)
     pm_window_present_if_deferred (self);
+}
+
+/* Auto-unlock is running (active) over the already-live mirror, or has finished.
+ * Float the "Unlocking…" alert over the stream while it runs; the mirror itself
+ * keeps rendering underneath (black while Android blanks the secure screen). */
+static void
+on_session_unlocking (PmSession *session, gboolean active, gpointer user_data)
+{
+  PmWindow *self = PM_WINDOW (user_data);
+  pm_window_set_unlock_alert (self, active);
 }
 
 static void
@@ -3261,7 +3355,7 @@ pm_setup_draw_connect_device_sheet (cairo_t     *cr,
                       1.0,
                       1.0);
   pm_setup_draw_text_fit (cr,
-                          _("Android 11+: Pair device with code."),
+                          _("Pair device with code."),
                           x + 9.0,
                           y + 63.0,
                           w - 18.0,
@@ -3892,6 +3986,8 @@ pm_window_init (PmWindow *self)
 
   /* --- Page: searching/connecting ------------------------------------- */
   self->status_page = ADW_STATUS_PAGE (adw_status_page_new ());
+  gtk_widget_set_size_request (GTK_WIDGET (self->status_page),
+                               PM_CONNECTION_MIN_WIDTH, -1);
   adw_status_page_set_icon_name (self->status_page, "phone-symbolic");
   adw_status_page_set_title (self->status_page, "Phone Mirror");
   adw_status_page_set_description (self->status_page,
@@ -3926,6 +4022,32 @@ pm_window_init (PmWindow *self)
   gtk_widget_set_vexpand (GTK_WIDGET (self->mirror_frame), TRUE);
   gtk_aspect_frame_set_child (self->mirror_frame, GTK_WIDGET (self->video_view));
 
+  /* Auto-unlock alert: a small "osd" card (spinner + label) floated, centred,
+   * over the mirror via a GtkOverlay. Android blanks the secure screen while the
+   * keyguard is driven, so the mirror is black then; this explains the wait. A
+   * revealer crossfades it in/out. */
+  self->unlock_spinner = GTK_SPINNER (gtk_spinner_new ());
+  gtk_widget_set_size_request (GTK_WIDGET (self->unlock_spinner), 24, 24);
+  GtkWidget *unlock_label = gtk_label_new (_("Unlocking your phone…"));
+  GtkBox *unlock_box = GTK_BOX (gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 12));
+  gtk_box_append (unlock_box, GTK_WIDGET (self->unlock_spinner));
+  gtk_box_append (unlock_box, unlock_label);
+  gtk_widget_add_css_class (GTK_WIDGET (unlock_box), "card");
+  gtk_widget_add_css_class (GTK_WIDGET (unlock_box), "toolbar");
+
+  self->unlock_revealer = GTK_REVEALER (gtk_revealer_new ());
+  gtk_revealer_set_transition_type (self->unlock_revealer,
+                                    GTK_REVEALER_TRANSITION_TYPE_CROSSFADE);
+  gtk_revealer_set_child (self->unlock_revealer, GTK_WIDGET (unlock_box));
+  gtk_revealer_set_reveal_child (self->unlock_revealer, FALSE);
+  gtk_widget_set_halign (GTK_WIDGET (self->unlock_revealer), GTK_ALIGN_CENTER);
+  gtk_widget_set_valign (GTK_WIDGET (self->unlock_revealer), GTK_ALIGN_CENTER);
+  gtk_widget_set_can_target (GTK_WIDGET (self->unlock_revealer), FALSE);
+
+  GtkWidget *mirror_overlay = gtk_overlay_new ();
+  gtk_overlay_set_child (GTK_OVERLAY (mirror_overlay), GTK_WIDGET (self->mirror_frame));
+  gtk_overlay_add_overlay (GTK_OVERLAY (mirror_overlay), GTK_WIDGET (self->unlock_revealer));
+
   /* --- View stack ----------------------------------------------------- */
   self->stack = ADW_VIEW_STACK (adw_view_stack_new ());
   adw_view_stack_set_transition_duration (self->stack, 280);
@@ -3939,7 +4061,7 @@ pm_window_init (PmWindow *self)
   adw_view_stack_set_vhomogeneous (self->stack, FALSE);
   adw_view_stack_add_named (self->stack, setup_root_new (self), "setup");
   adw_view_stack_add_named (self->stack, GTK_WIDGET (self->status_page), "searching");
-  adw_view_stack_add_named (self->stack, GTK_WIDGET (self->mirror_frame), "mirror");
+  adw_view_stack_add_named (self->stack, mirror_overlay, "mirror");
 
   /* --- Toolbar shell -------------------------------------------------- */
   self->toolbar_view = ADW_TOOLBAR_VIEW (adw_toolbar_view_new ());
@@ -3995,6 +4117,8 @@ pm_window_init (PmWindow *self)
                     G_CALLBACK (on_session_stream_changed), self);
   g_signal_connect (self->session, "startup-check-failed",
                     G_CALLBACK (on_startup_check_failed), self);
+  g_signal_connect (self->session, "unlocking",
+                    G_CALLBACK (on_session_unlocking), self);
 
   if (!self->setup_complete) {
     pm_window_show_setup_step (self, PM_SETUP_WELCOME);
@@ -4006,6 +4130,12 @@ pm_window_init (PmWindow *self)
   if (pm_device_has_pairing ()) {
     self->startup_search_active = TRUE;
     self->defer_initial_present = TRUE;
+    /* The deferred window only ever first appears once mirroring is live, so
+     * start it on the "mirror" page: it then shows up already on the stream
+     * instead of crossfading in from the search page. A failed silent connect
+     * still falls back to "searching" via the IDLE/ERROR paths in
+     * on_session_state_changed. */
+    adw_view_stack_set_visible_child_name (self->stack, "mirror");
     pm_session_start_silent (self->session, NULL);
   }
 }

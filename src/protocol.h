@@ -47,9 +47,14 @@ typedef enum {
   PM_KEY_UP   = 1,
 } PmKeyAction;
 
-/* Android KEYCODE_POWER. Toggles the screen/power state; injected on teardown
- * to put a lit, interactive screen to sleep, locking the phone. */
+/* Android KEYCODE_POWER. Toggles the screen/power state. */
 #define PM_ANDROID_KEYCODE_POWER 26
+
+/* Android KEYCODE_SLEEP. Unconditionally sleeps the device (never wakes it),
+ * so it locks the phone on teardown regardless of the current screen state.
+ * Preferred over POWER's toggle, which races a just-restored panel on slower
+ * devices and can wake a still-dark screen instead of locking it. */
+#define PM_ANDROID_KEYCODE_SLEEP 223
 
 /* Largest emitted control message; callers can size buffers with this. */
 #define PM_CTRL_MSG_MAX 512

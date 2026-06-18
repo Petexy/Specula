@@ -37,26 +37,27 @@ failsafe_handler (int signum)
       (void) r;   /* best-effort */
     }
     if (s_blanked) {
-      /* Re-light the panel first so the power-key press below toggles a lit,
-       * interactive screen *off* (locking the phone) rather than waking a dark
-       * one. */
+      /* Restore the panel's display power so the phone is usable again on the
+       * next wake. */
       static const unsigned char on_msg[2] = { PM_CTRL_SET_DISPLAY_POWER, 1 };
       ssize_t r = write (fd, on_msg, sizeof on_msg);
       (void) r;
     }
     /* Lock the phone. The server is no longer launched with power_off_on_close
      * (it can't tell a reconnect from a real disconnect), so it won't lock the
-     * device; inject KEYCODE_POWER (press then release) instead. These mirror
-     * pm_protocol_write_key's wire format: type(0=INJECT_KEYCODE), action, the
-     * big-endian keycode 26 (KEYCODE_POWER), then repeat(0) and meta-state(0). */
+     * device; inject KEYCODE_SLEEP (press then release) instead. SLEEP always
+     * sleeps regardless of screen state, so it can't wake a panel that has not
+     * re-lit yet (the POWER toggle could). These mirror pm_protocol_write_key's
+     * wire format: type(0=INJECT_KEYCODE), action, the big-endian keycode 223
+     * (KEYCODE_SLEEP), then repeat(0) and meta-state(0). */
     {
-      static const unsigned char power_down[14] =
-        { PM_CTRL_INJECT_KEYCODE, 0, 0, 0, 0, 26, 0, 0, 0, 0, 0, 0, 0, 0 };
-      static const unsigned char power_up[14] =
-        { PM_CTRL_INJECT_KEYCODE, 1, 0, 0, 0, 26, 0, 0, 0, 0, 0, 0, 0, 0 };
-      ssize_t r = write (fd, power_down, sizeof power_down);
+      static const unsigned char sleep_down[14] =
+        { PM_CTRL_INJECT_KEYCODE, 0, 0, 0, 0, 223, 0, 0, 0, 0, 0, 0, 0, 0 };
+      static const unsigned char sleep_up[14] =
+        { PM_CTRL_INJECT_KEYCODE, 1, 0, 0, 0, 223, 0, 0, 0, 0, 0, 0, 0, 0 };
+      ssize_t r = write (fd, sleep_down, sizeof sleep_down);
       (void) r;
-      r = write (fd, power_up, sizeof power_up);
+      r = write (fd, sleep_up, sizeof sleep_up);
       (void) r;
     }
   }

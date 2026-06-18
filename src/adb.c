@@ -286,6 +286,36 @@ adb_input (const char *serial, const char *const *input_args, GError **error)
   return adb_run ((const char *const *) argv->pdata, NULL, error);
 }
 
+/* Per-attempt settle (ms) between the keyguard swipe and typing the PIN. Short
+ * first so a snappy phone is unlocked almost instantly; growing so a sluggish
+ * keyguard (older or heavy-skin devices) still gets enough time on a later pass.
+ * The array length is also the attempt cap. */
+static const guint k_unlock_settle_ms[] = { 250, 450, 700, 950 };
+
+/* After typing, poll the lock state up to this many times at this interval,
+ * stopping the moment the PIN is accepted. This confirms the unlock *before* the
+ * loop could start another attempt, so a successful entry never spills a swipe or
+ * keystroke onto the now-unlocked home screen. The window (count x interval) is
+ * generous enough that a correct PIN is virtually always observed as unlocked
+ * here rather than racing a retry. */
+#define PM_UNLOCK_VERIFY_POLLS         8
+#define PM_UNLOCK_VERIFY_INTERVAL_US   (120 * 1000)
+
+/* Wipe any digits already in the focused PIN field by sending that many
+ * KEYCODE_DEL backspaces in a single `input keyevent` call. Harmless when the
+ * field is empty or not yet focused, so each unlock attempt can retype the full
+ * PIN from scratch rather than appending to a partial entry. */
+static gboolean
+keyguard_clear_field (const char *serial, gsize count, GError **error)
+{
+  g_autoptr (GPtrArray) args = g_ptr_array_new ();
+  g_ptr_array_add (args, (gpointer) "keyevent");
+  for (gsize i = 0; i < count; i++)
+    g_ptr_array_add (args, (gpointer) "KEYCODE_DEL");
+  g_ptr_array_add (args, NULL);
+  return adb_input (serial, (const char *const *) args->pdata, error);
+}
+
 gboolean
 pm_adb_unlock_with_pin (const char *serial, const char *pin, GError **error)
 {
@@ -302,37 +332,71 @@ pm_adb_unlock_with_pin (const char *serial, const char *pin, GError **error)
   if (pm_adb_query_lock_state (serial) == PM_LOCK_UNLOCKED)
     return TRUE;
 
-  /* Wake the panel so the keyguard is interactive. */
+  /* Wake the panel so the keyguard is interactive. No fixed settle here: if the
+   * first swipe lands before the screen is up it is simply a no-op and the retry
+   * loop below re-swipes once the device has woken. */
   {
     const char *wake[] = { "keyevent", "KEYCODE_WAKEUP", NULL };
     if (!adb_input (serial, wake, error))
       return FALSE;
   }
 
-  /* Swipe up to dismiss the keyguard and reveal the PIN pad. Coordinates scale
-   * with the real screen size so it works across resolutions. */
-  {
-    guint w = 0, h = 0;
-    query_screen_size (serial, &w, &h);
-    g_autofree char *x  = g_strdup_printf ("%u", w / 2);
-    g_autofree char *y1 = g_strdup_printf ("%u", (guint) (h * 0.75));
-    g_autofree char *y2 = g_strdup_printf ("%u", (guint) (h * 0.25));
+  /* Swipe-up coordinates, scaled to the real screen so the gesture lands across
+   * resolutions. */
+  guint w = 0, h = 0;
+  query_screen_size (serial, &w, &h);
+  g_autofree char *x  = g_strdup_printf ("%u", w / 2);
+  g_autofree char *y1 = g_strdup_printf ("%u", (guint) (h * 0.75));
+  g_autofree char *y2 = g_strdup_printf ("%u", (guint) (h * 0.25));
+  const gsize clear_count = MIN (strlen (pin) + 2, (gsize) 24);
+
+  /* Adaptive unlock instead of one long blind wait sized for the slowest phone:
+   * try with a short settle and only grow it if the phone is still locked. After
+   * each entry we poll until the unlock registers and return the instant it does,
+   * so a fast device pays only one short settle and - crucially - a successful
+   * entry never spills the next attempt's swipe/keystrokes onto the home screen.
+   * Clearing the field first makes every retype a fresh, full entry; a swipe/type
+   * that lands before the bouncer is ready simply enters nothing and retries. */
+  for (gsize attempt = 0; attempt < G_N_ELEMENTS (k_unlock_settle_ms); attempt++) {
+    /* Gate every retry against the lock state: once the phone is in, a swipe-up
+     * would open the launcher's app drawer and the text would land in whatever
+     * has focus. (Attempt 0 is already known locked from the entry check.) */
+    if (attempt > 0 && pm_adb_query_lock_state (serial) == PM_LOCK_UNLOCKED)
+      return TRUE;
+
     const char *swipe[] = { "swipe", x, y1, x, y2, "150", NULL };
     if (!adb_input (serial, swipe, error))
       return FALSE;
-  }
 
-  /* Type the digits, then submit. `input text` enters them into the focused PIN
-   * field; ENTER confirms on lockscreens that don't auto-submit. */
-  {
-    const char *text[] = { "text", pin, NULL };
-    if (!adb_input (serial, text, error))
+    g_usleep (k_unlock_settle_ms[attempt] * 1000);
+
+    /* The settle may have spanned a prior entry's keyguard dismissal; re-check so
+     * the type below never reaches the home screen. */
+    if (attempt > 0 && pm_adb_query_lock_state (serial) == PM_LOCK_UNLOCKED)
+      return TRUE;
+
+    if (!keyguard_clear_field (serial, clear_count, error))
       return FALSE;
-  }
-  {
-    const char *enter[] = { "keyevent", "KEYCODE_ENTER", NULL };
-    if (!adb_input (serial, enter, error))
-      return FALSE;
+    {
+      const char *text[] = { "text", pin, NULL };
+      if (!adb_input (serial, text, error))
+        return FALSE;
+    }
+    {
+      /* ENTER confirms on lockscreens that don't auto-submit; fixed-length PIN
+       * pads usually submit on the last digit and ignore this. */
+      const char *enter[] = { "keyevent", "KEYCODE_ENTER", NULL };
+      if (!adb_input (serial, enter, error))
+        return FALSE;
+    }
+
+    /* Wait for the unlock to actually register before considering a retry, so a
+     * correct PIN is seen here and never races into another attempt. */
+    for (gsize poll = 0; poll < PM_UNLOCK_VERIFY_POLLS; poll++) {
+      g_usleep (PM_UNLOCK_VERIFY_INTERVAL_US);
+      if (pm_adb_query_lock_state (serial) == PM_LOCK_UNLOCKED)
+        return TRUE;
+    }
   }
 
   return TRUE;
@@ -432,20 +496,33 @@ find_wireless_from_devices (PmDeviceInfo *out, GError **error)
   g_auto (GStrv) lines = g_strsplit (text, "\n", -1);
   for (guint i = 0; lines[i] != NULL; i++) {
     g_autofree char *line = g_strdup (g_strstrip (lines[i]));
+    const char *serial = NULL;
+    const char *state = NULL;
+
     if (*line == '\0')
       continue;
 
     g_auto (GStrv) cols = g_strsplit_set (line, " \t", 0);
-    if (cols[0] == NULL || cols[1] == NULL ||
-        g_strcmp0 (cols[1], "device") != 0)
+    for (guint c = 0; cols[c] != NULL; c++) {
+      if (*cols[c] == '\0')
+        continue;
+      if (serial == NULL)
+        serial = cols[c];
+      else if (state == NULL) {
+        state = cols[c];
+        break;
+      }
+    }
+
+    if (serial == NULL || g_strcmp0 (state, "device") != 0)
       continue;
 
     char *host = NULL;
     guint16 port = 0;
-    if (!parse_wireless_endpoint (cols[0], &host, &port))
+    if (!parse_wireless_endpoint (serial, &host, &port))
       continue;
 
-    out->serial = g_strdup (cols[0]);
+    out->serial = g_strdup (serial);
     out->host = host;
     out->port = port;
     return TRUE;

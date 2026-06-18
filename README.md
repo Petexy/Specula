@@ -116,7 +116,7 @@ src/
   main.c               entry point
   pm-application.{c,h} AdwApplication: lifecycle, dark mode, actions
   pm-window.{c,h}      AdwApplicationWindow: AdwViewStack states, actions
-  pm-connect-dialog.{c,h} device setup: connect by IP + async adb pair
+  pm-connect-dialog.{c,h} device setup: connect by IP[:port] + async adb pair
   pm-settings-dialog.{c,h} live mirror options (display, audio, bitrate, input)
   pm-session.{c,h}     pipeline controller + state machine (worker thread)
   pm-video-view.{c,h}  renderer surface (GdkTexture) + coordinate mapping

@@ -14,8 +14,9 @@ G_BEGIN_DECLS
 #define PM_TYPE_CONNECT_DIALOG (pm_connect_dialog_get_type ())
 G_DECLARE_FINAL_TYPE (PmConnectDialog, pm_connect_dialog, PM, CONNECT_DIALOG, AdwDialog)
 
-/* Invoked when the user confirms manual connection, or with host == NULL to
- * start automatic discovery after successful pairing. */
+/* Invoked when the user confirms manual connection, or after successful
+ * pairing with host set to the pairing IP and port == 0 so discovery can find
+ * the real post-pairing connect port automatically. */
 typedef void (*PmConnectCb) (const char *host, guint16 port, const char *name,
                              gpointer user_data);
 
