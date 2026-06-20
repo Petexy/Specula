@@ -33,9 +33,9 @@ pure C with GTK4 and libadwaita.
 </p>
 
 <p align="center">
-  <img src="screenshots/3.png" alt="Android screen mirrored in Phone Mirror" width="31%">
-  <img src="screenshots/4.png" alt="Phone Mirror displaying Android notifications" width="31%">
-  <img src="screenshots/5.png" alt="Phone Mirror display, input, and audio settings" width="31%">
+  <img src="screenshots/3.png" alt="Android screen mirrored in Phone Mirror" height="400">
+  <img src="screenshots/4.png" alt="Phone Mirror displaying Android notifications" height="400">
+  <img src="screenshots/5.png" alt="Phone Mirror display, input, and audio settings" height="400">
 </p>
 
 ## Quick start
