@@ -68,8 +68,16 @@ char *pm_adb_query_mac (const char *serial);
  * Enter. Returns TRUE if the sequence ran without an adb error (NOT proof the
  * the device actually unlocked - OEM lockscreens vary). Skips and returns TRUE when
  * the device already reports unlocked. Blocking; call off the UI thread. A NULL
- * serial or empty pin is a no-op returning FALSE. */
-gboolean pm_adb_unlock_with_pin (const char *serial, const char *pin, GError **error);
+ * serial or empty pin is a no-op returning FALSE.
+ *
+ * When `out_unlocked` is non-NULL it is set to TRUE only if the keyguard was
+ * confirmed dismissed (already unlocked, or the lock state was observed as
+ * unlocked after an entry); FALSE means the PIN was tried but the phone stayed
+ * locked - almost always a wrong saved PIN. Attempts are deliberately capped
+ * below Android's wrong-PIN lockout so the caller can prompt for a correct PIN
+ * instead of letting repeated tries time-lock (or wipe) the device. */
+gboolean pm_adb_unlock_with_pin (const char *serial, const char *pin,
+                                 gboolean *out_unlocked, GError **error);
 
 /* Wake the device screen (`adb shell input keyevent KEYCODE_WAKEUP`).
  * Fire-and-forget: spawns the command and reaps it asynchronously, so it is

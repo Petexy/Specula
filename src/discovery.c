@@ -47,6 +47,11 @@
 #define PM_PORT_SCAN_TIMEOUT_MS 20
 #define PM_PORT_SCAN_LOW 30000
 #define PM_PORT_SCAN_HIGH 49999
+/* A single mDNS hit is one known endpoint (not a 20k-port sweep), so it can
+ * afford a longer confirm than the port scan: long enough for a LAN round trip,
+ * short enough that an unreachable/cached record bails the searching phase
+ * quickly. */
+#define PM_MDNS_VERIFY_TIMEOUT_MS 300
 
 struct _PmDiscovery {
   PmDeviceInfo        target;       /* owned copy */
@@ -79,7 +84,6 @@ emit_found_main (PmDiscovery *self, const char *host, guint16 port, const char *
     return;
 
   PmDeviceInfo info = {
-    .serial = self->target.serial,
     .name   = (char *) (name ? name : self->target.name),
     .host   = (char *) host,
     .port   = port,
@@ -127,7 +131,6 @@ report_found_from_thread (PmDiscovery        *self,
    * late-dispatched idle can't land on a finalized session (use-after-free).
    * The session's handler is a no-op once it has left SEARCHING. */
   p->user_data = self->user_data ? g_object_ref (self->user_data) : NULL;
-  p->info.serial = g_strdup (info->serial);
   p->info.name   = g_strdup (info->name);
   p->info.host   = g_strdup (info->host);
   p->info.port   = info->port;
@@ -229,7 +232,6 @@ try_report_target_port (PmDiscovery *self,
     return FALSE;
 
   PmDeviceInfo info = {
-    .serial = self->target.serial,
     .name   = self->target.name,
     .host   = self->target.host,
     .port   = port,
@@ -291,7 +293,12 @@ probe_thread (gpointer data)
 
     PmDeviceInfo adb_info = { 0 };
     if (pm_adb_find_wireless_device (&adb_info, NULL)) {
-      gboolean reported = report_found_from_thread (self, &adb_info);
+      /* Confirm it connects before committing: `adb mdns services` can list a
+       * device that no longer routes. An already-attached device (the `adb
+       * devices` path) returns "already connected" and so passes cheaply. */
+      gboolean reachable = adb_info.host != NULL &&
+                           pm_adb_connect (adb_info.host, adb_info.port, NULL);
+      gboolean reported = reachable && report_found_from_thread (self, &adb_info);
       pm_device_info_clear (&adb_info);
       if (reported)
         break;
@@ -334,6 +341,28 @@ probe_thread (gpointer data)
 /* --- mDNS via Avahi (main thread) ----------------------------------------- */
 
 #if PM_HAVE_AVAHI
+/* TRUE if a TCP connection to host:port can be opened within timeout_ms. Gates
+ * mDNS hits: Avahi can serve a *cached* A-record from a previous network state,
+ * so a resolve may hand back an address that no longer routes - committing to it
+ * makes the real `adb connect` fail with "No route to host", with no fallback
+ * because reporting it tears the verified probe path down. A quick connect probe
+ * here keeps the "reported == reachable" contract the probe path already holds,
+ * so a stale record is skipped and the probe path (or a fresh mDNS hit) wins. */
+static gboolean
+endpoint_reachable (const char *host, guint16 port, int timeout_ms)
+{
+  struct addrinfo hints = {
+    .ai_family = AF_UNSPEC,
+    .ai_socktype = SOCK_STREAM,
+  };
+  struct addrinfo *addrs = NULL;
+  if (host == NULL || getaddrinfo (host, NULL, &hints, &addrs) != 0)
+    return FALSE;
+  gboolean ok = tcp_port_open (addrs, port, timeout_ms);
+  freeaddrinfo (addrs);
+  return ok;
+}
+
 static void
 resolve_cb (AvahiServiceResolver *r,
             AvahiIfIndex interface, AvahiProtocol protocol,
@@ -348,8 +377,17 @@ resolve_cb (AvahiServiceResolver *r,
   if (event == AVAHI_RESOLVER_FOUND && address->proto == AVAHI_PROTO_INET) {
     char addr[AVAHI_ADDRESS_STR_MAX];
     avahi_address_snprint (addr, sizeof addr, address);
-    g_debug ("discovery: mDNS resolved %s -> %s:%u", name, addr, port);
-    emit_found_main (self, addr, port, name);
+
+    /* Only commit to a resolved endpoint that actually answers - a cached/stale
+     * mDNS record (old IP, or a connect port closed since it was advertised)
+     * would otherwise be adopted and fail the real connect intermittently. */
+    if (endpoint_reachable (addr, port, PM_MDNS_VERIFY_TIMEOUT_MS)) {
+      g_debug ("discovery: mDNS resolved %s -> %s:%u (reachable)", name, addr, port);
+      emit_found_main (self, addr, port, name);
+    } else {
+      g_debug ("discovery: mDNS %s -> %s:%u unreachable; skipping stale record",
+               name, addr, port);
+    }
   }
 
   avahi_service_resolver_free (r);   /* one-shot */
@@ -426,7 +464,6 @@ pm_discovery_new (const PmDeviceInfo *target,
   g_return_val_if_fail (target != NULL, NULL);
 
   PmDiscovery *self = g_new0 (PmDiscovery, 1);
-  self->target.serial = g_strdup (target->serial);
   self->target.name   = g_strdup (target->name);
   self->target.host   = g_strdup (target->host);
   self->target.port   = (target->host == NULL && target->port == 0) ? 5555 : target->port;

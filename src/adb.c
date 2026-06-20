@@ -289,8 +289,12 @@ adb_input (const char *serial, const char *const *input_args, GError **error)
 /* Per-attempt settle (ms) between the keyguard swipe and typing the PIN. Short
  * first so a snappy phone is unlocked almost instantly; growing so a sluggish
  * keyguard (older or heavy-skin devices) still gets enough time on a later pass.
- * The array length is also the attempt cap. */
-static const guint k_unlock_settle_ms[] = { 250, 450, 700, 950 };
+ * The array length is also the attempt cap: kept at 3 so a wrong saved PIN is
+ * tried a few times (covering swipes that land before the bouncer is ready) but
+ * never enough to trip Android's wrong-PIN lockout, which typically begins at
+ * the 5th failure with an escalating time-lock (and, on some policies, a wipe).
+ * The caller surfaces the failure and asks the user for the correct PIN. */
+static const guint k_unlock_settle_ms[] = { 250, 450, 700 };
 
 /* After typing, poll the lock state up to this many times at this interval,
  * stopping the moment the PIN is accepted. This confirms the unlock *before* the
@@ -317,8 +321,12 @@ keyguard_clear_field (const char *serial, gsize count, GError **error)
 }
 
 gboolean
-pm_adb_unlock_with_pin (const char *serial, const char *pin, GError **error)
+pm_adb_unlock_with_pin (const char *serial, const char *pin,
+                        gboolean *out_unlocked, GError **error)
 {
+  if (out_unlocked != NULL)
+    *out_unlocked = FALSE;
+
   if (serial == NULL || pin == NULL || *pin == '\0') {
     g_set_error_literal (error, G_IO_ERROR, G_IO_ERROR_INVALID_ARGUMENT,
                          "missing serial or PIN");
@@ -329,8 +337,11 @@ pm_adb_unlock_with_pin (const char *serial, const char *pin, GError **error)
    * would leak the digits into whatever has focus. UNKNOWN falls through and the
    * attempt proceeds anyway (the keyguard swipe + text is harmless if already
    * unlocked). */
-  if (pm_adb_query_lock_state (serial) == PM_LOCK_UNLOCKED)
+  if (pm_adb_query_lock_state (serial) == PM_LOCK_UNLOCKED) {
+    if (out_unlocked != NULL)
+      *out_unlocked = TRUE;
     return TRUE;
+  }
 
   /* Wake the panel so the keyguard is interactive. No fixed settle here: if the
    * first swipe lands before the screen is up it is simply a no-op and the retry
@@ -361,8 +372,11 @@ pm_adb_unlock_with_pin (const char *serial, const char *pin, GError **error)
     /* Gate every retry against the lock state: once the phone is in, a swipe-up
      * would open the launcher's app drawer and the text would land in whatever
      * has focus. (Attempt 0 is already known locked from the entry check.) */
-    if (attempt > 0 && pm_adb_query_lock_state (serial) == PM_LOCK_UNLOCKED)
+    if (attempt > 0 && pm_adb_query_lock_state (serial) == PM_LOCK_UNLOCKED) {
+      if (out_unlocked != NULL)
+        *out_unlocked = TRUE;
       return TRUE;
+    }
 
     const char *swipe[] = { "swipe", x, y1, x, y2, "150", NULL };
     if (!adb_input (serial, swipe, error))
@@ -372,8 +386,11 @@ pm_adb_unlock_with_pin (const char *serial, const char *pin, GError **error)
 
     /* The settle may have spanned a prior entry's keyguard dismissal; re-check so
      * the type below never reaches the home screen. */
-    if (attempt > 0 && pm_adb_query_lock_state (serial) == PM_LOCK_UNLOCKED)
+    if (attempt > 0 && pm_adb_query_lock_state (serial) == PM_LOCK_UNLOCKED) {
+      if (out_unlocked != NULL)
+        *out_unlocked = TRUE;
       return TRUE;
+    }
 
     if (!keyguard_clear_field (serial, clear_count, error))
       return FALSE;
@@ -394,11 +411,18 @@ pm_adb_unlock_with_pin (const char *serial, const char *pin, GError **error)
      * correct PIN is seen here and never races into another attempt. */
     for (gsize poll = 0; poll < PM_UNLOCK_VERIFY_POLLS; poll++) {
       g_usleep (PM_UNLOCK_VERIFY_INTERVAL_US);
-      if (pm_adb_query_lock_state (serial) == PM_LOCK_UNLOCKED)
+      if (pm_adb_query_lock_state (serial) == PM_LOCK_UNLOCKED) {
+        if (out_unlocked != NULL)
+          *out_unlocked = TRUE;
         return TRUE;
+      }
     }
   }
 
+  /* Sequence ran cleanly (no adb error) but the phone never reported unlocked
+   * across every capped attempt: the saved PIN is almost certainly wrong. Leave
+   * `out_unlocked` FALSE so the caller can prompt for the correct one instead of
+   * retrying into a lockout. */
   return TRUE;
 }
 
@@ -522,7 +546,6 @@ find_wireless_from_devices (PmDeviceInfo *out, GError **error)
     if (!parse_wireless_endpoint (serial, &host, &port))
       continue;
 
-    out->serial = g_strdup (serial);
     out->host = host;
     out->port = port;
     return TRUE;
@@ -561,7 +584,6 @@ find_wireless_from_mdns (PmDeviceInfo *out, GError **error)
       if (!parse_wireless_endpoint (cols[c], &host, &port))
         continue;
 
-      out->serial = g_strdup (cols[c]);
       out->name = g_strdup (service_name);
       out->host = host;
       out->port = port;

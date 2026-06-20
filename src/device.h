@@ -2,7 +2,7 @@
  *
  * Pairing happens once (USB handoff or `adb pair` over Wi-Fi). The stored
  * fields are limited to automatic reconnect metadata:
- * its serial, friendly name, and last-known host:port. Stored as a GKeyFile
+ * its friendly name and last-known host:port. Stored as a GKeyFile
  * under $XDG_CONFIG_HOME/specula/device.ini.
  */
 #pragma once

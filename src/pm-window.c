@@ -1267,6 +1267,52 @@ on_session_unlocking (PmSession *session, gboolean active, gpointer user_data)
 }
 
 static void
+on_unlock_failed_response (AdwAlertDialog *dialog, const char *response,
+                           gpointer user_data)
+{
+  PmWindow *self = PM_WINDOW (user_data);
+
+  /* "Enter PIN" opens the Lockscreen PIN sheet so the user can replace the wrong
+   * saved value; "Dismiss" just lets the phone keep streaming on its keyguard. */
+  if (g_strcmp0 (response, "enter") == 0)
+    g_action_group_activate_action (G_ACTION_GROUP (self), "lockscreen-pin", NULL);
+}
+
+/* Auto-unlock exhausted its (deliberately capped) attempts and the phone is
+ * still locked: the saved PIN is almost certainly wrong. Alert the user and
+ * offer to enter the correct one, rather than letting the next connect retry
+ * into Android's escalating wrong-PIN lockout. */
+static void
+on_session_unlock_failed (PmSession *session, gpointer user_data)
+{
+  PmWindow *self = PM_WINDOW (user_data);
+
+  /* The "Unlocking…" notice may still be up if the finished edge hasn't landed
+   * yet; clear it so it never lingers behind the alert. */
+  pm_window_set_unlock_alert (self, FALSE);
+
+  AdwAlertDialog *dialog = ADW_ALERT_DIALOG (adw_alert_dialog_new (
+    _("Incorrect PIN"),
+    _("The saved lockscreen PIN didn't unlock your phone. Auto-unlock has "
+      "stopped trying so repeated wrong attempts can't lock you out of the "
+      "device. Enter the correct PIN to try again.")));
+
+  adw_alert_dialog_add_responses (dialog,
+                                  "dismiss", _("Dismiss"),
+                                  "enter", _("Enter PIN"),
+                                  NULL);
+  adw_alert_dialog_set_response_appearance (dialog, "enter",
+                                            ADW_RESPONSE_SUGGESTED);
+  adw_alert_dialog_set_default_response (dialog, "enter");
+  adw_alert_dialog_set_close_response (dialog, "dismiss");
+
+  g_signal_connect (dialog, "response",
+                    G_CALLBACK (on_unlock_failed_response), self);
+
+  adw_dialog_present (ADW_DIALOG (dialog), GTK_WIDGET (self));
+}
+
+static void
 on_startup_check_failed (PmSession *session, gpointer user_data)
 {
   PmWindow *self = PM_WINDOW (user_data);
@@ -1322,7 +1368,7 @@ on_device_chosen (const char *host, guint16 port, const char *name, gpointer use
   }
 
   PmDeviceInfo info = { .host = (char *) host, .port = port,
-                        .name = (char *) name, .serial = NULL };
+                        .name = (char *) name };
   pm_session_start (self->session, &info);
 }
 
@@ -1645,7 +1691,7 @@ pin_save_thread (GTask *task, gpointer source, gpointer task_data, GCancellable 
   /* The phone is connected, so the connect-time auto-unlock has already passed.
    * Apply the just-saved PIN now (best-effort) so saving it from the menu unlocks
    * a phone sitting on its keyguard immediately, not only on the next connect. */
-  pm_adb_unlock_with_pin (d->serial, d->pin, NULL);
+  pm_adb_unlock_with_pin (d->serial, d->pin, NULL, NULL);
   g_task_return_boolean (task, TRUE);
 }
 
@@ -4119,6 +4165,8 @@ pm_window_init (PmWindow *self)
                     G_CALLBACK (on_startup_check_failed), self);
   g_signal_connect (self->session, "unlocking",
                     G_CALLBACK (on_session_unlocking), self);
+  g_signal_connect (self->session, "unlock-failed",
+                    G_CALLBACK (on_session_unlock_failed), self);
 
   if (!self->setup_complete) {
     pm_window_show_setup_step (self, PM_SETUP_WELCOME);

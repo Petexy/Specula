@@ -24,6 +24,20 @@ pure C with GTK4 and libadwaita.
 > pattern when no phone is available. See [ARCHITECTURE.md](ARCHITECTURE.md) for
 > the design and roadmap.
 
+## Screenshots
+
+<p align="center">
+  <img src="screenshots/1.png" alt="Phone Mirror first-time setup welcome screen" width="31%">
+  <img src="screenshots/2.png" alt="Phone Mirror wireless pairing walkthrough" width="31%">
+  <img src="screenshots/6.png" alt="Phone Mirror device pairing dialog" width="31%">
+</p>
+
+<p align="center">
+  <img src="screenshots/3.png" alt="Android screen mirrored in Phone Mirror" width="31%">
+  <img src="screenshots/4.png" alt="Phone Mirror displaying Android notifications" width="31%">
+  <img src="screenshots/5.png" alt="Phone Mirror display, input, and audio settings" width="31%">
+</p>
+
 ## Quick start
 
 ```sh

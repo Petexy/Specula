@@ -149,7 +149,7 @@ find_scrcpy_version (void)
 }
 
 enum { SIG_STATE_CHANGED, SIG_STREAM_CHANGED, SIG_STARTUP_CHECK_FAILED,
-       SIG_UNLOCKING, N_SIGNALS };
+       SIG_UNLOCKING, SIG_UNLOCK_FAILED, N_SIGNALS };
 static guint signals[N_SIGNALS];
 
 G_DEFINE_FINAL_TYPE (PmSession, pm_session, G_TYPE_OBJECT)
@@ -371,6 +371,27 @@ post_unlocking (PmSession *self, gboolean active)
   m->active = active;
   g_main_context_invoke_full (NULL, G_PRIORITY_DEFAULT,
                               emit_unlocking_idle, m, unlock_msg_free);
+}
+
+/* Marshal an "auto-unlock exhausted its attempts and the phone is still locked"
+ * edge from the unlock worker to the main thread, where the window alerts the
+ * user that the saved PIN looks wrong and asks for a correct one. Reuses
+ * UnlockMsg (its `active` field is unused here). */
+static gboolean
+emit_unlock_failed_idle (gpointer data)
+{
+  UnlockMsg *m = data;
+  g_signal_emit (m->self, signals[SIG_UNLOCK_FAILED], 0);
+  return G_SOURCE_REMOVE;
+}
+
+static void
+post_unlock_failed (PmSession *self)
+{
+  UnlockMsg *m = g_new0 (UnlockMsg, 1);
+  m->self = g_object_ref (self);
+  g_main_context_invoke_full (NULL, G_PRIORITY_DEFAULT,
+                              emit_unlock_failed_idle, m, unlock_msg_free);
 }
 
 /* Decoder delivers textures on the main thread; push them to the view. */
@@ -660,11 +681,19 @@ maybe_unlock_device (PmSession *self, const char *serial)
 
   g_message ("auto-unlock: attempting to unlock device %s", mac);
   g_autoptr (GError) unlock_err = NULL;
-  if (!pm_adb_unlock_with_pin (serial, pin, &unlock_err))
+  gboolean unlocked = FALSE;
+  if (!pm_adb_unlock_with_pin (serial, pin, &unlocked, &unlock_err))
     g_debug ("auto-unlock: unlock attempt failed: %s",
              unlock_err ? unlock_err->message : "(unknown)");
 
   post_unlocking (self, FALSE);
+
+  /* Ran cleanly but the keyguard never dismissed across every capped attempt:
+   * the saved PIN is almost certainly wrong. Tell the window so it can alert the
+   * user and ask for a correct PIN rather than letting the next connect retry
+   * into Android's wrong-PIN lockout. */
+  if (!unlocked)
+    post_unlock_failed (self);
 
   /* Don't leave the plaintext PIN lingering in this buffer longer than needed. */
   memset (pin, 0, strlen (pin));
@@ -847,7 +876,6 @@ live_worker (gpointer data)
    * connect, and refresh the last-known host:port. */
   {
     PmDeviceInfo confirmed = {
-      .serial = self->target.serial != NULL ? self->target.serial : serial,
       .name   = device_name != NULL ? device_name : self->target.name,
       .host   = self->target.host,
       .port   = self->target.port,
@@ -1164,7 +1192,6 @@ pm_session_start_internal (PmSession           *self,
   /* Resolve target: explicit arg > saved pairing > network discovery. */
   pm_device_info_clear (&self->target);
   if (target != NULL) {
-    self->target.serial = g_strdup (target->serial);
     self->target.name   = g_strdup (target->name);
     self->target.host   = g_strdup (target->host);
     self->target.port   = target->port;
@@ -1223,7 +1250,6 @@ pm_session_reconnect (PmSession *self)
 
   /* Copy the endpoint before pm_session_stop() clears self->target. */
   PmDeviceInfo target = {
-    .serial = g_strdup (self->target.serial),
     .name   = g_strdup (self->target.name),
     .host   = g_strdup (self->target.host),
     .port   = self->target.port,
@@ -1386,6 +1412,17 @@ pm_session_class_init (PmSessionClass *klass)
                   G_SIGNAL_RUN_FIRST,
                   0, NULL, NULL, NULL,
                   G_TYPE_NONE, 1, G_TYPE_BOOLEAN);
+
+  /* Auto-unlock tried the saved PIN the capped number of times and the phone
+   * stayed locked - the PIN is almost certainly wrong. The window alerts the
+   * user and offers to enter the correct one before further attempts risk a
+   * lockout. */
+  signals[SIG_UNLOCK_FAILED] =
+    g_signal_new ("unlock-failed",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_FIRST,
+                  0, NULL, NULL, NULL,
+                  G_TYPE_NONE, 0);
 }
 
 static void

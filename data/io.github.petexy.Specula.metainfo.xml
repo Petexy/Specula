@@ -69,6 +69,19 @@
   <content_rating type="oars-1.1"/>
 
   <releases>
+    <release version="0.5.0" date="2026-06-20">
+      <description>
+        <ul>
+          <li>Auto-unlock now stops after a few unsuccessful PIN attempts, so
+          an incorrect saved PIN cannot keep trying until the phone locks you
+          out.</li>
+          <li>If the saved PIN does not work, the app now explains what happened
+          and offers a quick way to enter the correct PIN.</li>
+          <li>Reconnecting to a paired phone should be more reliable because the
+          app ignores old network records that no longer reach the phone.</li>
+        </ul>
+      </description>
+    </release>
     <release version="0.4.0" date="2026-06-17">
       <description>
         <p>Added localization support with a Polish translation; the interface

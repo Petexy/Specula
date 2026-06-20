@@ -167,8 +167,7 @@ on_connect_clicked (GtkButton *button, gpointer user_data)
     return;
   }
 
-  PmDeviceInfo info = { .host = host, .port = port,
-                        .serial = NULL, .name = NULL };
+  PmDeviceInfo info = { .host = host, .port = port, .name = NULL };
   g_autoptr (GError) error = NULL;
   if (!pm_device_save (&info, &error)) {
     toast (self, error->message);

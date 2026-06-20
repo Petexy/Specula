@@ -33,9 +33,9 @@ typedef enum {
   PM_STATE_ERROR,        /* Recoverable failure; message is shown.        */
 } PmState;
 
-/* Description of a (paired) target device. */
+/* Description of a (paired) target device. The adb serial is not stored: every
+ * adb operation derives it from host:port at runtime (see pm-session.c). */
 typedef struct {
-  char    *serial;       /* adb serial, e.g. "RZ8N..." or "ip:port".      */
   char    *name;         /* Friendly model name for the UI.               */
   char    *host;         /* Last-known IPv4/IPv6 literal.                  */
   guint16  port;         /* adb tcp port (default 5555 or mDNS dynamic).   */

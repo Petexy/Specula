@@ -10,7 +10,6 @@ pm_device_info_clear (PmDeviceInfo *info)
 {
   if (info == NULL)
     return;
-  g_clear_pointer (&info->serial, g_free);
   g_clear_pointer (&info->name, g_free);
   g_clear_pointer (&info->host, g_free);
   info->port = 0;
@@ -21,7 +20,6 @@ pm_device_info_copy (const PmDeviceInfo *info)
 {
   PmDeviceInfo *c = g_new0 (PmDeviceInfo, 1);
   if (info != NULL) {
-    c->serial = g_strdup (info->serial);
     c->name   = g_strdup (info->name);
     c->host   = g_strdup (info->host);
     c->port   = info->port;
@@ -53,7 +51,6 @@ pm_device_load (PmDeviceInfo *out, GError **error)
   if (!g_key_file_load_from_file (kf, path, G_KEY_FILE_NONE, error))
     return FALSE;
 
-  out->serial = g_key_file_get_string  (kf, PM_CONFIG_GROUP, "serial", NULL);
   out->name   = g_key_file_get_string  (kf, PM_CONFIG_GROUP, "name",   NULL);
   out->host   = g_key_file_get_string  (kf, PM_CONFIG_GROUP, "host",   NULL);
   out->port   = (guint16) g_key_file_get_integer (kf, PM_CONFIG_GROUP, "port", NULL);
@@ -76,7 +73,6 @@ pm_device_save (const PmDeviceInfo *info, GError **error)
   }
 
   g_autoptr (GKeyFile) kf = g_key_file_new ();
-  g_key_file_set_string  (kf, PM_CONFIG_GROUP, "serial", info->serial ? info->serial : "");
   g_key_file_set_string  (kf, PM_CONFIG_GROUP, "name",   info->name   ? info->name   : "");
   g_key_file_set_string  (kf, PM_CONFIG_GROUP, "host",   info->host   ? info->host   : "");
   g_key_file_set_integer (kf, PM_CONFIG_GROUP, "port",   info->port);
