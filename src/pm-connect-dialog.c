@@ -309,8 +309,8 @@ build_pairing_page (PmConnectDialog *self)
   self->code_row = ADW_ENTRY_ROW (adw_entry_row_new ());
   adw_preferences_row_set_title (ADW_PREFERENCES_ROW (self->code_row), _("Pairing code"));
 
-  adw_preferences_group_add (pg, GTK_WIDGET (self->pair_addr_row));
   adw_preferences_group_add (pg, GTK_WIDGET (self->code_row));
+  adw_preferences_group_add (pg, GTK_WIDGET (self->pair_addr_row));
   adw_preferences_page_add (page, pg);
 
   add_pin_group (self, page);

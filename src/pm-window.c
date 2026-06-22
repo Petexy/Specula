@@ -3360,8 +3360,8 @@ pm_setup_draw_connect_device_sheet (cairo_t     *cr,
                                     PmSetupRect *code_row)
 {
   PmSetupRect pair_group = { x + 8.0, y + 74.0, w - 16.0, 57.0 };
-  PmSetupRect addr = { pair_group.x, pair_group.y, pair_group.w, pair_group.h / 2.0 };
-  PmSetupRect code = {
+  PmSetupRect code = { pair_group.x, pair_group.y, pair_group.w, pair_group.h / 2.0 };
+  PmSetupRect addr = {
     pair_group.x, pair_group.y + pair_group.h / 2.0, pair_group.w, pair_group.h / 2.0
   };
 
@@ -3413,11 +3413,11 @@ pm_setup_draw_connect_device_sheet (cairo_t     *cr,
                           1.0);
   pm_setup_draw_adw_entry_group (cr,
                                  pair_group,
-                                 _("Pairing address (ip:port)"),
-                                 "192.168.1.25:37123",
-                                 pm_setup_interval (copy_progress, 0.0, 0.55),
                                  _("Pairing code"),
                                  "123456",
+                                 pm_setup_interval (copy_progress, 0.0, 0.55),
+                                 _("Pairing address (ip:port)"),
+                                 "192.168.1.25:37123",
                                  pm_setup_interval (copy_progress, 0.35, 0.9));
   pm_setup_fill_rounded (cr,
                          x + 30.0,
