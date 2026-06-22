@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: specula\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-18 03:26+0200\n"
+"POT-Creation-Date: 2026-06-22 18:11+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 #: src/pm-application.c:59 src/pm-window.c:1135 src/pm-window.c:1143
-#: src/pm-window.c:3947 src/pm-window.c:3966
+#: src/pm-window.c:4147 src/pm-window.c:4166
 msgid "Phone Mirror"
 msgstr ""
 
@@ -50,426 +50,465 @@ msgstr ""
 msgid "Could not reach the device."
 msgstr ""
 
-#: src/pm-window.c:1745 src/pm-window.c:1758 src/pm-connect-dialog.c:138
+#: src/pm-window.c:1381 src/pm-window.c:1449
+msgid "Incorrect PIN"
+msgstr ""
+
+#: src/pm-window.c:1381
+msgid "Unlock Phone"
+msgstr ""
+
+#: src/pm-window.c:1382
+msgid "Try again."
+msgstr ""
+
+#: src/pm-window.c:1382
+msgid "Enter your PIN."
+msgstr ""
+
+#: src/pm-window.c:1386
+msgid "PIN"
+msgstr ""
+
+#: src/pm-window.c:1392 src/pm-window.c:2914
+msgid "Cancel"
+msgstr ""
+
+#: src/pm-window.c:1393
+msgid "Unlock"
+msgstr ""
+
+#: src/pm-window.c:1450
+msgid ""
+"The saved lockscreen PIN didn't unlock your phone. Auto-unlock has stopped "
+"trying so repeated wrong attempts can't lock you out of the device. Enter "
+"the correct PIN to try again."
+msgstr ""
+
+#: src/pm-window.c:1455
+msgid "Dismiss"
+msgstr ""
+
+#: src/pm-window.c:1456
+msgid "Enter PIN"
+msgstr ""
+
+#: src/pm-window.c:1945 src/pm-window.c:1958 src/pm-connect-dialog.c:138
 msgid "Lockscreen PIN"
 msgstr ""
 
-#: src/pm-window.c:1752 src/pm-connect-dialog.c:131
+#: src/pm-window.c:1952 src/pm-connect-dialog.c:131
 msgid "Auto-unlock"
 msgstr ""
 
-#: src/pm-window.c:1754
+#: src/pm-window.c:1954
 msgid ""
 "Stored encrypted on this computer, tied to this phone, and used to unlock it "
 "automatically when it connects."
 msgstr ""
 
-#: src/pm-window.c:1767
+#: src/pm-window.c:1967
 msgid "Save"
 msgstr ""
 
-#: src/pm-window.c:1770
+#: src/pm-window.c:1970
 msgid "Remove"
 msgstr ""
 
-#: src/pm-window.c:1898
+#: src/pm-window.c:2098
 msgid "Network & internet"
 msgstr ""
 
-#: src/pm-window.c:1898
+#: src/pm-window.c:2098
 msgid "Wi-Fi, SIM, hotspot"
 msgstr ""
 
-#: src/pm-window.c:1899
+#: src/pm-window.c:2099
 msgid "Connected devices"
 msgstr ""
 
-#: src/pm-window.c:1899
+#: src/pm-window.c:2099
 msgid "Bluetooth, pairing"
 msgstr ""
 
-#: src/pm-window.c:1900
+#: src/pm-window.c:2100
 msgid "Apps"
 msgstr ""
 
-#: src/pm-window.c:1900
+#: src/pm-window.c:2100
 msgid "Permissions and defaults"
 msgstr ""
 
-#: src/pm-window.c:1901
+#: src/pm-window.c:2101
 msgid "Notifications"
 msgstr ""
 
-#: src/pm-window.c:1901
+#: src/pm-window.c:2101
 msgid "History and conversations"
 msgstr ""
 
-#: src/pm-window.c:1902
+#: src/pm-window.c:2102
 msgid "Battery"
 msgstr ""
 
-#: src/pm-window.c:1902
+#: src/pm-window.c:2102
 msgid "87%, until 10:30 PM"
 msgstr ""
 
-#: src/pm-window.c:1903
+#: src/pm-window.c:2103
 msgid "System"
 msgstr ""
 
-#: src/pm-window.c:1903
+#: src/pm-window.c:2103
 msgid "Languages, gestures, time"
 msgstr ""
 
-#: src/pm-window.c:1904 src/pm-window.c:2951 src/pm-window.c:2984
-#: src/pm-window.c:3061
+#: src/pm-window.c:2104 src/pm-window.c:3151 src/pm-window.c:3184
+#: src/pm-window.c:3261
 msgid "About phone"
 msgstr ""
 
-#: src/pm-window.c:1904
+#: src/pm-window.c:2104
 msgid "Model, Android version"
 msgstr ""
 
-#: src/pm-window.c:1905 src/pm-window.c:3074 src/pm-window.c:3131
+#: src/pm-window.c:2105 src/pm-window.c:3274 src/pm-window.c:3331
 msgid "Developer options"
 msgstr ""
 
-#: src/pm-window.c:1905
+#: src/pm-window.c:2105
 msgid "Debugging and input"
 msgstr ""
 
-#: src/pm-window.c:1915 src/pm-window.c:3116
+#: src/pm-window.c:2115 src/pm-window.c:3316
 msgid "Device name"
 msgstr ""
 
-#: src/pm-window.c:1915
+#: src/pm-window.c:2115
 msgid "Pixel phone"
 msgstr ""
 
-#: src/pm-window.c:1916
+#: src/pm-window.c:2116
 msgid "Android version"
 msgstr ""
 
-#: src/pm-window.c:1916
+#: src/pm-window.c:2116
 msgid "Version and security update"
 msgstr ""
 
-#: src/pm-window.c:1917
+#: src/pm-window.c:2117
 msgid "Build number"
 msgstr ""
 
-#: src/pm-window.c:1917
+#: src/pm-window.c:2117
 msgid "Tap seven times"
 msgstr ""
 
-#: src/pm-window.c:1934
+#: src/pm-window.c:2134
 msgid "Use developer options"
 msgstr ""
 
-#: src/pm-window.c:1934 src/pm-window.c:3176
+#: src/pm-window.c:2134 src/pm-window.c:3376
 msgid "On"
 msgstr ""
 
-#: src/pm-window.c:1935
+#: src/pm-window.c:2135
 msgid "USB debugging"
 msgstr ""
 
-#: src/pm-window.c:1935
+#: src/pm-window.c:2135
 msgid "Debug mode when USB is connected"
 msgstr ""
 
-#: src/pm-window.c:1936 src/pm-window.c:3141 src/pm-window.c:3191
+#: src/pm-window.c:2136 src/pm-window.c:3341 src/pm-window.c:3391
 msgid "Wireless debugging"
 msgstr ""
 
-#: src/pm-window.c:1936
+#: src/pm-window.c:2136
 msgid "Debug over Wi-Fi"
 msgstr ""
 
-#: src/pm-window.c:1937
+#: src/pm-window.c:2137
 msgid "Revoke debugging authorizations"
 msgstr ""
 
-#: src/pm-window.c:2308
+#: src/pm-window.c:2508
 msgid "Phone"
 msgstr ""
 
-#: src/pm-window.c:2309
+#: src/pm-window.c:2509
 msgid "Messages"
 msgstr ""
 
-#: src/pm-window.c:2310
+#: src/pm-window.c:2510
 msgid "Photos"
 msgstr ""
 
-#: src/pm-window.c:2311
+#: src/pm-window.c:2511
 msgid "Camera"
 msgstr ""
 
-#: src/pm-window.c:2312 src/pm-window.c:2909 src/pm-window.c:2941
-#: src/pm-window.c:3048 src/pm-settings-dialog.c:76
+#: src/pm-window.c:2512 src/pm-window.c:3109 src/pm-window.c:3141
+#: src/pm-window.c:3248 src/pm-settings-dialog.c:76
 msgid "Settings"
 msgstr ""
 
-#: src/pm-window.c:2313
+#: src/pm-window.c:2513
 msgid "Files"
 msgstr ""
 
-#: src/pm-window.c:2336
+#: src/pm-window.c:2536
 msgid "Search your phone"
 msgstr ""
 
-#: src/pm-window.c:2714
-msgid "Cancel"
-msgstr ""
-
-#: src/pm-window.c:2993
+#: src/pm-window.c:3193
 #, c-format
 msgid "Tap %d of 7"
 msgstr ""
 
-#: src/pm-window.c:3018
+#: src/pm-window.c:3218
 msgid "You are now a developer!"
 msgstr ""
 
-#: src/pm-window.c:3098
+#: src/pm-window.c:3298
 msgid "Allow USB debugging?"
 msgstr ""
 
-#: src/pm-window.c:3099
+#: src/pm-window.c:3299
 msgid "Computer RSA key fingerprint"
 msgstr ""
 
-#: src/pm-window.c:3100
+#: src/pm-window.c:3300
 msgid "OK"
 msgstr ""
 
-#: src/pm-window.c:3114 src/pm-window.c:3176
+#: src/pm-window.c:3314 src/pm-window.c:3376
 msgid "Use wireless debugging"
 msgstr ""
 
-#: src/pm-window.c:3114
+#: src/pm-window.c:3314
 msgid "Current Wi-Fi network"
 msgstr ""
 
-#: src/pm-window.c:3115
+#: src/pm-window.c:3315
 msgid "Wi-Fi network"
 msgstr ""
 
-#: src/pm-window.c:3115
+#: src/pm-window.c:3315
 msgid "Same network as Linux"
 msgstr ""
 
-#: src/pm-window.c:3116
+#: src/pm-window.c:3316
 msgid "Android device"
 msgstr ""
 
-#: src/pm-window.c:3160
+#: src/pm-window.c:3360
 msgid "Allow wireless debugging?"
 msgstr ""
 
-#: src/pm-window.c:3161
+#: src/pm-window.c:3361
 msgid "Allow on this Wi-Fi network"
 msgstr ""
 
-#: src/pm-window.c:3162
+#: src/pm-window.c:3362
 msgid "Allow"
 msgstr ""
 
-#: src/pm-window.c:3177
+#: src/pm-window.c:3377
 msgid "Pair device with code"
 msgstr ""
 
-#: src/pm-window.c:3177
+#: src/pm-window.c:3377
 msgid "Shows code and address"
 msgstr ""
 
-#: src/pm-window.c:3178
+#: src/pm-window.c:3378
 msgid "IP address & port"
 msgstr ""
 
-#: src/pm-window.c:3181 src/pm-window.c:3373 src/pm-connect-dialog.c:311
+#: src/pm-window.c:3381 src/pm-window.c:3570 src/pm-connect-dialog.c:310
 msgid "Pairing code"
 msgstr ""
 
-#: src/pm-window.c:3182
+#: src/pm-window.c:3382
 msgid "Pairing address"
 msgstr ""
 
-#: src/pm-window.c:3183
+#: src/pm-window.c:3383
 msgid "Keep this screen open"
 msgstr ""
 
-#: src/pm-window.c:3183
+#: src/pm-window.c:3383
 msgid "Code expires soon"
 msgstr ""
 
-#: src/pm-window.c:3201
+#: src/pm-window.c:3401
 msgid "Pair device"
 msgstr ""
 
-#: src/pm-window.c:3337 src/pm-connect-dialog.c:322
+#: src/pm-window.c:3537 src/pm-connect-dialog.c:321
 msgid "Set up device"
 msgstr ""
 
-#: src/pm-window.c:3348 src/pm-connect-dialog.c:303
+#: src/pm-window.c:3548 src/pm-connect-dialog.c:302
 msgid "Pairing"
 msgstr ""
 
-#: src/pm-window.c:3358
+#: src/pm-window.c:3558
 msgid "Pair device with code."
 msgstr ""
 
-#: src/pm-window.c:3370 src/pm-connect-dialog.c:309
+#: src/pm-window.c:3573 src/pm-connect-dialog.c:308
 msgid "Pairing address (ip:port)"
 msgstr ""
 
-#: src/pm-window.c:3387 src/pm-connect-dialog.c:319
+#: src/pm-window.c:3587 src/pm-connect-dialog.c:318
 msgid "Pair & Connect"
 msgstr ""
 
-#: src/pm-window.c:3628
+#: src/pm-window.c:3828
 msgid "Go to Home"
 msgstr ""
 
-#: src/pm-window.c:3629 src/pm-window.c:3837
+#: src/pm-window.c:3829 src/pm-window.c:4037
 msgid "Continue"
 msgstr ""
 
-#: src/pm-window.c:3632
+#: src/pm-window.c:3832
 msgid "First Time Setup"
 msgstr ""
 
-#: src/pm-window.c:3699
+#: src/pm-window.c:3899
 msgid "Welcome to Phone Mirror"
 msgstr ""
 
-#: src/pm-window.c:3700
+#: src/pm-window.c:3900
 msgid ""
 "We will help you prepare your Android phone. Keep your phone nearby and "
 "connect it to the same Wi-Fi network as this computer."
 msgstr ""
 
-#: src/pm-window.c:3703
+#: src/pm-window.c:3903
 msgid "Open Settings"
 msgstr ""
 
-#: src/pm-window.c:3704
+#: src/pm-window.c:3904
 msgid "Unlock your Android phone. Find the Settings app and open it."
 msgstr ""
 
-#: src/pm-window.c:3707
+#: src/pm-window.c:3907
 msgid "Find About phone"
 msgstr ""
 
-#: src/pm-window.c:3708
+#: src/pm-window.c:3908
 msgid ""
 "In Settings, scroll toward the bottom. Tap About phone. On some phones, open "
 "System first, then tap About phone."
 msgstr ""
 
-#: src/pm-window.c:3711
+#: src/pm-window.c:3911
 msgid "Turn on Developer options"
 msgstr ""
 
-#: src/pm-window.c:3712
+#: src/pm-window.c:3912
 msgid ""
 "Find Build number. Tap Build number seven times. If Android asks for your "
 "PIN, enter it. Stop when the phone says you are now a developer."
 msgstr ""
 
-#: src/pm-window.c:3715
+#: src/pm-window.c:3915
 msgid "Turn on USB debugging"
 msgstr ""
 
-#: src/pm-window.c:3716
+#: src/pm-window.c:3916
 msgid ""
 "Go back to Settings. Open Developer options. On some phones, open System "
 "first, then turn on USB debugging. If Android asks, tap OK."
 msgstr ""
 
-#: src/pm-window.c:3719
+#: src/pm-window.c:3919
 msgid "Turn on Wireless debugging"
 msgstr ""
 
-#: src/pm-window.c:3720
+#: src/pm-window.c:3920
 msgid ""
 "Stay in Developer options. Turn on Wireless debugging. Keep your phone and "
 "this computer on the same network. If Android asks, tap Allow."
 msgstr ""
 
-#: src/pm-window.c:3723
+#: src/pm-window.c:3923
 msgid "Get the pairing code"
 msgstr ""
 
-#: src/pm-window.c:3724
+#: src/pm-window.c:3924
 msgid ""
 "Tap Wireless debugging, then Pair device with pairing code. Leave that "
 "screen open. On the home page, choose Set Up Device, enter the pairing "
 "address and code, then choose Pair & Connect."
 msgstr ""
 
-#: src/pm-window.c:3738
+#: src/pm-window.c:3938
 msgid "Welcome"
 msgstr ""
 
-#: src/pm-window.c:3739
+#: src/pm-window.c:3939
 #, c-format
 msgid "Step %u of %u"
 msgstr ""
 
-#: src/pm-window.c:3832
+#: src/pm-window.c:4032
 msgid "Back"
 msgstr ""
 
-#: src/pm-window.c:3872
+#: src/pm-window.c:4072
 msgid "_Disconnect"
 msgstr ""
 
-#: src/pm-window.c:3873
+#: src/pm-window.c:4073
 msgid "_Lockscreen PIN…"
 msgstr ""
 
-#: src/pm-window.c:3874
+#: src/pm-window.c:4074
 msgid "_First Time Setup"
 msgstr ""
 
-#: src/pm-window.c:3880
+#: src/pm-window.c:4080
 msgid "_Manual Connection…"
 msgstr ""
 
-#: src/pm-window.c:3881
+#: src/pm-window.c:4081
 msgid "_Set Up Device…"
 msgstr ""
 
-#: src/pm-window.c:3887
+#: src/pm-window.c:4087
 msgid "_Settings"
 msgstr ""
 
-#: src/pm-window.c:3888
+#: src/pm-window.c:4088
 msgid "_About Phone Mirror"
 msgstr ""
 
-#: src/pm-window.c:3893
+#: src/pm-window.c:4093
 msgid "_Quit"
 msgstr ""
 
-#: src/pm-window.c:3977
+#: src/pm-window.c:4177
 msgid "Keep controls visible"
 msgstr ""
 
-#: src/pm-window.c:3994
+#: src/pm-window.c:4194
 msgid "Press Connect to look for your paired device."
 msgstr ""
 
-#: src/pm-window.c:3999
+#: src/pm-window.c:4199
 msgid "Connect"
 msgstr ""
 
-#: src/pm-window.c:4006
+#: src/pm-window.c:4206
 msgid "Set Up Device…"
 msgstr ""
 
-#: src/pm-window.c:4031
+#: src/pm-window.c:4231
 msgid "Unlocking your phone…"
 msgstr ""
 
@@ -483,45 +522,45 @@ msgstr ""
 msgid "Enter the device IP address"
 msgstr ""
 
-#: src/pm-connect-dialog.c:241
+#: src/pm-connect-dialog.c:240
 msgid "Enter pairing address (ip:port) and code"
 msgstr ""
 
-#: src/pm-connect-dialog.c:250
+#: src/pm-connect-dialog.c:249
 msgid "Invalid pairing port"
 msgstr ""
 
-#: src/pm-connect-dialog.c:258
+#: src/pm-connect-dialog.c:257
 msgid "Pairing…"
 msgstr ""
 
-#: src/pm-connect-dialog.c:305
+#: src/pm-connect-dialog.c:304
 msgid "Enable Wireless debugging → Pair device with code."
 msgstr ""
 
-#: src/pm-connect-dialog.c:331
+#: src/pm-connect-dialog.c:330
 msgid "Connection"
 msgstr ""
 
-#: src/pm-connect-dialog.c:333
+#: src/pm-connect-dialog.c:332
 msgid ""
 "Enter the Wi-Fi debugging address only if automatic discovery cannot find "
 "the phone."
 msgstr ""
 
-#: src/pm-connect-dialog.c:336
+#: src/pm-connect-dialog.c:335
 msgid "IP address or ip:port"
 msgstr ""
 
-#: src/pm-connect-dialog.c:338
+#: src/pm-connect-dialog.c:337
 msgid "Port (default 5555)"
 msgstr ""
 
-#: src/pm-connect-dialog.c:348
+#: src/pm-connect-dialog.c:347
 msgid "Connect manually"
 msgstr ""
 
-#: src/pm-connect-dialog.c:361
+#: src/pm-connect-dialog.c:360
 msgid "Manual connection"
 msgstr ""
 
@@ -636,78 +675,78 @@ msgstr ""
 msgid "Mirroring a connected phone"
 msgstr ""
 
-#: src/pm-session.c:403
+#: src/pm-session.c:444
 #, c-format
 msgid "scrcpy-server exited with status %d"
 msgstr ""
 
-#: src/pm-session.c:431
+#: src/pm-session.c:472
 #, c-format
 msgid "timed out waiting for scrcpy-server socket%s%s"
 msgstr ""
 
-#: src/pm-session.c:704
+#: src/pm-session.c:761
 msgid "Connecting to device…"
 msgstr ""
 
-#: src/pm-session.c:711
+#: src/pm-session.c:768
 msgid ""
 "Could not find scrcpy-server. Install scrcpy or set PM_SERVER_JAR to the "
 "server path."
 msgstr ""
 
-#: src/pm-session.c:718
+#: src/pm-session.c:775
 msgid ""
 "Could not determine scrcpy-server version. Install scrcpy or set "
 "PM_SCRCPY_VERSION to match your server."
 msgstr ""
 
-#: src/pm-session.c:776
+#: src/pm-session.c:833
 msgid "Connecting with adb…"
 msgstr ""
 
-#: src/pm-session.c:784
+#: src/pm-session.c:841
 msgid "Installing mirror server…"
 msgstr ""
 
-#: src/pm-session.c:790
+#: src/pm-session.c:847
 msgid "Opening mirror socket…"
 msgstr ""
 
-#: src/pm-session.c:796
+#: src/pm-session.c:853
 msgid "Starting mirror server…"
 msgstr ""
 
-#: src/pm-session.c:803
+#: src/pm-session.c:860
 msgid "Connecting video stream…"
 msgstr ""
 
-#: src/pm-session.c:814
+#: src/pm-session.c:871
 msgid "Connecting audio stream…"
 msgstr ""
 
-#: src/pm-session.c:821
+#: src/pm-session.c:878
 msgid "Connecting controls…"
 msgstr ""
 
-#: src/pm-session.c:832
+#: src/pm-session.c:889
 msgid "Reading video stream…"
 msgstr ""
 
-#: src/pm-session.c:998
+#: src/pm-session.c:1054
 #, c-format
 msgid "%s failed: %s%s"
 msgstr ""
 
-#: src/pm-session.c:1000
+#: src/pm-session.c:1056
 msgid "connection failed"
 msgstr ""
 
-#: src/pm-session.c:1063
+#: src/pm-session.c:1119
 msgid "Found device — starting mirror server…"
 msgstr ""
 
-#: src/pm-session.c:1132
+#: src/pm-session.c:1188
 msgid ""
 "No phone found. Use Set Up Device to enter your phone's Wireless debugging "
 "address."

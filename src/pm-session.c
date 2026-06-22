@@ -149,7 +149,7 @@ find_scrcpy_version (void)
 }
 
 enum { SIG_STATE_CHANGED, SIG_STREAM_CHANGED, SIG_STARTUP_CHECK_FAILED,
-       SIG_UNLOCKING, SIG_UNLOCK_FAILED, N_SIGNALS };
+       SIG_PIN_REQUIRED, SIG_UNLOCKING, SIG_UNLOCK_FAILED, N_SIGNALS };
 static guint signals[N_SIGNALS];
 
 G_DEFINE_FINAL_TYPE (PmSession, pm_session, G_TYPE_OBJECT)
@@ -392,6 +392,26 @@ post_unlock_failed (PmSession *self)
   m->self = g_object_ref (self);
   g_main_context_invoke_full (NULL, G_PRIORITY_DEFAULT,
                               emit_unlock_failed_idle, m, unlock_msg_free);
+}
+
+/* Tell the UI that this locked phone has no saved PIN. The PIN prompt and its
+ * unlock attempt are intentionally owned by the window: unlike auto-unlock,
+ * the entered value must remain ephemeral and never pass through PmPinStore. */
+static gboolean
+emit_pin_required_idle (gpointer data)
+{
+  UnlockMsg *m = data;
+  g_signal_emit (m->self, signals[SIG_PIN_REQUIRED], 0);
+  return G_SOURCE_REMOVE;
+}
+
+static void
+post_pin_required (PmSession *self)
+{
+  UnlockMsg *m = g_new0 (UnlockMsg, 1);
+  m->self = g_object_ref (self);
+  g_main_context_invoke_full (NULL, G_PRIORITY_DEFAULT,
+                              emit_pin_required_idle, m, unlock_msg_free);
 }
 
 /* Decoder delivers textures on the main thread; push them to the view. */
@@ -661,7 +681,9 @@ maybe_unlock_device (PmSession *self, const char *serial)
 {
   g_autofree char *mac = pm_adb_query_mac (serial);
   if (mac == NULL) {
-    g_debug ("auto-unlock: could not read device MAC; skipping");
+    g_debug ("auto-unlock: could not read device MAC; offering one-time PIN");
+    if (pm_adb_query_lock_state (serial) != PM_LOCK_UNLOCKED)
+      post_pin_required (self);
     return;
   }
 
@@ -670,8 +692,14 @@ maybe_unlock_device (PmSession *self, const char *serial)
     g_message ("auto-unlock: saved PIN for device %s", mac);
 
   g_autofree char *pin = pm_pinstore_get (mac);
-  if (pin == NULL)
-    return;   /* no PIN saved for this device - nothing to do */
+  if (pin == NULL) {
+    /* Don't interrupt an already-unlocked phone. If this OEM doesn't expose a
+     * readable lock state, prefer offering the prompt: the user can still
+     * cancel it, while a locked secure screen would otherwise be unusable. */
+    if (pm_adb_query_lock_state (serial) != PM_LOCK_UNLOCKED)
+      post_pin_required (self);
+    return;
+  }
 
   /* A PIN is stored, so the keyguard is about to be driven (several adb round
    * trips plus deliberate settle delays, during which Android blanks the secure
@@ -1397,6 +1425,15 @@ pm_session_class_init (PmSessionClass *klass)
 
   signals[SIG_STARTUP_CHECK_FAILED] =
     g_signal_new ("startup-check-failed",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_FIRST,
+                  0, NULL, NULL, NULL,
+                  G_TYPE_NONE, 0);
+
+  /* The connected phone is locked and has no stored PIN. The window asks for a
+   * one-time PIN, which is never persisted and is required again next time. */
+  signals[SIG_PIN_REQUIRED] =
+    g_signal_new ("pin-required",
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_FIRST,
                   0, NULL, NULL, NULL,

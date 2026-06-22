@@ -84,6 +84,7 @@ typedef struct {
 static void pm_window_save_prefs (PmWindow *self);
 static void pm_window_show_setup_step (PmWindow *self, guint step);
 static void pm_window_set_resize_gesture_active (PmWindow *self, gboolean active);
+static void pm_window_present_dialog (PmWindow *self, AdwDialog *dialog);
 
 struct _PmWindow {
   AdwApplicationWindow parent_instance;
@@ -1266,6 +1267,160 @@ on_session_unlocking (PmSession *session, gboolean active, gpointer user_data)
   pm_window_set_unlock_alert (self, active);
 }
 
+typedef struct {
+  char *serial;
+  char *pin;
+} ManualUnlockData;
+
+static void
+manual_unlock_data_free (gpointer data)
+{
+  ManualUnlockData *d = data;
+  g_free (d->serial);
+  if (d->pin != NULL) {
+    memset (d->pin, 0, strlen (d->pin));
+    g_free (d->pin);
+  }
+  g_free (d);
+}
+
+static void
+manual_unlock_thread (GTask        *task,
+                      gpointer      source,
+                      gpointer      task_data,
+                      GCancellable *cancellable)
+{
+  ManualUnlockData *d = task_data;
+  g_autoptr (GError) error = NULL;
+  gboolean unlocked = FALSE;
+
+  if (!pm_adb_unlock_with_pin_once (d->serial, d->pin, &unlocked, &error)) {
+    g_debug ("manual unlock: %s", error ? error->message : "attempt failed");
+    g_task_return_boolean (task, FALSE);
+    return;
+  }
+
+  g_task_return_boolean (task, unlocked);
+}
+
+typedef struct {
+  PmWindow       *window;
+  AdwAlertDialog *dialog;
+  GtkEditable    *entry;
+  gulong          text_changed_id;
+} ManualPinDialogCtx;
+
+static void pm_window_show_manual_pin_dialog (PmWindow *self, gboolean incorrect);
+
+static void
+manual_unlock_done (GObject *source, GAsyncResult *result, gpointer user_data)
+{
+  PmWindow *self = PM_WINDOW (source);
+  gboolean unlocked = g_task_propagate_boolean (G_TASK (result), NULL);
+
+  pm_window_set_unlock_alert (self, FALSE);
+
+  /* A disconnect while adb was running makes the result irrelevant. */
+  if (!unlocked && pm_session_get_state (self->session) == PM_STATE_MIRRORING)
+    pm_window_show_manual_pin_dialog (self, TRUE);
+}
+
+static void
+on_manual_pin_text_changed (GObject *entry, GParamSpec *pspec, gpointer user_data)
+{
+  ManualPinDialogCtx *ctx = user_data;
+  const char *pin = gtk_editable_get_text (ctx->entry);
+  adw_alert_dialog_set_response_enabled (ctx->dialog, "unlock",
+                                         pin != NULL && *pin != '\0');
+}
+
+static void
+on_manual_pin_response (AdwAlertDialog *dialog,
+                        const char     *response,
+                        gpointer        user_data)
+{
+  ManualPinDialogCtx *ctx = user_data;
+
+  if (g_strcmp0 (response, "unlock") == 0) {
+    const char *entered = gtk_editable_get_text (ctx->entry);
+    char *pin = g_strdup (entered);
+    g_autofree char *serial = pm_session_dup_serial (ctx->window->session);
+
+    /* Clear the secure entry before the alert is destroyed. The task owns the
+     * only remaining copy and zeroes it as soon as the attempt completes. */
+    g_signal_handler_disconnect (ctx->entry, ctx->text_changed_id);
+    gtk_editable_set_text (ctx->entry, "");
+
+    if (pin != NULL && *pin != '\0' && serial != NULL) {
+      ManualUnlockData *d = g_new0 (ManualUnlockData, 1);
+      d->serial = g_steal_pointer (&serial);
+      d->pin = g_steal_pointer (&pin);
+
+      pm_window_set_unlock_alert (ctx->window, TRUE);
+      GTask *task = g_task_new (ctx->window, NULL, manual_unlock_done, NULL);
+      g_task_set_task_data (task, d, manual_unlock_data_free);
+      g_task_run_in_thread (task, manual_unlock_thread);
+      g_object_unref (task);
+    } else if (pin != NULL) {
+      memset (pin, 0, strlen (pin));
+      g_free (pin);
+    }
+  } else {
+    g_signal_handler_disconnect (ctx->entry, ctx->text_changed_id);
+  }
+
+  g_free (ctx);
+}
+
+/* Ask for a one-time PIN in a modal Libadwaita alert attached to the main
+ * window. Nothing entered here is stored; a failed attempt opens a fresh alert
+ * with the smallest useful error message. */
+static void
+pm_window_show_manual_pin_dialog (PmWindow *self, gboolean incorrect)
+{
+  AdwAlertDialog *dialog = ADW_ALERT_DIALOG (adw_alert_dialog_new (
+    incorrect ? _("Incorrect PIN") : _("Unlock Phone"),
+    incorrect ? _("Try again.") : _("Enter your PIN.")));
+
+  GtkWidget *entry = gtk_password_entry_new ();
+  g_object_set (entry,
+                "placeholder-text", _("PIN"),
+                "activates-default", TRUE,
+                NULL);
+  adw_alert_dialog_set_extra_child (dialog, entry);
+
+  adw_alert_dialog_add_responses (dialog,
+                                  "cancel", _("Cancel"),
+                                  "unlock", _("Unlock"),
+                                  NULL);
+  adw_alert_dialog_set_response_enabled (dialog, "unlock", FALSE);
+  adw_alert_dialog_set_response_appearance (dialog, "unlock",
+                                            ADW_RESPONSE_SUGGESTED);
+  adw_alert_dialog_set_default_response (dialog, "unlock");
+  adw_alert_dialog_set_close_response (dialog, "cancel");
+  adw_dialog_set_focus (ADW_DIALOG (dialog), entry);
+
+  ManualPinDialogCtx *ctx = g_new0 (ManualPinDialogCtx, 1);
+  ctx->window = self;
+  ctx->dialog = dialog;
+  ctx->entry = GTK_EDITABLE (entry);
+  ctx->text_changed_id =
+    g_signal_connect (entry, "notify::text",
+                      G_CALLBACK (on_manual_pin_text_changed), ctx);
+  g_signal_connect (dialog, "response",
+                    G_CALLBACK (on_manual_pin_response), ctx);
+
+  pm_window_present_dialog (self, ADW_DIALOG (dialog));
+}
+
+static void
+on_session_pin_required (PmSession *session, gpointer user_data)
+{
+  PmWindow *self = PM_WINDOW (user_data);
+  if (pm_session_get_state (self->session) == PM_STATE_MIRRORING)
+    pm_window_show_manual_pin_dialog (self, FALSE);
+}
+
 static void
 on_unlock_failed_response (AdwAlertDialog *dialog, const char *response,
                            gpointer user_data)
@@ -1309,7 +1464,7 @@ on_session_unlock_failed (PmSession *session, gpointer user_data)
   g_signal_connect (dialog, "response",
                     G_CALLBACK (on_unlock_failed_response), self);
 
-  adw_dialog_present (ADW_DIALOG (dialog), GTK_WIDGET (self));
+  pm_window_present_dialog (self, ADW_DIALOG (dialog));
 }
 
 static void
@@ -1444,14 +1599,14 @@ on_window_dialog_closed (AdwDialog *dialog, gpointer user_data)
   gtk_window_set_resizable (GTK_WINDOW (self), was_resizable);
 }
 
-/* Present @dialog as an in-window bottom sheet, even while mirroring.
+/* Present @dialog inside the application window, even while mirroring.
  *
  * AdwDialog falls back to a standalone floating window (ignoring its
  * presentation mode) when the host window is non-resizable. Mirroring locks
  * the window to the video aspect, so the window is made resizable for the
  * dialog's lifetime, guarded against maximizing, and restored on close. */
 static void
-pm_window_present_sheet (PmWindow *self, AdwDialog *dialog)
+pm_window_present_dialog (PmWindow *self, AdwDialog *dialog)
 {
   gboolean was_resizable = gtk_window_get_resizable (GTK_WINDOW (self));
   g_object_set_data (G_OBJECT (dialog), "pm-prev-resizable",
@@ -1478,7 +1633,7 @@ on_setup_action (GSimpleAction *action, GVariant *param, gpointer user_data)
 {
   PmWindow *self = PM_WINDOW (user_data);
   PmConnectDialog *dialog = pm_connect_dialog_new (on_device_chosen, self);
-  pm_window_present_sheet (self, ADW_DIALOG (dialog));
+  pm_window_present_dialog (self, ADW_DIALOG (dialog));
 }
 
 static void
@@ -1486,7 +1641,7 @@ on_manual_connect_action (GSimpleAction *action, GVariant *param, gpointer user_
 {
   PmWindow *self = PM_WINDOW (user_data);
   PmConnectDialog *dialog = pm_manual_connect_dialog_new (on_device_chosen, self);
-  pm_window_present_sheet (self, ADW_DIALOG (dialog));
+  pm_window_present_dialog (self, ADW_DIALOG (dialog));
 }
 
 static void
@@ -1824,7 +1979,7 @@ on_lockscreen_pin_action (GSimpleAction *action, GVariant *param, gpointer user_
 
   g_signal_connect (dialog, "closed", G_CALLBACK (on_pin_dialog_closed), ctx);
 
-  pm_window_present_sheet (self, dialog);
+  pm_window_present_dialog (self, dialog);
 }
 
 static void
@@ -1845,7 +2000,7 @@ on_settings_action (GSimpleAction *action, GVariant *param, gpointer user_data)
     pm_settings_dialog_new (&initial, on_settings_changed, self);
   g_signal_connect (dialog, "closed",
                     G_CALLBACK (on_settings_dialog_closed), self);
-  pm_window_present_sheet (self, ADW_DIALOG (dialog));
+  pm_window_present_dialog (self, ADW_DIALOG (dialog));
 }
 
 static void
@@ -4163,6 +4318,8 @@ pm_window_init (PmWindow *self)
                     G_CALLBACK (on_session_stream_changed), self);
   g_signal_connect (self->session, "startup-check-failed",
                     G_CALLBACK (on_startup_check_failed), self);
+  g_signal_connect (self->session, "pin-required",
+                    G_CALLBACK (on_session_pin_required), self);
   g_signal_connect (self->session, "unlocking",
                     G_CALLBACK (on_session_unlocking), self);
   g_signal_connect (self->session, "unlock-failed",

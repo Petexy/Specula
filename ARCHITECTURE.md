@@ -119,8 +119,10 @@ handoff to `adb tcpip 5555`. The result (serial, host, port) is persisted by
 1a. **Auto-unlock** (`maybe_unlock_device`, best-effort): read the device's
    Wi-Fi MAC, commit any PIN entered during pairing or via the **Lockscreen
    PIN…** menu to that MAC (`pinstore.c`), and, if a PIN is stored and the
-   keyguard is up, wake + swipe + type it via `adb shell input`. Every failure
-   here is non-fatal and just continues.
+   keyguard is up, wake + swipe + type it via `adb shell input`. If no PIN is
+   stored, the window asks for a one-time PIN that never enters `pinstore.c` and
+   submits it only once per confirmation. Every failure here is non-fatal and
+   just continues.
 2. `adb push scrcpy-server.jar /data/local/tmp/`.
 3. `adb forward tcp:27183 localabstract:scrcpy`.
 4. `adb shell CLASSPATH=… app_process / …Server …` (long-running `GSubprocess`).
@@ -217,4 +219,3 @@ you ship. Pin a known scrcpy-server release and keep `protocol.c` /
 `read_stream_meta()` in lockstep (see README "Server component").
 
 ---
-

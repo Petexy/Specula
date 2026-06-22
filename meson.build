@@ -14,7 +14,7 @@ project('specula', 'c',
 # ---------------------------------------------------------------------------
 # UI stack
 gtk_dep   = dependency('gtk4',         version : '>= 4.10')
-adw_dep   = dependency('libadwaita-1', version : '>= 1.4')
+adw_dep   = dependency('libadwaita-1', version : '>= 1.5')
 
 # Video decode stack (FFmpeg)
 avcodec_dep  = dependency('libavcodec')

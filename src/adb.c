@@ -320,9 +320,12 @@ keyguard_clear_field (const char *serial, gsize count, GError **error)
   return adb_input (serial, (const char *const *) args->pdata, error);
 }
 
-gboolean
-pm_adb_unlock_with_pin (const char *serial, const char *pin,
-                        gboolean *out_unlocked, GError **error)
+static gboolean
+unlock_with_pin_attempts (const char *serial,
+                          const char *pin,
+                          gsize       max_attempts,
+                          gboolean   *out_unlocked,
+                          GError    **error)
 {
   if (out_unlocked != NULL)
     *out_unlocked = FALSE;
@@ -368,7 +371,9 @@ pm_adb_unlock_with_pin (const char *serial, const char *pin,
    * entry never spills the next attempt's swipe/keystrokes onto the home screen.
    * Clearing the field first makes every retype a fresh, full entry; a swipe/type
    * that lands before the bouncer is ready simply enters nothing and retries. */
-  for (gsize attempt = 0; attempt < G_N_ELEMENTS (k_unlock_settle_ms); attempt++) {
+  for (gsize attempt = 0;
+       attempt < MIN (max_attempts, G_N_ELEMENTS (k_unlock_settle_ms));
+       attempt++) {
     /* Gate every retry against the lock state: once the phone is in, a swipe-up
      * would open the launcher's app drawer and the text would land in whatever
      * has focus. (Attempt 0 is already known locked from the entry check.) */
@@ -424,6 +429,22 @@ pm_adb_unlock_with_pin (const char *serial, const char *pin,
    * `out_unlocked` FALSE so the caller can prompt for the correct one instead of
    * retrying into a lockout. */
   return TRUE;
+}
+
+gboolean
+pm_adb_unlock_with_pin (const char *serial, const char *pin,
+                        gboolean *out_unlocked, GError **error)
+{
+  return unlock_with_pin_attempts (serial, pin,
+                                   G_N_ELEMENTS (k_unlock_settle_ms),
+                                   out_unlocked, error);
+}
+
+gboolean
+pm_adb_unlock_with_pin_once (const char *serial, const char *pin,
+                             gboolean *out_unlocked, GError **error)
+{
+  return unlock_with_pin_attempts (serial, pin, 1, out_unlocked, error);
 }
 
 gboolean

@@ -79,6 +79,13 @@ char *pm_adb_query_mac (const char *serial);
 gboolean pm_adb_unlock_with_pin (const char *serial, const char *pin,
                                  gboolean *out_unlocked, GError **error);
 
+/* One-shot form for a PIN entered interactively. Unlike the saved-PIN helper
+ * above, this submits the PIN exactly once so each press of Unlock corresponds
+ * to one Android lockscreen attempt. The result semantics are otherwise the
+ * same. */
+gboolean pm_adb_unlock_with_pin_once (const char *serial, const char *pin,
+                                      gboolean *out_unlocked, GError **error);
+
 /* Wake the device screen (`adb shell input keyevent KEYCODE_WAKEUP`).
  * Fire-and-forget: spawns the command and reaps it asynchronously, so it is
  * safe to call from the UI thread. KEYCODE_WAKEUP only turns the screen *on*;

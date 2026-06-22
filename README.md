@@ -50,7 +50,7 @@ ninja -C build
 
 Runtime/build libraries:
 
-- `gtk4` ≥ 4.10, `libadwaita-1` ≥ 1.4
+- `gtk4` ≥ 4.10, `libadwaita-1` ≥ 1.5
 - `libavcodec`, `libavformat`, `libavutil`, `libswscale` (FFmpeg)
 - `libpulse-simple` (audio playback; PipeWire's PulseAudio shim works too)
 - `gio-2.0`, `gthread-2.0` (part of GLib)
@@ -87,8 +87,9 @@ host:port.
    If you provide a standalone server file without the `scrcpy` binary on
    `PATH`, also set `PM_SCRCPY_VERSION` to that server's version.
 3. Click **Connect**. The app runs `adb connect`, best-effort auto-unlocks the
-   phone if a PIN was saved for it, then `push → forward → app_process`, opens
-   the video/(audio)/control sockets, decodes, and renders.
+   phone if a PIN was saved for it, or asks for a one-time PIN if it was not,
+   then `push → forward → app_process`, opens the video/(audio)/control
+   sockets, decodes, and renders.
 
 Persisted pairing lives at `$XDG_CONFIG_HOME/specula/device.ini`.
 
