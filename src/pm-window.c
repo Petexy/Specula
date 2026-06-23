@@ -4108,7 +4108,10 @@ pm_window_dispose (GObject *object)
   PmWindow *self = PM_WINDOW (object);
 
   pm_window_cancel_chrome_tick (self);
-  g_clear_object (&self->session);
+  if (self->session != NULL) {
+    g_signal_handlers_disconnect_by_data (self->session, self);
+    g_clear_object (&self->session);
+  }
   G_OBJECT_CLASS (pm_window_parent_class)->dispose (object);
 }
 
