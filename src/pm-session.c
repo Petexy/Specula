@@ -26,6 +26,9 @@
  * in finalize_screen, plus any panel restore) off the control socket before it
  * is force-killed on a clean disconnect, so the phone actually locks. */
 #define PM_LOCK_DRAIN_US (300 * 1000)
+/* Cadence of the in-stream keyguard probe that drives the floating Unlock button
+ * and the battery-saver blank gate. One adb dumpsys per cycle, so kept modest. */
+#define PM_LOCK_POLL_US (2 * G_USEC_PER_SEC)
 #define PM_DEVICE_NAME_FIELD_LENGTH 64
 #define PM_STREAM_PACKET_FLAG_SESSION 0x80000000u
 
@@ -149,7 +152,8 @@ find_scrcpy_version (void)
 }
 
 enum { SIG_STATE_CHANGED, SIG_STREAM_CHANGED, SIG_STARTUP_CHECK_FAILED,
-       SIG_PIN_REQUIRED, SIG_UNLOCKING, SIG_UNLOCK_FAILED, N_SIGNALS };
+       SIG_PIN_REQUIRED, SIG_UNLOCKING, SIG_UNLOCK_FAILED, SIG_LOCKED_CHANGED,
+       N_SIGNALS };
 static guint signals[N_SIGNALS];
 
 G_DEFINE_FINAL_TYPE (PmSession, pm_session, G_TYPE_OBJECT)
@@ -412,6 +416,27 @@ post_pin_required (PmSession *self)
   m->self = g_object_ref (self);
   g_main_context_invoke_full (NULL, G_PRIORITY_DEFAULT,
                               emit_pin_required_idle, m, unlock_msg_free);
+}
+
+/* Marshal a keyguard lock/unlock edge (TRUE = the phone is now on its
+ * lockscreen) from the stream worker to the main thread, where the window shows
+ * or hides the floating Unlock button. Reuses UnlockMsg's `active` field. */
+static gboolean
+emit_locked_changed_idle (gpointer data)
+{
+  UnlockMsg *m = data;
+  g_signal_emit (m->self, signals[SIG_LOCKED_CHANGED], 0, m->active);
+  return G_SOURCE_REMOVE;
+}
+
+static void
+post_locked (PmSession *self, gboolean locked)
+{
+  UnlockMsg *m = g_new0 (UnlockMsg, 1);
+  m->self = g_object_ref (self);
+  m->active = locked;
+  g_main_context_invoke_full (NULL, G_PRIORITY_DEFAULT,
+                              emit_locked_changed_idle, m, unlock_msg_free);
 }
 
 /* Decoder delivers textures on the main thread; push them to the view. */
@@ -930,17 +955,22 @@ live_worker (gpointer data)
     self->unlock_worker = g_thread_new ("pm-unlock", unlock_worker, ctx);
   }
 
-  /* Battery saver: blank the phone's physical panel while mirroring, but only
-   * once the user has unlocked the device - otherwise it would just black out
-   * an unusable lock screen they still have to get past. The panel stays on
-   * while the keyguard is polled once a second from inside the stream loop
-   * (cheap, no extra thread, and the only control-socket writer besides input
-   * stays this worker). The moment it reports unlocked the blank is sent; if the
-   * device never reports a lock state, blanking happens right away so the
-   * feature still works. `screen_blanked` also gates the restore on teardown. */
+  /* Keyguard polling drives two features off a single adb probe taken on a fixed
+   * cadence from inside the stream loop (cheap, no extra thread, and this worker
+   * stays the only control-socket writer besides input):
+   *
+   *   - The floating Unlock button: shown over the mirror whenever the phone is
+   *     sitting on its lockscreen, so the user can punch in a one-time PIN.
+   *   - Battery saver (screen-off): blank the phone's physical panel while
+   *     mirroring, but only once the keyguard is gone - otherwise it would just
+   *     black out an unusable lock screen they still have to get past. If the
+   *     device never reports a lock state, blanking happens right away so the
+   *     feature still works. `screen_blanked` also gates the restore on teardown.
+   */
   const gboolean want_screen_off = self->screen_off;
   gboolean blanked = FALSE;
-  gint64 next_lock_poll_us = 0;   /* 0 → probe on the very first frame */
+  gboolean reported_locked = FALSE;   /* last lock state pushed to the UI button */
+  gint64 next_lock_poll_us = 0;       /* 0 → probe on the very first frame */
   /* Clear any leftover blank state from a prior connection so a reconnect
    * starts with the screen lit and wakeable. */
   pm_failsafe_set_screen_blanked (FALSE);
@@ -957,11 +987,22 @@ live_worker (gpointer data)
     if (!pm_decoder_feed (self->decoder, buf, (gsize) n, &error))
       break;
 
-    if (want_screen_off && !blanked) {
-      gint64 now = g_get_monotonic_time ();
-      if (now >= next_lock_poll_us) {
-        next_lock_poll_us = now + G_USEC_PER_SEC;   /* re-probe in ~1s if still locked */
-        PmLockState lock = pm_adb_query_lock_state (serial);
+    gint64 now = g_get_monotonic_time ();
+    if (now >= next_lock_poll_us) {
+      next_lock_poll_us = now + PM_LOCK_POLL_US;
+      PmLockState lock = pm_adb_query_lock_state (serial);
+
+      /* Raise the Unlock button only on a definitively-locked keyguard; UNKNOWN
+       * (OEMs that don't expose the state) counts as unlocked so the button is
+       * never stranded up on a device that can't report. Posted on transitions
+       * only, so the UI isn't churned on every poll. */
+      gboolean locked_now = (lock == PM_LOCK_LOCKED);
+      if (locked_now != reported_locked) {
+        post_locked (self, locked_now);
+        reported_locked = locked_now;
+      }
+
+      if (want_screen_off && !blanked) {
         if (lock == PM_LOCK_UNKNOWN)
           /* Can't read the lock state on this device - blank immediately rather
            * than never honouring the setting. */
@@ -971,7 +1012,7 @@ live_worker (gpointer data)
           blank_screen (self);
           blanked = TRUE;
         }
-        /* PM_LOCK_LOCKED → keep the panel lit and probe again next second. */
+        /* PM_LOCK_LOCKED → keep the panel lit and probe again next cycle. */
       }
     }
   }
@@ -1460,6 +1501,16 @@ pm_session_class_init (PmSessionClass *klass)
                   G_SIGNAL_RUN_FIRST,
                   0, NULL, NULL, NULL,
                   G_TYPE_NONE, 0);
+
+  /* TRUE when the live phone has settled onto its lockscreen, FALSE when the
+   * keyguard is dismissed. Polled from the stream loop; the window floats an
+   * Unlock button over the mirror while it is TRUE. */
+  signals[SIG_LOCKED_CHANGED] =
+    g_signal_new ("locked-changed",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_FIRST,
+                  0, NULL, NULL, NULL,
+                  G_TYPE_NONE, 1, G_TYPE_BOOLEAN);
 }
 
 static void

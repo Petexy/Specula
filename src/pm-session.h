@@ -6,6 +6,7 @@
  *
  *   "state-changed"  (guint state /PmState/, const char *message)
  *   "stream-changed" (guint width, guint height)
+ *   "locked-changed" (gboolean locked)  - the live phone is on/off its lockscreen
  *
  * It drives the sequence:
  *   discovery -> adb connect/push/forward -> spawn server -> net connect

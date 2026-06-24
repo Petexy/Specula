@@ -61,6 +61,7 @@ typedef enum {
   PM_SETUP_ABOUT,
   PM_SETUP_BUILD_NUMBER,
   PM_SETUP_USB_DEBUGGING,
+  PM_SETUP_ADB_TIMEOUT,
   PM_SETUP_WIRELESS_DEBUGGING,
   PM_SETUP_PAIRING,
   PM_SETUP_N_STEPS
@@ -72,6 +73,7 @@ static const char * const pm_setup_page_names[] = {
   [PM_SETUP_ABOUT]              = "setup-about",
   [PM_SETUP_BUILD_NUMBER]       = "setup-build-number",
   [PM_SETUP_USB_DEBUGGING]      = "setup-usb-debugging",
+  [PM_SETUP_ADB_TIMEOUT]        = "setup-adb-timeout",
   [PM_SETUP_WIRELESS_DEBUGGING] = "setup-wireless-debugging",
   [PM_SETUP_PAIRING]            = "setup-pairing",
 };
@@ -85,6 +87,7 @@ static void pm_window_save_prefs (PmWindow *self);
 static void pm_window_show_setup_step (PmWindow *self, guint step);
 static void pm_window_set_resize_gesture_active (PmWindow *self, gboolean active);
 static void pm_window_present_dialog (PmWindow *self, AdwDialog *dialog);
+static void pm_window_update_unlock_button (PmWindow *self);
 
 struct _PmWindow {
   AdwApplicationWindow parent_instance;
@@ -101,6 +104,9 @@ struct _PmWindow {
   AdwStatusPage  *status_page;
   GtkRevealer    *unlock_revealer;   /* "Unlocking…" alert floating over the mirror */
   GtkSpinner     *unlock_spinner;
+  GtkRevealer    *unlock_button_revealer; /* "Unlock" button floating over the mirror */
+  gboolean        device_locked;     /* phone is on its lockscreen (from the session) */
+  gboolean        unlock_alert_active;/* an unlock attempt's "Unlocking…" alert is up */
   GtkAspectFrame *mirror_frame;
   PmVideoView    *video_view;
   GtkButton      *connect_button;
@@ -1210,6 +1216,12 @@ pm_window_apply_state (PmWindow   *self,
   else
     gtk_widget_remove_css_class (GTK_WIDGET (self), "specula-mirror");
   pm_window_reset_mirror_chrome (self, !mirroring);
+
+  /* Leaving mirroring clears the known lock state so the floating Unlock button
+   * starts hidden on the next stream until its keyguard poll says otherwise. */
+  if (!mirroring)
+    self->device_locked = FALSE;
+  pm_window_update_unlock_button (self);
 }
 
 static void
@@ -1229,6 +1241,31 @@ pm_window_set_unlock_alert (PmWindow *self, gboolean show)
 {
   gtk_spinner_set_spinning (self->unlock_spinner, show);
   gtk_revealer_set_reveal_child (self->unlock_revealer, show);
+
+  /* The Unlock button and the "Unlocking…" alert are mutually exclusive: while an
+   * unlock attempt is in flight the button stands down so the two never stack. */
+  self->unlock_alert_active = show;
+  pm_window_update_unlock_button (self);
+}
+
+/* The floating Unlock button rides over the bottom of the mirror only while the
+ * phone is actually sitting on its lockscreen, no unlock attempt is mid-flight,
+ * and a stream is live. A revealer crossfades it in and out - except when the
+ * "Unlocking…" alert takes over, where the button is dropped instantly so the
+ * two never briefly overlap mid-fade. */
+static void
+pm_window_update_unlock_button (PmWindow *self)
+{
+  if (self->unlock_button_revealer == NULL)
+    return;
+
+  gboolean mirroring = (self->session != NULL &&
+                        pm_session_get_state (self->session) == PM_STATE_MIRRORING);
+  gboolean show = mirroring && self->device_locked && !self->unlock_alert_active;
+
+  gtk_revealer_set_transition_duration (self->unlock_button_revealer,
+                                        (!show && self->unlock_alert_active) ? 0 : 250);
+  gtk_revealer_set_reveal_child (self->unlock_button_revealer, show);
 }
 
 static void
@@ -1265,6 +1302,16 @@ on_session_unlocking (PmSession *session, gboolean active, gpointer user_data)
 {
   PmWindow *self = PM_WINDOW (user_data);
   pm_window_set_unlock_alert (self, active);
+}
+
+/* The live phone settled onto (or left) its lockscreen: float the Unlock button
+ * over the mirror so the user can punch in a one-time PIN. */
+static void
+on_session_locked_changed (PmSession *session, gboolean locked, gpointer user_data)
+{
+  PmWindow *self = PM_WINDOW (user_data);
+  self->device_locked = locked;
+  pm_window_update_unlock_button (self);
 }
 
 typedef struct {
@@ -2039,6 +2086,14 @@ on_pin_toggled (GtkToggleButton *button, gpointer user_data)
                                       gtk_toggle_button_get_active (button));
 }
 
+/* The floating Unlock button: open the one-time PIN dialog for the locked phone. */
+static void
+on_unlock_button_clicked (GtkButton *button, gpointer user_data)
+{
+  PmWindow *self = PM_WINDOW (user_data);
+  pm_window_show_manual_pin_dialog (self, FALSE);
+}
+
 static void
 pm_window_save_prefs (PmWindow *self)
 {
@@ -2123,24 +2178,28 @@ enum {
   PM_SETUP_DEVELOPER_ROW_USB,
   PM_SETUP_DEVELOPER_ROW_WIRELESS,
   PM_SETUP_DEVELOPER_ROW_REVOKE,
+  PM_SETUP_DEVELOPER_ROW_ADB_TIMEOUT,
   PM_SETUP_DEVELOPER_N_ROWS,
 };
 
 static void
 pm_setup_developer_rows_for_state (PmSetupDrawRow rows[PM_SETUP_DEVELOPER_N_ROWS],
                                    double         usb_progress,
-                                   double         wireless_progress)
+                                   double         wireless_progress,
+                                   double         adb_timeout_progress)
 {
   const PmSetupDrawRow base[] = {
     { "Dev", N_("Use developer options"), N_("On"), TRUE, 1.0 },
     { "USB", N_("USB debugging"), N_("Debug mode when USB is connected"), TRUE, 0.0 },
     { "Wi", N_("Wireless debugging"), N_("Debug over Wi-Fi"), TRUE, 0.0 },
     { "ADB", N_("Revoke debugging authorizations"), NULL, FALSE, 0.0 },
+    { "Time", N_("Disable adb authorization timeout"), N_("Stay authorized"), TRUE, 0.0 },
   };
 
   memcpy (rows, base, sizeof base);
   rows[PM_SETUP_DEVELOPER_ROW_USB].switch_progress = usb_progress;
   rows[PM_SETUP_DEVELOPER_ROW_WIRELESS].switch_progress = wireless_progress;
+  rows[PM_SETUP_DEVELOPER_ROW_ADB_TIMEOUT].switch_progress = adb_timeout_progress;
 }
 
 static double
@@ -3237,7 +3296,7 @@ pm_setup_draw_usb_scene (cairo_t *cr,
   double about_x = back_progress * screen.w;
   double developer_x = (1.0 - open_developer) * screen.w;
 
-  pm_setup_developer_rows_for_state (developer_rows, switch_progress, 0.0);
+  pm_setup_developer_rows_for_state (developer_rows, switch_progress, 0.0, 0.0);
 
   cairo_save (cr);
   pm_setup_clip_screen (cr, screen);
@@ -3321,7 +3380,7 @@ pm_setup_draw_wireless_scene (cairo_t *cr,
   double open = pm_setup_ease (pm_setup_interval (t, 0.65, 1.35));
   double switch_progress = pm_setup_ease (pm_setup_interval (t, 2.0, 2.9));
 
-  pm_setup_developer_rows_for_state (developer_rows, 1.0, switch_progress * 0.35);
+  pm_setup_developer_rows_for_state (developer_rows, 1.0, switch_progress * 0.35, 1.0);
   wireless_rows[0].switch_progress = switch_progress;
 
   cairo_save (cr);
@@ -3366,6 +3425,40 @@ pm_setup_draw_wireless_scene (cairo_t *cr,
                        screen.x + screen.w - 38.0,
                        screen.y + screen.h / 2.0 + 39.0,
                        pm_setup_interval (t, 4.4, 5.2));
+}
+
+static void
+pm_setup_draw_adb_timeout_scene (cairo_t *cr,
+                                 double   t)
+{
+  /* The same Developer options list the USB and Wireless steps show, scrolled
+   * down to the Debugging section so its "Disable adb authorization timeout"
+   * row comes fully into view; a finger then flips that switch on. USB is
+   * already on from the previous step; Wireless is still off (its step is
+   * next). */
+  PmSetupDrawRow developer_rows[PM_SETUP_DEVELOPER_N_ROWS];
+  PmSetupRect phone = { 73.0, 10.0, 174.0, 270.0 };
+  PmSetupRect screen = pm_setup_draw_phone_shell (cr, phone.x, phone.y, phone.w, phone.h);
+  double scroll = pm_setup_mix (0.0, 46.0, pm_setup_ease (pm_setup_interval (t, 0.7, 1.7)));
+  double switch_progress = pm_setup_ease (pm_setup_interval (t, 2.9, 3.8));
+  double switch_y = screen.y + 48.0 + PM_SETUP_DEVELOPER_ROW_ADB_TIMEOUT * 40.0 + 17.5 - scroll;
+
+  pm_setup_developer_rows_for_state (developer_rows, 1.0, 0.0, switch_progress);
+
+  pm_setup_draw_settings_screen (cr,
+                                 screen,
+                                 _("Developer options"),
+                                 developer_rows,
+                                 PM_SETUP_DEVELOPER_N_ROWS,
+                                 PM_SETUP_DEVELOPER_ROW_ADB_TIMEOUT,
+                                 scroll,
+                                 TRUE,
+                                 FALSE);
+
+  pm_setup_draw_touch (cr,
+                       screen.x + screen.w - 34.0,
+                       switch_y,
+                       pm_setup_interval (t, 2.4, 3.2));
 }
 
 static void
@@ -3665,6 +3758,7 @@ pm_setup_cycle_for_step (PmSetupStep step)
     case PM_SETUP_ABOUT:
     case PM_SETUP_USB_DEBUGGING:
     case PM_SETUP_WIRELESS_DEBUGGING:
+    case PM_SETUP_ADB_TIMEOUT:
     case PM_SETUP_PAIRING:
       return 6.2;
     case PM_SETUP_WELCOME:
@@ -3715,6 +3809,9 @@ pm_setup_animation_draw (GtkDrawingArea *area,
       break;
     case PM_SETUP_WIRELESS_DEBUGGING:
       pm_setup_draw_wireless_scene (cr, t);
+      break;
+    case PM_SETUP_ADB_TIMEOUT:
+      pm_setup_draw_adb_timeout_scene (cr, t);
       break;
     case PM_SETUP_PAIRING:
       pm_setup_draw_pairing_scene (cr, t);
@@ -3915,6 +4012,10 @@ static const PmSetupText pm_setup_texts[PM_SETUP_N_STEPS] = {
   [PM_SETUP_USB_DEBUGGING] = {
     N_("Turn on USB debugging"),
     N_("Go back to Settings. Open Developer options. On some phones, open System first, then turn on USB debugging. If Android asks, tap OK."),
+  },
+  [PM_SETUP_ADB_TIMEOUT] = {
+    N_("Disable adb authorization timeout"),
+    N_("Stay in Developer options. Find Disable adb authorization timeout and turn it on. This stops Android from removing this computer after seven days, so you will not have to pair again."),
   },
   [PM_SETUP_WIRELESS_DEBUGGING] = {
     N_("Turn on Wireless debugging"),
@@ -4248,9 +4349,32 @@ pm_window_init (PmWindow *self)
   gtk_widget_set_valign (GTK_WIDGET (self->unlock_revealer), GTK_ALIGN_CENTER);
   gtk_widget_set_can_target (GTK_WIDGET (self->unlock_revealer), FALSE);
 
+  /* Floating Unlock button: an accent pill riding over the bottom of the mirror,
+   * shown only while the phone is on its lockscreen (driven by the session's
+   * keyguard poll). Tapping it opens the one-time PIN dialog. A revealer
+   * crossfades it in/out, mirroring the auto-unlock alert above. Uses the same
+   * pill + suggested-action style as the app's other primary actions. */
+  GtkWidget *unlock_button = gtk_button_new_with_label (_("Unlock"));
+  gtk_widget_add_css_class (unlock_button, "pill");
+  gtk_widget_add_css_class (unlock_button, "suggested-action");
+  gtk_widget_set_halign (unlock_button, GTK_ALIGN_CENTER);
+  g_signal_connect (unlock_button, "clicked",
+                    G_CALLBACK (on_unlock_button_clicked), self);
+
+  self->unlock_button_revealer = GTK_REVEALER (gtk_revealer_new ());
+  gtk_revealer_set_transition_type (self->unlock_button_revealer,
+                                    GTK_REVEALER_TRANSITION_TYPE_CROSSFADE);
+  gtk_revealer_set_child (self->unlock_button_revealer, unlock_button);
+  gtk_revealer_set_reveal_child (self->unlock_button_revealer, FALSE);
+  gtk_widget_set_halign (GTK_WIDGET (self->unlock_button_revealer), GTK_ALIGN_CENTER);
+  gtk_widget_set_valign (GTK_WIDGET (self->unlock_button_revealer), GTK_ALIGN_END);
+  gtk_widget_set_margin_bottom (GTK_WIDGET (self->unlock_button_revealer), 48);
+
   GtkWidget *mirror_overlay = gtk_overlay_new ();
   gtk_overlay_set_child (GTK_OVERLAY (mirror_overlay), GTK_WIDGET (self->mirror_frame));
   gtk_overlay_add_overlay (GTK_OVERLAY (mirror_overlay), GTK_WIDGET (self->unlock_revealer));
+  gtk_overlay_add_overlay (GTK_OVERLAY (mirror_overlay),
+                           GTK_WIDGET (self->unlock_button_revealer));
 
   /* --- View stack ----------------------------------------------------- */
   self->stack = ADW_VIEW_STACK (adw_view_stack_new ());
@@ -4327,6 +4451,8 @@ pm_window_init (PmWindow *self)
                     G_CALLBACK (on_session_unlocking), self);
   g_signal_connect (self->session, "unlock-failed",
                     G_CALLBACK (on_session_unlock_failed), self);
+  g_signal_connect (self->session, "locked-changed",
+                    G_CALLBACK (on_session_locked_changed), self);
 
   if (!self->setup_complete) {
     pm_window_show_setup_step (self, PM_SETUP_WELCOME);

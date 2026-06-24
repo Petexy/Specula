@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: specula 0.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-18 03:26+0200\n"
+"POT-Creation-Date: 2026-06-24 16:33+0200\n"
 "PO-Revision-Date: 2026-06-17 21:30+0200\n"
 "Last-Translator: Specula <piotr.petexiness@gmail.com>\n"
 "Language-Team: Spanish\n"
@@ -16,48 +16,100 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: src/pm-application.c:59 src/pm-window.c:1135 src/pm-window.c:1143
-#: src/pm-window.c:3947 src/pm-window.c:3966
+#: src/pm-application.c:59 src/pm-window.c:1142 src/pm-window.c:1150
+#: src/pm-window.c:4252 src/pm-window.c:4271
 msgid "Phone Mirror"
 msgstr "Espejo del teléfono"
 
-#: src/pm-window.c:1145
+#: src/pm-window.c:1152
 msgid "Press Connect to find your phone automatically."
 msgstr "Pulse Conectar para encontrar su teléfono automáticamente."
 
-#: src/pm-window.c:1153
+#: src/pm-window.c:1160
 msgid "Searching…"
 msgstr "Buscando…"
 
-#: src/pm-window.c:1155
+#: src/pm-window.c:1162
 msgid "Looking for your phone on the local network."
 msgstr "Buscando su teléfono en la red local."
 
-#: src/pm-window.c:1163
+#: src/pm-window.c:1170
 msgid "Connecting…"
 msgstr "Conectando…"
 
-#: src/pm-window.c:1165
+#: src/pm-window.c:1172
 msgid "Starting the mirror server on your device."
 msgstr "Iniciando el servidor de espejo en su dispositivo."
 
-#: src/pm-window.c:1185
+#: src/pm-window.c:1192
 msgid "Connection failed"
 msgstr "Error de conexión"
 
-#: src/pm-window.c:1187
+#: src/pm-window.c:1194
 msgid "Could not reach the device."
 msgstr "No se pudo conectar con el dispositivo."
 
-#: src/pm-window.c:1745 src/pm-window.c:1758 src/pm-connect-dialog.c:138
+#: src/pm-window.c:1429 src/pm-window.c:1497
+msgid "Incorrect PIN"
+msgstr "PIN incorrecto"
+
+#: src/pm-window.c:1429
+msgid "Unlock Phone"
+msgstr "Desbloquear teléfono"
+
+#: src/pm-window.c:1430
+msgid "Try again."
+msgstr "Inténtelo de nuevo."
+
+#: src/pm-window.c:1430
+msgid "Enter your PIN."
+msgstr "Introduzca su PIN."
+
+#: src/pm-window.c:1434
+msgid "PIN"
+msgstr "PIN"
+
+#: src/pm-window.c:1440 src/pm-window.c:2974
+msgid "Cancel"
+msgstr "Cancelar"
+
+#. Floating Unlock button: an accent pill riding over the bottom of the mirror,
+#. * shown only while the phone is on its lockscreen (driven by the session's
+#. * keyguard poll). Tapping it opens the one-time PIN dialog. A revealer
+#. * crossfades it in/out, mirroring the auto-unlock alert above. Uses the same
+#. * pill + suggested-action style as the app's other primary actions.
+#: src/pm-window.c:1441 src/pm-window.c:4357
+msgid "Unlock"
+msgstr "Desbloquear"
+
+#: src/pm-window.c:1498
+msgid ""
+"The saved lockscreen PIN didn't unlock your phone. Auto-unlock has stopped "
+"trying so repeated wrong attempts can't lock you out of the device. Enter "
+"the correct PIN to try again."
+msgstr ""
+"El PIN de la pantalla de bloqueo guardado no desbloqueó su teléfono. El "
+"desbloqueo automático ha dejado de intentarlo para que los intentos fallidos "
+"repetidos no le bloqueen el acceso al dispositivo. Introduzca el PIN "
+"correcto para volver a intentarlo."
+
+#: src/pm-window.c:1503
+msgid "Dismiss"
+msgstr "Descartar"
+
+#: src/pm-window.c:1504
+msgid "Enter PIN"
+msgstr "Introducir PIN"
+
+#: src/pm-window.c:1993 src/pm-window.c:2006 src/pm-connect-dialog.c:138
 msgid "Lockscreen PIN"
 msgstr "PIN de pantalla de bloqueo"
 
-#: src/pm-window.c:1752 src/pm-connect-dialog.c:131
+#: src/pm-window.c:2000 src/pm-connect-dialog.c:131
 msgid "Auto-unlock"
 msgstr "Desbloqueo automático"
 
-#: src/pm-window.c:1754
+#: src/pm-window.c:2002
 msgid ""
 "Stored encrypted on this computer, tied to this phone, and used to unlock it "
 "automatically when it connects."
@@ -65,286 +117,291 @@ msgstr ""
 "Se almacena cifrado en este equipo, vinculado a este teléfono, y se usa para "
 "desbloquearlo automáticamente al conectarse."
 
-#: src/pm-window.c:1767
+#: src/pm-window.c:2015
 msgid "Save"
 msgstr "Guardar"
 
-#: src/pm-window.c:1770
+#: src/pm-window.c:2018
 msgid "Remove"
 msgstr "Quitar"
 
-#: src/pm-window.c:1898
+#: src/pm-window.c:2154
 msgid "Network & internet"
 msgstr "Red e Internet"
 
-#: src/pm-window.c:1898
+#: src/pm-window.c:2154
 msgid "Wi-Fi, SIM, hotspot"
 msgstr "Wi-Fi, SIM, zona Wi-Fi"
 
-#: src/pm-window.c:1899
+#: src/pm-window.c:2155
 msgid "Connected devices"
 msgstr "Dispositivos conectados"
 
-#: src/pm-window.c:1899
+#: src/pm-window.c:2155
 msgid "Bluetooth, pairing"
 msgstr "Bluetooth, emparejamiento"
 
-#: src/pm-window.c:1900
+#: src/pm-window.c:2156
 msgid "Apps"
 msgstr "Aplicaciones"
 
-#: src/pm-window.c:1900
+#: src/pm-window.c:2156
 msgid "Permissions and defaults"
 msgstr "Permisos y valores predeterminados"
 
-#: src/pm-window.c:1901
+#: src/pm-window.c:2157
 msgid "Notifications"
 msgstr "Notificaciones"
 
-#: src/pm-window.c:1901
+#: src/pm-window.c:2157
 msgid "History and conversations"
 msgstr "Historial y conversaciones"
 
-#: src/pm-window.c:1902
+#: src/pm-window.c:2158
 msgid "Battery"
 msgstr "Batería"
 
-#: src/pm-window.c:1902
+#: src/pm-window.c:2158
 msgid "87%, until 10:30 PM"
 msgstr "87 %, hasta las 22:30"
 
-#: src/pm-window.c:1903
+#: src/pm-window.c:2159
 msgid "System"
 msgstr "Sistema"
 
-#: src/pm-window.c:1903
+#: src/pm-window.c:2159
 msgid "Languages, gestures, time"
 msgstr "Idiomas, gestos, hora"
 
-#: src/pm-window.c:1904 src/pm-window.c:2951 src/pm-window.c:2984
-#: src/pm-window.c:3061
+#: src/pm-window.c:2160 src/pm-window.c:3211 src/pm-window.c:3244
+#: src/pm-window.c:3321
 msgid "About phone"
 msgstr "Información del teléfono"
 
-#: src/pm-window.c:1904
+#: src/pm-window.c:2160
 msgid "Model, Android version"
 msgstr "Modelo, versión de Android"
 
-#: src/pm-window.c:1905 src/pm-window.c:3074 src/pm-window.c:3131
+#: src/pm-window.c:2161 src/pm-window.c:3334 src/pm-window.c:3391
+#: src/pm-window.c:3450
 msgid "Developer options"
 msgstr "Opciones de desarrollador"
 
-#: src/pm-window.c:1905
+#: src/pm-window.c:2161
 msgid "Debugging and input"
 msgstr "Depuración y entrada"
 
-#: src/pm-window.c:1915 src/pm-window.c:3116
+#: src/pm-window.c:2171 src/pm-window.c:3376
 msgid "Device name"
 msgstr "Nombre del dispositivo"
 
-#: src/pm-window.c:1915
+#: src/pm-window.c:2171
 msgid "Pixel phone"
 msgstr "Teléfono Pixel"
 
-#: src/pm-window.c:1916
+#: src/pm-window.c:2172
 msgid "Android version"
 msgstr "Versión de Android"
 
-#: src/pm-window.c:1916
+#: src/pm-window.c:2172
 msgid "Version and security update"
 msgstr "Versión y actualización de seguridad"
 
-#: src/pm-window.c:1917
+#: src/pm-window.c:2173
 msgid "Build number"
 msgstr "Número de compilación"
 
-#: src/pm-window.c:1917
+#: src/pm-window.c:2173
 msgid "Tap seven times"
 msgstr "Toque siete veces"
 
-#: src/pm-window.c:1934
+#: src/pm-window.c:2192
 msgid "Use developer options"
 msgstr "Usar opciones de desarrollador"
 
-#: src/pm-window.c:1934 src/pm-window.c:3176
+#: src/pm-window.c:2192 src/pm-window.c:3470
 msgid "On"
 msgstr "Activado"
 
-#: src/pm-window.c:1935
+#: src/pm-window.c:2193
 msgid "USB debugging"
 msgstr "Depuración por USB"
 
-#: src/pm-window.c:1935
+#: src/pm-window.c:2193
 msgid "Debug mode when USB is connected"
 msgstr "Modo de depuración cuando el USB está conectado"
 
-#: src/pm-window.c:1936 src/pm-window.c:3141 src/pm-window.c:3191
+#: src/pm-window.c:2194 src/pm-window.c:3401 src/pm-window.c:3485
 msgid "Wireless debugging"
 msgstr "Depuración inalámbrica"
 
-#: src/pm-window.c:1936
+#: src/pm-window.c:2194
 msgid "Debug over Wi-Fi"
 msgstr "Depurar por Wi-Fi"
 
-#: src/pm-window.c:1937
+#: src/pm-window.c:2195
 msgid "Revoke debugging authorizations"
 msgstr "Revocar autorizaciones de depuración"
 
-#: src/pm-window.c:2308
+#: src/pm-window.c:2196 src/pm-window.c:4017
+msgid "Disable adb authorization timeout"
+msgstr "Desactivar el tiempo de espera de autorización de adb"
+
+#: src/pm-window.c:2196
+msgid "Stay authorized"
+msgstr "Seguir autorizado"
+
+#: src/pm-window.c:2568
 msgid "Phone"
 msgstr "Teléfono"
 
-#: src/pm-window.c:2309
+#: src/pm-window.c:2569
 msgid "Messages"
 msgstr "Mensajes"
 
-#: src/pm-window.c:2310
+#: src/pm-window.c:2570
 msgid "Photos"
 msgstr "Fotos"
 
-#: src/pm-window.c:2311
+#: src/pm-window.c:2571
 msgid "Camera"
 msgstr "Cámara"
 
-#: src/pm-window.c:2312 src/pm-window.c:2909 src/pm-window.c:2941
-#: src/pm-window.c:3048 src/pm-settings-dialog.c:76
+#: src/pm-window.c:2572 src/pm-window.c:3169 src/pm-window.c:3201
+#: src/pm-window.c:3308 src/pm-settings-dialog.c:76
 msgid "Settings"
 msgstr "Configuración"
 
-#: src/pm-window.c:2313
+#: src/pm-window.c:2573
 msgid "Files"
 msgstr "Archivos"
 
-#: src/pm-window.c:2336
+#: src/pm-window.c:2596
 msgid "Search your phone"
 msgstr "Buscar en el teléfono"
 
-#: src/pm-window.c:2714
-msgid "Cancel"
-msgstr "Cancelar"
-
-#: src/pm-window.c:2993
+#: src/pm-window.c:3253
 #, c-format
 msgid "Tap %d of 7"
 msgstr "Toque %d de 7"
 
-#: src/pm-window.c:3018
+#: src/pm-window.c:3278
 msgid "You are now a developer!"
 msgstr "¡Ahora es un desarrollador!"
 
-#: src/pm-window.c:3098
+#: src/pm-window.c:3358
 msgid "Allow USB debugging?"
 msgstr "¿Permitir la depuración por USB?"
 
-#: src/pm-window.c:3099
+#: src/pm-window.c:3359
 msgid "Computer RSA key fingerprint"
 msgstr "Huella de la clave RSA del equipo"
 
-#: src/pm-window.c:3100
+#: src/pm-window.c:3360
 msgid "OK"
 msgstr "OK"
 
-#: src/pm-window.c:3114 src/pm-window.c:3176
+#: src/pm-window.c:3374 src/pm-window.c:3470
 msgid "Use wireless debugging"
 msgstr "Usar depuración inalámbrica"
 
-#: src/pm-window.c:3114
+#: src/pm-window.c:3374
 msgid "Current Wi-Fi network"
 msgstr "Red Wi-Fi actual"
 
-#: src/pm-window.c:3115
+#: src/pm-window.c:3375
 msgid "Wi-Fi network"
 msgstr "Red Wi-Fi"
 
-#: src/pm-window.c:3115
+#: src/pm-window.c:3375
 msgid "Same network as Linux"
 msgstr "La misma red que Linux"
 
-#: src/pm-window.c:3116
+#: src/pm-window.c:3376
 msgid "Android device"
 msgstr "Dispositivo Android"
 
-#: src/pm-window.c:3160
+#: src/pm-window.c:3420
 msgid "Allow wireless debugging?"
 msgstr "¿Permitir la depuración inalámbrica?"
 
-#: src/pm-window.c:3161
+#: src/pm-window.c:3421
 msgid "Allow on this Wi-Fi network"
 msgstr "Permitir en esta red Wi-Fi"
 
-#: src/pm-window.c:3162
+#: src/pm-window.c:3422
 msgid "Allow"
 msgstr "Permitir"
 
-#: src/pm-window.c:3177
+#: src/pm-window.c:3471
 msgid "Pair device with code"
 msgstr "Vincular dispositivo con código"
 
-#: src/pm-window.c:3177
+#: src/pm-window.c:3471
 msgid "Shows code and address"
 msgstr "Muestra el código y la dirección"
 
-#: src/pm-window.c:3178
+#: src/pm-window.c:3472
 msgid "IP address & port"
 msgstr "Dirección IP y puerto"
 
-#: src/pm-window.c:3181 src/pm-window.c:3373 src/pm-connect-dialog.c:311
+#: src/pm-window.c:3475 src/pm-window.c:3664 src/pm-connect-dialog.c:310
 msgid "Pairing code"
 msgstr "Código de vinculación"
 
-#: src/pm-window.c:3182
+#: src/pm-window.c:3476
 msgid "Pairing address"
 msgstr "Dirección de vinculación"
 
-#: src/pm-window.c:3183
+#: src/pm-window.c:3477
 msgid "Keep this screen open"
 msgstr "Mantenga esta pantalla abierta"
 
-#: src/pm-window.c:3183
+#: src/pm-window.c:3477
 msgid "Code expires soon"
 msgstr "El código caduca pronto"
 
-#: src/pm-window.c:3201
+#: src/pm-window.c:3495
 msgid "Pair device"
 msgstr "Vincular dispositivo"
 
-#: src/pm-window.c:3337 src/pm-connect-dialog.c:322
+#: src/pm-window.c:3631 src/pm-connect-dialog.c:321
 msgid "Set up device"
 msgstr "Configurar dispositivo"
 
-#: src/pm-window.c:3348 src/pm-connect-dialog.c:303
+#: src/pm-window.c:3642 src/pm-connect-dialog.c:302
 msgid "Pairing"
 msgstr "Vinculación"
 
-#: src/pm-window.c:3358
+#: src/pm-window.c:3652
 msgid "Pair device with code."
 msgstr "Vincule el dispositivo con código."
 
-#: src/pm-window.c:3370 src/pm-connect-dialog.c:309
+#: src/pm-window.c:3667 src/pm-connect-dialog.c:308
 msgid "Pairing address (ip:port)"
 msgstr "Dirección de vinculación (ip:puerto)"
 
-#: src/pm-window.c:3387 src/pm-connect-dialog.c:319
+#: src/pm-window.c:3681 src/pm-connect-dialog.c:318
 msgid "Pair & Connect"
 msgstr "Vincular y conectar"
 
-#: src/pm-window.c:3628
+#: src/pm-window.c:3926
 msgid "Go to Home"
 msgstr "Ir al inicio"
 
-#: src/pm-window.c:3629 src/pm-window.c:3837
+#: src/pm-window.c:3927 src/pm-window.c:4139
 msgid "Continue"
 msgstr "Continuar"
 
-#: src/pm-window.c:3632
+#: src/pm-window.c:3930
 msgid "First Time Setup"
 msgstr "Configuración inicial"
 
-#: src/pm-window.c:3699
+#: src/pm-window.c:3997
 msgid "Welcome to Phone Mirror"
 msgstr "Bienvenido a Espejo del teléfono"
 
-#: src/pm-window.c:3700
+#: src/pm-window.c:3998
 msgid ""
 "We will help you prepare your Android phone. Keep your phone nearby and "
 "connect it to the same Wi-Fi network as this computer."
@@ -352,20 +409,20 @@ msgstr ""
 "Le ayudaremos a preparar su teléfono Android. Mantenga su teléfono cerca y "
 "conéctelo a la misma red Wi-Fi que este equipo."
 
-#: src/pm-window.c:3703
+#: src/pm-window.c:4001
 msgid "Open Settings"
 msgstr "Abrir Configuración"
 
-#: src/pm-window.c:3704
+#: src/pm-window.c:4002
 msgid "Unlock your Android phone. Find the Settings app and open it."
 msgstr ""
 "Desbloquee su teléfono Android. Busque la aplicación Configuración y ábrala."
 
-#: src/pm-window.c:3707
+#: src/pm-window.c:4005
 msgid "Find About phone"
 msgstr "Buscar Información del teléfono"
 
-#: src/pm-window.c:3708
+#: src/pm-window.c:4006
 msgid ""
 "In Settings, scroll toward the bottom. Tap About phone. On some phones, open "
 "System first, then tap About phone."
@@ -374,11 +431,11 @@ msgstr ""
 "algunos teléfonos, abra primero Sistema y luego toque Información del "
 "teléfono."
 
-#: src/pm-window.c:3711
+#: src/pm-window.c:4009
 msgid "Turn on Developer options"
 msgstr "Activar opciones de desarrollador"
 
-#: src/pm-window.c:3712
+#: src/pm-window.c:4010
 msgid ""
 "Find Build number. Tap Build number seven times. If Android asks for your "
 "PIN, enter it. Stop when the phone says you are now a developer."
@@ -387,11 +444,11 @@ msgstr ""
 "Si Android le pide el PIN, introdúzcalo. Deténgase cuando el teléfono "
 "indique que ahora es un desarrollador."
 
-#: src/pm-window.c:3715
+#: src/pm-window.c:4013
 msgid "Turn on USB debugging"
 msgstr "Activar depuración por USB"
 
-#: src/pm-window.c:3716
+#: src/pm-window.c:4014
 msgid ""
 "Go back to Settings. Open Developer options. On some phones, open System "
 "first, then turn on USB debugging. If Android asks, tap OK."
@@ -400,11 +457,21 @@ msgstr ""
 "teléfonos, abra primero Sistema y luego active la depuración por USB. Si "
 "Android lo pide, toque OK."
 
-#: src/pm-window.c:3719
+#: src/pm-window.c:4018
+msgid ""
+"Stay in Developer options. Find Disable adb authorization timeout and turn "
+"it on. This stops Android from removing this computer after seven days, so "
+"you will not have to pair again."
+msgstr ""
+"Permanezca en las opciones de desarrollador. Busque Desactivar el tiempo de "
+"espera de autorización de adb y actívelo. Así Android no quitará este equipo "
+"después de siete días y no tendrá que volver a vincular."
+
+#: src/pm-window.c:4021
 msgid "Turn on Wireless debugging"
 msgstr "Activar depuración inalámbrica"
 
-#: src/pm-window.c:3720
+#: src/pm-window.c:4022
 msgid ""
 "Stay in Developer options. Turn on Wireless debugging. Keep your phone and "
 "this computer on the same network. If Android asks, tap Allow."
@@ -413,11 +480,11 @@ msgstr ""
 "inalámbrica. Mantenga su teléfono y este equipo en la misma red. Si Android "
 "lo pide, toque Permitir."
 
-#: src/pm-window.c:3723
+#: src/pm-window.c:4025
 msgid "Get the pairing code"
 msgstr "Obtener el código de vinculación"
 
-#: src/pm-window.c:3724
+#: src/pm-window.c:4026
 msgid ""
 "Tap Wireless debugging, then Pair device with pairing code. Leave that "
 "screen open. On the home page, choose Set Up Device, enter the pairing "
@@ -428,68 +495,68 @@ msgstr ""
 "Configurar dispositivo, introduzca la dirección y el código de vinculación, "
 "y elija Vincular y conectar."
 
-#: src/pm-window.c:3738
+#: src/pm-window.c:4040
 msgid "Welcome"
 msgstr "Bienvenido"
 
-#: src/pm-window.c:3739
+#: src/pm-window.c:4041
 #, c-format
 msgid "Step %u of %u"
 msgstr "Paso %u de %u"
 
-#: src/pm-window.c:3832
+#: src/pm-window.c:4134
 msgid "Back"
 msgstr "Atrás"
 
-#: src/pm-window.c:3872
+#: src/pm-window.c:4174
 msgid "_Disconnect"
 msgstr "_Desconectar"
 
-#: src/pm-window.c:3873
+#: src/pm-window.c:4175
 msgid "_Lockscreen PIN…"
 msgstr "_PIN de pantalla de bloqueo…"
 
-#: src/pm-window.c:3874
+#: src/pm-window.c:4176
 msgid "_First Time Setup"
 msgstr "_Configuración inicial"
 
-#: src/pm-window.c:3880
+#: src/pm-window.c:4182
 msgid "_Manual Connection…"
 msgstr "Conexión _manual…"
 
-#: src/pm-window.c:3881
+#: src/pm-window.c:4183
 msgid "_Set Up Device…"
 msgstr "_Configurar dispositivo…"
 
-#: src/pm-window.c:3887
+#: src/pm-window.c:4189
 msgid "_Settings"
 msgstr "_Configuración"
 
-#: src/pm-window.c:3888
+#: src/pm-window.c:4190
 msgid "_About Phone Mirror"
 msgstr "_Acerca de Espejo del teléfono"
 
-#: src/pm-window.c:3893
+#: src/pm-window.c:4195
 msgid "_Quit"
 msgstr "_Salir"
 
-#: src/pm-window.c:3977
+#: src/pm-window.c:4282
 msgid "Keep controls visible"
 msgstr "Mantener los controles visibles"
 
-#: src/pm-window.c:3994
+#: src/pm-window.c:4299
 msgid "Press Connect to look for your paired device."
 msgstr "Pulse Conectar para buscar su dispositivo vinculado."
 
-#: src/pm-window.c:3999
+#: src/pm-window.c:4304
 msgid "Connect"
 msgstr "Conectar"
 
-#: src/pm-window.c:4006
+#: src/pm-window.c:4311
 msgid "Set Up Device…"
 msgstr "Configurar dispositivo…"
 
-#: src/pm-window.c:4031
+#: src/pm-window.c:4336
 msgid "Unlocking your phone…"
 msgstr "Desbloqueando su teléfono…"
 
@@ -506,27 +573,27 @@ msgstr ""
 msgid "Enter the device IP address"
 msgstr "Introduzca la dirección IP del dispositivo"
 
-#: src/pm-connect-dialog.c:241
+#: src/pm-connect-dialog.c:240
 msgid "Enter pairing address (ip:port) and code"
 msgstr "Introduzca la dirección de vinculación (ip:puerto) y el código"
 
-#: src/pm-connect-dialog.c:250
+#: src/pm-connect-dialog.c:249
 msgid "Invalid pairing port"
 msgstr "Puerto de vinculación no válido"
 
-#: src/pm-connect-dialog.c:258
+#: src/pm-connect-dialog.c:257
 msgid "Pairing…"
 msgstr "Vinculando…"
 
-#: src/pm-connect-dialog.c:305
+#: src/pm-connect-dialog.c:304
 msgid "Enable Wireless debugging → Pair device with code."
 msgstr "Active la depuración inalámbrica → Vincular dispositivo con código."
 
-#: src/pm-connect-dialog.c:331
+#: src/pm-connect-dialog.c:330
 msgid "Connection"
 msgstr "Conexión"
 
-#: src/pm-connect-dialog.c:333
+#: src/pm-connect-dialog.c:332
 msgid ""
 "Enter the Wi-Fi debugging address only if automatic discovery cannot find "
 "the phone."
@@ -534,20 +601,19 @@ msgstr ""
 "Introduzca la dirección de depuración Wi-Fi solo si la detección automática "
 "no puede encontrar el teléfono."
 
-#: src/pm-connect-dialog.c:336
-#, fuzzy
+#: src/pm-connect-dialog.c:335
 msgid "IP address or ip:port"
-msgstr "Dirección IP y puerto"
+msgstr "Dirección IP o ip:port"
 
-#: src/pm-connect-dialog.c:338
+#: src/pm-connect-dialog.c:337
 msgid "Port (default 5555)"
 msgstr "Puerto (predeterminado 5555)"
 
-#: src/pm-connect-dialog.c:348
+#: src/pm-connect-dialog.c:347
 msgid "Connect manually"
 msgstr "Conectar manualmente"
 
-#: src/pm-connect-dialog.c:361
+#: src/pm-connect-dialog.c:360
 msgid "Manual connection"
 msgstr "Conexión manual"
 
@@ -665,25 +731,25 @@ msgid "Route the phone's sound to this computer. Reconnects to apply."
 msgstr ""
 "Dirija el sonido del teléfono a este equipo. Se reconecta para aplicar."
 
-#: src/pm-session.c:188
+#: src/pm-session.c:192
 msgid "Mirroring a connected phone"
 msgstr "Reflejando un teléfono conectado"
 
-#: src/pm-session.c:403
+#: src/pm-session.c:469
 #, c-format
 msgid "scrcpy-server exited with status %d"
 msgstr "scrcpy-server finalizó con el estado %d"
 
-#: src/pm-session.c:431
+#: src/pm-session.c:497
 #, c-format
 msgid "timed out waiting for scrcpy-server socket%s%s"
 msgstr "tiempo de espera agotado para el socket de scrcpy-server%s%s"
 
-#: src/pm-session.c:704
+#: src/pm-session.c:786
 msgid "Connecting to device…"
 msgstr "Conectando con el dispositivo…"
 
-#: src/pm-session.c:711
+#: src/pm-session.c:793
 msgid ""
 "Could not find scrcpy-server. Install scrcpy or set PM_SERVER_JAR to the "
 "server path."
@@ -691,7 +757,7 @@ msgstr ""
 "No se pudo encontrar scrcpy-server. Instale scrcpy o establezca "
 "PM_SERVER_JAR en la ruta del servidor."
 
-#: src/pm-session.c:718
+#: src/pm-session.c:800
 msgid ""
 "Could not determine scrcpy-server version. Install scrcpy or set "
 "PM_SCRCPY_VERSION to match your server."
@@ -699,52 +765,52 @@ msgstr ""
 "No se pudo determinar la versión de scrcpy-server. Instale scrcpy o "
 "establezca PM_SCRCPY_VERSION para que coincida con su servidor."
 
-#: src/pm-session.c:776
+#: src/pm-session.c:858
 msgid "Connecting with adb…"
 msgstr "Conectando con adb…"
 
-#: src/pm-session.c:784
+#: src/pm-session.c:866
 msgid "Installing mirror server…"
 msgstr "Instalando el servidor de espejo…"
 
-#: src/pm-session.c:790
+#: src/pm-session.c:872
 msgid "Opening mirror socket…"
 msgstr "Abriendo el socket de espejo…"
 
-#: src/pm-session.c:796
+#: src/pm-session.c:878
 msgid "Starting mirror server…"
 msgstr "Iniciando el servidor de espejo…"
 
-#: src/pm-session.c:803
+#: src/pm-session.c:885
 msgid "Connecting video stream…"
 msgstr "Conectando el flujo de vídeo…"
 
-#: src/pm-session.c:814
+#: src/pm-session.c:896
 msgid "Connecting audio stream…"
 msgstr "Conectando el flujo de audio…"
 
-#: src/pm-session.c:821
+#: src/pm-session.c:903
 msgid "Connecting controls…"
 msgstr "Conectando los controles…"
 
-#: src/pm-session.c:832
+#: src/pm-session.c:914
 msgid "Reading video stream…"
 msgstr "Leyendo el flujo de vídeo…"
 
-#: src/pm-session.c:998
+#: src/pm-session.c:1095
 #, c-format
 msgid "%s failed: %s%s"
 msgstr "%s falló: %s%s"
 
-#: src/pm-session.c:1000
+#: src/pm-session.c:1097
 msgid "connection failed"
 msgstr "error de conexión"
 
-#: src/pm-session.c:1063
+#: src/pm-session.c:1160
 msgid "Found device — starting mirror server…"
 msgstr "Dispositivo encontrado: iniciando el servidor de espejo…"
 
-#: src/pm-session.c:1132
+#: src/pm-session.c:1229
 msgid ""
 "No phone found. Use Set Up Device to enter your phone's Wireless debugging "
 "address."

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: specula 0.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-18 03:26+0200\n"
+"POT-Creation-Date: 2026-06-24 16:33+0200\n"
 "PO-Revision-Date: 2026-06-17 21:30+0200\n"
 "Last-Translator: Specula <piotr.petexiness@gmail.com>\n"
 "Language-Team: Hindi\n"
@@ -16,48 +16,99 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: src/pm-application.c:59 src/pm-window.c:1135 src/pm-window.c:1143
-#: src/pm-window.c:3947 src/pm-window.c:3966
+#: src/pm-application.c:59 src/pm-window.c:1142 src/pm-window.c:1150
+#: src/pm-window.c:4252 src/pm-window.c:4271
 msgid "Phone Mirror"
 msgstr "फ़ोन मिरर"
 
-#: src/pm-window.c:1145
+#: src/pm-window.c:1152
 msgid "Press Connect to find your phone automatically."
 msgstr "अपना फ़ोन स्वचालित रूप से ढूँढने के लिए कनेक्ट दबाएँ।"
 
-#: src/pm-window.c:1153
+#: src/pm-window.c:1160
 msgid "Searching…"
 msgstr "खोज रहा है…"
 
-#: src/pm-window.c:1155
+#: src/pm-window.c:1162
 msgid "Looking for your phone on the local network."
 msgstr "स्थानीय नेटवर्क पर आपका फ़ोन खोजा जा रहा है।"
 
-#: src/pm-window.c:1163
+#: src/pm-window.c:1170
 msgid "Connecting…"
 msgstr "कनेक्ट हो रहा है…"
 
-#: src/pm-window.c:1165
+#: src/pm-window.c:1172
 msgid "Starting the mirror server on your device."
 msgstr "आपके डिवाइस पर मिरर सर्वर शुरू किया जा रहा है।"
 
-#: src/pm-window.c:1185
+#: src/pm-window.c:1192
 msgid "Connection failed"
 msgstr "कनेक्शन विफल"
 
-#: src/pm-window.c:1187
+#: src/pm-window.c:1194
 msgid "Could not reach the device."
 msgstr "डिवाइस तक नहीं पहुँचा जा सका।"
 
-#: src/pm-window.c:1745 src/pm-window.c:1758 src/pm-connect-dialog.c:138
+#: src/pm-window.c:1429 src/pm-window.c:1497
+msgid "Incorrect PIN"
+msgstr "गलत पिन"
+
+#: src/pm-window.c:1429
+msgid "Unlock Phone"
+msgstr "फ़ोन अनलॉक करें"
+
+#: src/pm-window.c:1430
+msgid "Try again."
+msgstr "पुनः प्रयास करें।"
+
+#: src/pm-window.c:1430
+msgid "Enter your PIN."
+msgstr "अपना पिन डालें।"
+
+#: src/pm-window.c:1434
+msgid "PIN"
+msgstr "पिन"
+
+#: src/pm-window.c:1440 src/pm-window.c:2974
+msgid "Cancel"
+msgstr "रद्द करें"
+
+#. Floating Unlock button: an accent pill riding over the bottom of the mirror,
+#. * shown only while the phone is on its lockscreen (driven by the session's
+#. * keyguard poll). Tapping it opens the one-time PIN dialog. A revealer
+#. * crossfades it in/out, mirroring the auto-unlock alert above. Uses the same
+#. * pill + suggested-action style as the app's other primary actions.
+#: src/pm-window.c:1441 src/pm-window.c:4357
+msgid "Unlock"
+msgstr "अनलॉक करें"
+
+#: src/pm-window.c:1498
+msgid ""
+"The saved lockscreen PIN didn't unlock your phone. Auto-unlock has stopped "
+"trying so repeated wrong attempts can't lock you out of the device. Enter "
+"the correct PIN to try again."
+msgstr ""
+"सहेजा गया लॉकस्क्रीन पिन आपके फ़ोन को अनलॉक नहीं कर सका। ऑटो-अनलॉक ने प्रयास करना बंद "
+"कर दिया है ताकि बार-बार गलत प्रयास आपको डिवाइस से लॉक न कर दें। पुनः प्रयास करने के "
+"लिए सही पिन दर्ज करें।"
+
+#: src/pm-window.c:1503
+msgid "Dismiss"
+msgstr "खारिज करें"
+
+#: src/pm-window.c:1504
+msgid "Enter PIN"
+msgstr "पिन डालें"
+
+#: src/pm-window.c:1993 src/pm-window.c:2006 src/pm-connect-dialog.c:138
 msgid "Lockscreen PIN"
 msgstr "लॉकस्क्रीन पिन"
 
-#: src/pm-window.c:1752 src/pm-connect-dialog.c:131
+#: src/pm-window.c:2000 src/pm-connect-dialog.c:131
 msgid "Auto-unlock"
 msgstr "स्वचालित अनलॉक"
 
-#: src/pm-window.c:1754
+#: src/pm-window.c:2002
 msgid ""
 "Stored encrypted on this computer, tied to this phone, and used to unlock it "
 "automatically when it connects."
@@ -65,286 +116,291 @@ msgstr ""
 "इस कंप्यूटर पर एन्क्रिप्टेड रूप में संग्रहीत, इस फ़ोन से जुड़ा हुआ, और कनेक्ट होने पर इसे स्वचालित "
 "रूप से अनलॉक करने के लिए उपयोग किया जाता है।"
 
-#: src/pm-window.c:1767
+#: src/pm-window.c:2015
 msgid "Save"
 msgstr "सहेजें"
 
-#: src/pm-window.c:1770
+#: src/pm-window.c:2018
 msgid "Remove"
 msgstr "हटाएँ"
 
-#: src/pm-window.c:1898
+#: src/pm-window.c:2154
 msgid "Network & internet"
 msgstr "नेटवर्क और इंटरनेट"
 
-#: src/pm-window.c:1898
+#: src/pm-window.c:2154
 msgid "Wi-Fi, SIM, hotspot"
 msgstr "वाई-फ़ाई, सिम, हॉटस्पॉट"
 
-#: src/pm-window.c:1899
+#: src/pm-window.c:2155
 msgid "Connected devices"
 msgstr "कनेक्टेड डिवाइस"
 
-#: src/pm-window.c:1899
+#: src/pm-window.c:2155
 msgid "Bluetooth, pairing"
 msgstr "ब्लूटूथ, पेयरिंग"
 
-#: src/pm-window.c:1900
+#: src/pm-window.c:2156
 msgid "Apps"
 msgstr "ऐप्स"
 
-#: src/pm-window.c:1900
+#: src/pm-window.c:2156
 msgid "Permissions and defaults"
 msgstr "अनुमतियाँ और डिफ़ॉल्ट"
 
-#: src/pm-window.c:1901
+#: src/pm-window.c:2157
 msgid "Notifications"
 msgstr "सूचनाएँ"
 
-#: src/pm-window.c:1901
+#: src/pm-window.c:2157
 msgid "History and conversations"
 msgstr "इतिहास और बातचीत"
 
-#: src/pm-window.c:1902
+#: src/pm-window.c:2158
 msgid "Battery"
 msgstr "बैटरी"
 
-#: src/pm-window.c:1902
+#: src/pm-window.c:2158
 msgid "87%, until 10:30 PM"
 msgstr "87%, रात 10:30 बजे तक"
 
-#: src/pm-window.c:1903
+#: src/pm-window.c:2159
 msgid "System"
 msgstr "सिस्टम"
 
-#: src/pm-window.c:1903
+#: src/pm-window.c:2159
 msgid "Languages, gestures, time"
 msgstr "भाषाएँ, जेस्चर, समय"
 
-#: src/pm-window.c:1904 src/pm-window.c:2951 src/pm-window.c:2984
-#: src/pm-window.c:3061
+#: src/pm-window.c:2160 src/pm-window.c:3211 src/pm-window.c:3244
+#: src/pm-window.c:3321
 msgid "About phone"
 msgstr "फ़ोन के बारे में"
 
-#: src/pm-window.c:1904
+#: src/pm-window.c:2160
 msgid "Model, Android version"
 msgstr "मॉडल, Android संस्करण"
 
-#: src/pm-window.c:1905 src/pm-window.c:3074 src/pm-window.c:3131
+#: src/pm-window.c:2161 src/pm-window.c:3334 src/pm-window.c:3391
+#: src/pm-window.c:3450
 msgid "Developer options"
 msgstr "डेवलपर विकल्प"
 
-#: src/pm-window.c:1905
+#: src/pm-window.c:2161
 msgid "Debugging and input"
 msgstr "डिबगिंग और इनपुट"
 
-#: src/pm-window.c:1915 src/pm-window.c:3116
+#: src/pm-window.c:2171 src/pm-window.c:3376
 msgid "Device name"
 msgstr "डिवाइस का नाम"
 
-#: src/pm-window.c:1915
+#: src/pm-window.c:2171
 msgid "Pixel phone"
 msgstr "Pixel फ़ोन"
 
-#: src/pm-window.c:1916
+#: src/pm-window.c:2172
 msgid "Android version"
 msgstr "Android संस्करण"
 
-#: src/pm-window.c:1916
+#: src/pm-window.c:2172
 msgid "Version and security update"
 msgstr "संस्करण और सुरक्षा अपडेट"
 
-#: src/pm-window.c:1917
+#: src/pm-window.c:2173
 msgid "Build number"
 msgstr "बिल्ड नंबर"
 
-#: src/pm-window.c:1917
+#: src/pm-window.c:2173
 msgid "Tap seven times"
 msgstr "सात बार टैप करें"
 
-#: src/pm-window.c:1934
+#: src/pm-window.c:2192
 msgid "Use developer options"
 msgstr "डेवलपर विकल्प उपयोग करें"
 
-#: src/pm-window.c:1934 src/pm-window.c:3176
+#: src/pm-window.c:2192 src/pm-window.c:3470
 msgid "On"
 msgstr "चालू"
 
-#: src/pm-window.c:1935
+#: src/pm-window.c:2193
 msgid "USB debugging"
 msgstr "USB डिबगिंग"
 
-#: src/pm-window.c:1935
+#: src/pm-window.c:2193
 msgid "Debug mode when USB is connected"
 msgstr "जब USB कनेक्टेड हो तब डिबग मोड"
 
-#: src/pm-window.c:1936 src/pm-window.c:3141 src/pm-window.c:3191
+#: src/pm-window.c:2194 src/pm-window.c:3401 src/pm-window.c:3485
 msgid "Wireless debugging"
 msgstr "वायरलेस डिबगिंग"
 
-#: src/pm-window.c:1936
+#: src/pm-window.c:2194
 msgid "Debug over Wi-Fi"
 msgstr "वाई-फ़ाई पर डिबग करें"
 
-#: src/pm-window.c:1937
+#: src/pm-window.c:2195
 msgid "Revoke debugging authorizations"
 msgstr "डिबगिंग प्राधिकरण रद्द करें"
 
-#: src/pm-window.c:2308
+#: src/pm-window.c:2196 src/pm-window.c:4017
+msgid "Disable adb authorization timeout"
+msgstr "adb प्राधिकरण टाइमआउट अक्षम करें"
+
+#: src/pm-window.c:2196
+msgid "Stay authorized"
+msgstr "अधिकृत बने रहें"
+
+#: src/pm-window.c:2568
 msgid "Phone"
 msgstr "फ़ोन"
 
-#: src/pm-window.c:2309
+#: src/pm-window.c:2569
 msgid "Messages"
 msgstr "संदेश"
 
-#: src/pm-window.c:2310
+#: src/pm-window.c:2570
 msgid "Photos"
 msgstr "फ़ोटो"
 
-#: src/pm-window.c:2311
+#: src/pm-window.c:2571
 msgid "Camera"
 msgstr "कैमरा"
 
-#: src/pm-window.c:2312 src/pm-window.c:2909 src/pm-window.c:2941
-#: src/pm-window.c:3048 src/pm-settings-dialog.c:76
+#: src/pm-window.c:2572 src/pm-window.c:3169 src/pm-window.c:3201
+#: src/pm-window.c:3308 src/pm-settings-dialog.c:76
 msgid "Settings"
 msgstr "सेटिंग्स"
 
-#: src/pm-window.c:2313
+#: src/pm-window.c:2573
 msgid "Files"
 msgstr "फ़ाइलें"
 
-#: src/pm-window.c:2336
+#: src/pm-window.c:2596
 msgid "Search your phone"
 msgstr "अपने फ़ोन में खोजें"
 
-#: src/pm-window.c:2714
-msgid "Cancel"
-msgstr "रद्द करें"
-
-#: src/pm-window.c:2993
+#: src/pm-window.c:3253
 #, c-format
 msgid "Tap %d of 7"
 msgstr "%d / 7 टैप"
 
-#: src/pm-window.c:3018
+#: src/pm-window.c:3278
 msgid "You are now a developer!"
 msgstr "अब आप डेवलपर हैं!"
 
-#: src/pm-window.c:3098
+#: src/pm-window.c:3358
 msgid "Allow USB debugging?"
 msgstr "USB डिबगिंग की अनुमति दें?"
 
-#: src/pm-window.c:3099
+#: src/pm-window.c:3359
 msgid "Computer RSA key fingerprint"
 msgstr "कंप्यूटर की RSA कुंजी फ़िंगरप्रिंट"
 
-#: src/pm-window.c:3100
+#: src/pm-window.c:3360
 msgid "OK"
 msgstr "ठीक है"
 
-#: src/pm-window.c:3114 src/pm-window.c:3176
+#: src/pm-window.c:3374 src/pm-window.c:3470
 msgid "Use wireless debugging"
 msgstr "वायरलेस डिबगिंग उपयोग करें"
 
-#: src/pm-window.c:3114
+#: src/pm-window.c:3374
 msgid "Current Wi-Fi network"
 msgstr "वर्तमान वाई-फ़ाई नेटवर्क"
 
-#: src/pm-window.c:3115
+#: src/pm-window.c:3375
 msgid "Wi-Fi network"
 msgstr "वाई-फ़ाई नेटवर्क"
 
-#: src/pm-window.c:3115
+#: src/pm-window.c:3375
 msgid "Same network as Linux"
 msgstr "Linux के समान नेटवर्क"
 
-#: src/pm-window.c:3116
+#: src/pm-window.c:3376
 msgid "Android device"
 msgstr "Android डिवाइस"
 
-#: src/pm-window.c:3160
+#: src/pm-window.c:3420
 msgid "Allow wireless debugging?"
 msgstr "वायरलेस डिबगिंग की अनुमति दें?"
 
-#: src/pm-window.c:3161
+#: src/pm-window.c:3421
 msgid "Allow on this Wi-Fi network"
 msgstr "इस वाई-फ़ाई नेटवर्क पर अनुमति दें"
 
-#: src/pm-window.c:3162
+#: src/pm-window.c:3422
 msgid "Allow"
 msgstr "अनुमति दें"
 
-#: src/pm-window.c:3177
+#: src/pm-window.c:3471
 msgid "Pair device with code"
 msgstr "कोड के साथ डिवाइस पेयर करें"
 
-#: src/pm-window.c:3177
+#: src/pm-window.c:3471
 msgid "Shows code and address"
 msgstr "कोड और पता दिखाता है"
 
-#: src/pm-window.c:3178
+#: src/pm-window.c:3472
 msgid "IP address & port"
 msgstr "IP पता और पोर्ट"
 
-#: src/pm-window.c:3181 src/pm-window.c:3373 src/pm-connect-dialog.c:311
+#: src/pm-window.c:3475 src/pm-window.c:3664 src/pm-connect-dialog.c:310
 msgid "Pairing code"
 msgstr "पेयरिंग कोड"
 
-#: src/pm-window.c:3182
+#: src/pm-window.c:3476
 msgid "Pairing address"
 msgstr "पेयरिंग पता"
 
-#: src/pm-window.c:3183
+#: src/pm-window.c:3477
 msgid "Keep this screen open"
 msgstr "इस स्क्रीन को खुला रखें"
 
-#: src/pm-window.c:3183
+#: src/pm-window.c:3477
 msgid "Code expires soon"
 msgstr "कोड जल्द ही समाप्त हो जाएगा"
 
-#: src/pm-window.c:3201
+#: src/pm-window.c:3495
 msgid "Pair device"
 msgstr "डिवाइस पेयर करें"
 
-#: src/pm-window.c:3337 src/pm-connect-dialog.c:322
+#: src/pm-window.c:3631 src/pm-connect-dialog.c:321
 msgid "Set up device"
 msgstr "डिवाइस सेटअप करें"
 
-#: src/pm-window.c:3348 src/pm-connect-dialog.c:303
+#: src/pm-window.c:3642 src/pm-connect-dialog.c:302
 msgid "Pairing"
 msgstr "पेयरिंग"
 
-#: src/pm-window.c:3358
+#: src/pm-window.c:3652
 msgid "Pair device with code."
 msgstr "कोड के साथ डिवाइस पेयर करें।"
 
-#: src/pm-window.c:3370 src/pm-connect-dialog.c:309
+#: src/pm-window.c:3667 src/pm-connect-dialog.c:308
 msgid "Pairing address (ip:port)"
 msgstr "पेयरिंग पता (ip:port)"
 
-#: src/pm-window.c:3387 src/pm-connect-dialog.c:319
+#: src/pm-window.c:3681 src/pm-connect-dialog.c:318
 msgid "Pair & Connect"
 msgstr "पेयर करें और कनेक्ट करें"
 
-#: src/pm-window.c:3628
+#: src/pm-window.c:3926
 msgid "Go to Home"
 msgstr "होम पर जाएँ"
 
-#: src/pm-window.c:3629 src/pm-window.c:3837
+#: src/pm-window.c:3927 src/pm-window.c:4139
 msgid "Continue"
 msgstr "जारी रखें"
 
-#: src/pm-window.c:3632
+#: src/pm-window.c:3930
 msgid "First Time Setup"
 msgstr "प्रथम बार सेटअप"
 
-#: src/pm-window.c:3699
+#: src/pm-window.c:3997
 msgid "Welcome to Phone Mirror"
 msgstr "फ़ोन मिरर में आपका स्वागत है"
 
-#: src/pm-window.c:3700
+#: src/pm-window.c:3998
 msgid ""
 "We will help you prepare your Android phone. Keep your phone nearby and "
 "connect it to the same Wi-Fi network as this computer."
@@ -352,19 +408,19 @@ msgstr ""
 "हम आपके Android फ़ोन को तैयार करने में मदद करेंगे। अपना फ़ोन पास रखें और इसे इस कंप्यूटर के "
 "समान वाई-फ़ाई नेटवर्क से कनेक्ट करें।"
 
-#: src/pm-window.c:3703
+#: src/pm-window.c:4001
 msgid "Open Settings"
 msgstr "सेटिंग्स खोलें"
 
-#: src/pm-window.c:3704
+#: src/pm-window.c:4002
 msgid "Unlock your Android phone. Find the Settings app and open it."
 msgstr "अपना Android फ़ोन अनलॉक करें। सेटिंग्स ऐप ढूँढें और उसे खोलें।"
 
-#: src/pm-window.c:3707
+#: src/pm-window.c:4005
 msgid "Find About phone"
 msgstr "फ़ोन के बारे में ढूँढें"
 
-#: src/pm-window.c:3708
+#: src/pm-window.c:4006
 msgid ""
 "In Settings, scroll toward the bottom. Tap About phone. On some phones, open "
 "System first, then tap About phone."
@@ -372,11 +428,11 @@ msgstr ""
 "सेटिंग्स में नीचे की ओर स्क्रॉल करें। फ़ोन के बारे में पर टैप करें। कुछ फ़ोन पर, पहले सिस्टम खोलें, "
 "फिर फ़ोन के बारे में पर टैप करें।"
 
-#: src/pm-window.c:3711
+#: src/pm-window.c:4009
 msgid "Turn on Developer options"
 msgstr "डेवलपर विकल्प चालू करें"
 
-#: src/pm-window.c:3712
+#: src/pm-window.c:4010
 msgid ""
 "Find Build number. Tap Build number seven times. If Android asks for your "
 "PIN, enter it. Stop when the phone says you are now a developer."
@@ -384,11 +440,11 @@ msgstr ""
 "बिल्ड नंबर ढूँढें। बिल्ड नंबर पर सात बार टैप करें। यदि Android आपका पिन माँगे, तो उसे दर्ज "
 "करें। जब फ़ोन कहे कि अब आप डेवलपर हैं, तब रुक जाएँ।"
 
-#: src/pm-window.c:3715
+#: src/pm-window.c:4013
 msgid "Turn on USB debugging"
 msgstr "USB डिबगिंग चालू करें"
 
-#: src/pm-window.c:3716
+#: src/pm-window.c:4014
 msgid ""
 "Go back to Settings. Open Developer options. On some phones, open System "
 "first, then turn on USB debugging. If Android asks, tap OK."
@@ -396,11 +452,20 @@ msgstr ""
 "सेटिंग्स पर वापस जाएँ। डेवलपर विकल्प खोलें। कुछ फ़ोन पर, पहले सिस्टम खोलें, फिर USB डिबगिंग "
 "चालू करें। यदि Android पूछे, तो ठीक है पर टैप करें।"
 
-#: src/pm-window.c:3719
+#: src/pm-window.c:4018
+msgid ""
+"Stay in Developer options. Find Disable adb authorization timeout and turn "
+"it on. This stops Android from removing this computer after seven days, so "
+"you will not have to pair again."
+msgstr ""
+"डेवलपर विकल्प में रहें। adb प्राधिकरण टाइमआउट अक्षम करें ढूँढें और इसे चालू करें। इससे Android "
+"सात दिनों के बाद इस कंप्यूटर को नहीं हटाएगा, इसलिए आपको दोबारा पेयर नहीं करना पड़ेगा।"
+
+#: src/pm-window.c:4021
 msgid "Turn on Wireless debugging"
 msgstr "वायरलेस डिबगिंग चालू करें"
 
-#: src/pm-window.c:3720
+#: src/pm-window.c:4022
 msgid ""
 "Stay in Developer options. Turn on Wireless debugging. Keep your phone and "
 "this computer on the same network. If Android asks, tap Allow."
@@ -408,11 +473,11 @@ msgstr ""
 "डेवलपर विकल्प में रहें। वायरलेस डिबगिंग चालू करें। अपने फ़ोन और इस कंप्यूटर को एक ही नेटवर्क "
 "पर रखें। यदि Android पूछे, तो अनुमति दें पर टैप करें।"
 
-#: src/pm-window.c:3723
+#: src/pm-window.c:4025
 msgid "Get the pairing code"
 msgstr "पेयरिंग कोड प्राप्त करें"
 
-#: src/pm-window.c:3724
+#: src/pm-window.c:4026
 msgid ""
 "Tap Wireless debugging, then Pair device with pairing code. Leave that "
 "screen open. On the home page, choose Set Up Device, enter the pairing "
@@ -422,68 +487,68 @@ msgstr ""
 "को खुला रखें। होम पेज पर, डिवाइस सेटअप करें चुनें, पेयरिंग पता और कोड दर्ज करें, फिर पेयर करें "
 "और कनेक्ट करें चुनें।"
 
-#: src/pm-window.c:3738
+#: src/pm-window.c:4040
 msgid "Welcome"
 msgstr "स्वागत है"
 
-#: src/pm-window.c:3739
+#: src/pm-window.c:4041
 #, c-format
 msgid "Step %u of %u"
 msgstr "चरण %u / %u"
 
-#: src/pm-window.c:3832
+#: src/pm-window.c:4134
 msgid "Back"
 msgstr "वापस"
 
-#: src/pm-window.c:3872
+#: src/pm-window.c:4174
 msgid "_Disconnect"
 msgstr "डिस्कनेक्ट करें (_D)"
 
-#: src/pm-window.c:3873
+#: src/pm-window.c:4175
 msgid "_Lockscreen PIN…"
 msgstr "लॉकस्क्रीन पिन (_L)…"
 
-#: src/pm-window.c:3874
+#: src/pm-window.c:4176
 msgid "_First Time Setup"
 msgstr "प्रथम बार सेटअप (_F)"
 
-#: src/pm-window.c:3880
+#: src/pm-window.c:4182
 msgid "_Manual Connection…"
 msgstr "मैन्युअल कनेक्शन (_M)…"
 
-#: src/pm-window.c:3881
+#: src/pm-window.c:4183
 msgid "_Set Up Device…"
 msgstr "डिवाइस सेटअप करें (_S)…"
 
-#: src/pm-window.c:3887
+#: src/pm-window.c:4189
 msgid "_Settings"
 msgstr "सेटिंग्स (_S)"
 
-#: src/pm-window.c:3888
+#: src/pm-window.c:4190
 msgid "_About Phone Mirror"
 msgstr "फ़ोन मिरर के बारे में (_A)"
 
-#: src/pm-window.c:3893
+#: src/pm-window.c:4195
 msgid "_Quit"
 msgstr "बाहर निकलें (_Q)"
 
-#: src/pm-window.c:3977
+#: src/pm-window.c:4282
 msgid "Keep controls visible"
 msgstr "नियंत्रण दृश्यमान रखें"
 
-#: src/pm-window.c:3994
+#: src/pm-window.c:4299
 msgid "Press Connect to look for your paired device."
 msgstr "अपना पेयर किया हुआ डिवाइस खोजने के लिए कनेक्ट दबाएँ।"
 
-#: src/pm-window.c:3999
+#: src/pm-window.c:4304
 msgid "Connect"
 msgstr "कनेक्ट करें"
 
-#: src/pm-window.c:4006
+#: src/pm-window.c:4311
 msgid "Set Up Device…"
 msgstr "डिवाइस सेटअप करें…"
 
-#: src/pm-window.c:4031
+#: src/pm-window.c:4336
 msgid "Unlocking your phone…"
 msgstr "आपका फ़ोन अनलॉक हो रहा है…"
 
@@ -499,46 +564,45 @@ msgstr ""
 msgid "Enter the device IP address"
 msgstr "डिवाइस का IP पता दर्ज करें"
 
-#: src/pm-connect-dialog.c:241
+#: src/pm-connect-dialog.c:240
 msgid "Enter pairing address (ip:port) and code"
 msgstr "पेयरिंग पता (ip:port) और कोड दर्ज करें"
 
-#: src/pm-connect-dialog.c:250
+#: src/pm-connect-dialog.c:249
 msgid "Invalid pairing port"
 msgstr "अमान्य पेयरिंग पोर्ट"
 
-#: src/pm-connect-dialog.c:258
+#: src/pm-connect-dialog.c:257
 msgid "Pairing…"
 msgstr "पेयरिंग हो रही है…"
 
-#: src/pm-connect-dialog.c:305
+#: src/pm-connect-dialog.c:304
 msgid "Enable Wireless debugging → Pair device with code."
 msgstr "वायरलेस डिबगिंग सक्षम करें → कोड के साथ डिवाइस पेयर करें।"
 
-#: src/pm-connect-dialog.c:331
+#: src/pm-connect-dialog.c:330
 msgid "Connection"
 msgstr "कनेक्शन"
 
-#: src/pm-connect-dialog.c:333
+#: src/pm-connect-dialog.c:332
 msgid ""
 "Enter the Wi-Fi debugging address only if automatic discovery cannot find "
 "the phone."
 msgstr "वाई-फ़ाई डिबगिंग पता केवल तभी दर्ज करें जब स्वचालित खोज फ़ोन को न ढूँढ सके।"
 
-#: src/pm-connect-dialog.c:336
-#, fuzzy
+#: src/pm-connect-dialog.c:335
 msgid "IP address or ip:port"
-msgstr "IP पता और पोर्ट"
+msgstr "IP पता या ip:port"
 
-#: src/pm-connect-dialog.c:338
+#: src/pm-connect-dialog.c:337
 msgid "Port (default 5555)"
 msgstr "पोर्ट (डिफ़ॉल्ट 5555)"
 
-#: src/pm-connect-dialog.c:348
+#: src/pm-connect-dialog.c:347
 msgid "Connect manually"
 msgstr "मैन्युअल रूप से कनेक्ट करें"
 
-#: src/pm-connect-dialog.c:361
+#: src/pm-connect-dialog.c:360
 msgid "Manual connection"
 msgstr "मैन्युअल कनेक्शन"
 
@@ -651,32 +715,32 @@ msgstr "फ़ोन का ऑडियो चलाएँ"
 msgid "Route the phone's sound to this computer. Reconnects to apply."
 msgstr "फ़ोन की ध्वनि को इस कंप्यूटर पर भेजें। लागू करने के लिए पुनः कनेक्ट होता है।"
 
-#: src/pm-session.c:188
+#: src/pm-session.c:192
 msgid "Mirroring a connected phone"
 msgstr "एक कनेक्टेड फ़ोन को मिरर किया जा रहा है"
 
-#: src/pm-session.c:403
+#: src/pm-session.c:469
 #, c-format
 msgid "scrcpy-server exited with status %d"
 msgstr "scrcpy-server स्थिति %d के साथ बंद हुआ"
 
-#: src/pm-session.c:431
+#: src/pm-session.c:497
 #, c-format
 msgid "timed out waiting for scrcpy-server socket%s%s"
 msgstr "scrcpy-server सॉकेट%s%s की प्रतीक्षा का समय समाप्त हो गया"
 
-#: src/pm-session.c:704
+#: src/pm-session.c:786
 msgid "Connecting to device…"
 msgstr "डिवाइस से कनेक्ट हो रहा है…"
 
-#: src/pm-session.c:711
+#: src/pm-session.c:793
 msgid ""
 "Could not find scrcpy-server. Install scrcpy or set PM_SERVER_JAR to the "
 "server path."
 msgstr ""
 "scrcpy-server नहीं मिला। scrcpy इंस्टॉल करें या PM_SERVER_JAR को सर्वर पथ पर सेट करें।"
 
-#: src/pm-session.c:718
+#: src/pm-session.c:800
 msgid ""
 "Could not determine scrcpy-server version. Install scrcpy or set "
 "PM_SCRCPY_VERSION to match your server."
@@ -684,52 +748,52 @@ msgstr ""
 "scrcpy-server का संस्करण निर्धारित नहीं किया जा सका। scrcpy इंस्टॉल करें या "
 "PM_SCRCPY_VERSION को अपने सर्वर से मेल खाने के लिए सेट करें।"
 
-#: src/pm-session.c:776
+#: src/pm-session.c:858
 msgid "Connecting with adb…"
 msgstr "adb के साथ कनेक्ट हो रहा है…"
 
-#: src/pm-session.c:784
+#: src/pm-session.c:866
 msgid "Installing mirror server…"
 msgstr "मिरर सर्वर इंस्टॉल हो रहा है…"
 
-#: src/pm-session.c:790
+#: src/pm-session.c:872
 msgid "Opening mirror socket…"
 msgstr "मिरर सॉकेट खोला जा रहा है…"
 
-#: src/pm-session.c:796
+#: src/pm-session.c:878
 msgid "Starting mirror server…"
 msgstr "मिरर सर्वर शुरू हो रहा है…"
 
-#: src/pm-session.c:803
+#: src/pm-session.c:885
 msgid "Connecting video stream…"
 msgstr "वीडियो स्ट्रीम कनेक्ट हो रही है…"
 
-#: src/pm-session.c:814
+#: src/pm-session.c:896
 msgid "Connecting audio stream…"
 msgstr "ऑडियो स्ट्रीम कनेक्ट हो रही है…"
 
-#: src/pm-session.c:821
+#: src/pm-session.c:903
 msgid "Connecting controls…"
 msgstr "नियंत्रण कनेक्ट हो रहे हैं…"
 
-#: src/pm-session.c:832
+#: src/pm-session.c:914
 msgid "Reading video stream…"
 msgstr "वीडियो स्ट्रीम पढ़ी जा रही है…"
 
-#: src/pm-session.c:998
+#: src/pm-session.c:1095
 #, c-format
 msgid "%s failed: %s%s"
 msgstr "%s विफल: %s%s"
 
-#: src/pm-session.c:1000
+#: src/pm-session.c:1097
 msgid "connection failed"
 msgstr "कनेक्शन विफल"
 
-#: src/pm-session.c:1063
+#: src/pm-session.c:1160
 msgid "Found device — starting mirror server…"
 msgstr "डिवाइस मिला — मिरर सर्वर शुरू हो रहा है…"
 
-#: src/pm-session.c:1132
+#: src/pm-session.c:1229
 msgid ""
 "No phone found. Use Set Up Device to enter your phone's Wireless debugging "
 "address."
