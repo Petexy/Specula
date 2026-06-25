@@ -86,7 +86,9 @@ typedef struct {
 static void pm_window_save_prefs (PmWindow *self);
 static void pm_window_show_setup_step (PmWindow *self, guint step);
 static void pm_window_set_resize_gesture_active (PmWindow *self, gboolean active);
+static void pm_window_apply_resize_policy (PmWindow *self);
 static void pm_window_present_dialog (PmWindow *self, AdwDialog *dialog);
+static void pm_window_open_setup_dialog (PmWindow *self);
 static void pm_window_update_unlock_button (PmWindow *self);
 
 struct _PmWindow {
@@ -110,6 +112,7 @@ struct _PmWindow {
   GtkAspectFrame *mirror_frame;
   PmVideoView    *video_view;
   GtkButton      *connect_button;
+  GtkWidget      *setup_guide_button;
   GtkToggleButton *pin_button;
   GtkImage       *pin_image;
   GtkWidget      *setup_animation_areas[PM_SETUP_N_STEPS];
@@ -810,6 +813,26 @@ pm_window_update_stream_aspect (PmWindow *self, gboolean preserve_area)
 }
 
 static void
+pm_window_apply_resize_policy (PmWindow *self)
+{
+  gboolean mirroring =
+    self->session != NULL &&
+    pm_session_get_state (self->session) == PM_STATE_MIRRORING;
+
+  if (!mirroring) {
+    gtk_window_set_resizable (GTK_WINDOW (self), TRUE);
+    pm_window_set_resize_gesture_active (self, FALSE);
+    return;
+  }
+
+  /* Free resize hands sizing back to the compositor's native edge resize.
+   * Locking takes it over with the edge-drag gesture while the window is made
+   * non-resizable, so compositor drags cannot move it off-aspect. */
+  gtk_window_set_resizable (GTK_WINDOW (self), self->free_resize);
+  pm_window_set_resize_gesture_active (self, !self->free_resize);
+}
+
+static void
 pm_window_fit_to_stream (PmWindow *self)
 {
   PmStreamInfo stream = { 0 };
@@ -827,12 +850,7 @@ pm_window_fit_to_stream (PmWindow *self)
   int width = MAX (PM_MIRROR_MIN_WIDTH, (int) round (stream.width * scale));
   int height = MAX (PM_MIRROR_MIN_HEIGHT, (int) round (stream.height * scale));
 
-  /* In free-resize mode the window uses the compositor's native edge resize.
-   * When the phone aspect is locked the window is instead made non-resizable so
-   * the compositor can never free-resize it off-aspect; a dedicated edge-drag
-   * gesture drives the size and keeps it on the aspect line the whole time. */
-  gtk_window_set_resizable (GTK_WINDOW (self), self->free_resize);
-  pm_window_set_resize_gesture_active (self, !self->free_resize);
+  pm_window_apply_resize_policy (self);
   pm_window_update_stream_aspect (self, FALSE);
   pm_window_clamp_to_initial_aspect (self,
                                      (double) stream.width / stream.height,
@@ -1133,10 +1151,14 @@ pm_window_apply_state (PmWindow   *self,
                        const char *message)
 {
   gboolean mirroring = (state == PM_STATE_MIRRORING);
+  gboolean no_phone_found =
+    message != NULL && g_strcmp0 (message, _("No phone found")) == 0;
+
   pm_window_set_disconnect_available (self, mirroring);
   gtk_widget_set_size_request (GTK_WIDGET (self->status_page),
                                mirroring ? -1 : PM_CONNECTION_MIN_WIDTH,
                                -1);
+  gtk_widget_set_visible (self->setup_guide_button, no_phone_found);
 
   if (!mirroring) {
     adw_window_title_set_title (self->title, _("Phone Mirror"));
@@ -1189,9 +1211,13 @@ pm_window_apply_state (PmWindow   *self,
     case PM_STATE_ERROR:
       pm_window_reset_window_shape (self);
       adw_view_stack_set_visible_child_name (self->stack, "searching");
-      adw_status_page_set_title (self->status_page, _("Connection failed"));
+      adw_status_page_set_title (self->status_page,
+        no_phone_found ? _("No phone found") : _("Connection failed"));
       adw_status_page_set_description (self->status_page,
-        message ? message : _("Could not reach the device."));
+        no_phone_found
+          ? _("Make sure Wireless ADB is turned on on your phone. Android turns "
+              "it off every time the phone loses its Wi-Fi connection.")
+          : (message ? message : _("Could not reach the device.")));
       gtk_spinner_set_spinning (self->spinner, FALSE);
       gtk_widget_set_visible (GTK_WIDGET (self->connect_button), TRUE);
       break;
@@ -1283,7 +1309,7 @@ on_session_state_changed (PmSession  *session,
 
     self->startup_search_active = FALSE;
     if (pm_state == PM_STATE_IDLE || pm_state == PM_STATE_ERROR) {
-      pm_window_apply_state (self, PM_STATE_IDLE, NULL);
+      pm_window_apply_state (self, PM_STATE_ERROR, _("No phone found"));
       pm_window_present_if_deferred (self);
       return;
     }
@@ -1522,7 +1548,7 @@ on_startup_check_failed (PmSession *session, gpointer user_data)
   if (!self->startup_search_active)
     return;
 
-  pm_window_apply_state (self, PM_STATE_IDLE, NULL);
+  pm_window_apply_state (self, PM_STATE_ERROR, _("No phone found"));
   pm_window_present_if_deferred (self);
 }
 
@@ -1627,13 +1653,12 @@ pm_window_suppress_maximize_button (PmWindow *self)
   adw_header_bar_set_decoration_layout (self->header_bar, stripped);
 }
 
-/* Restore the host window's resizable state once an in-window dialog is gone. */
+/* Restore the host window's current resize policy once an in-window dialog is
+ * gone. The policy may have changed while the dialog was open. */
 static void
 on_window_dialog_closed (AdwDialog *dialog, gpointer user_data)
 {
   PmWindow *self = PM_WINDOW (user_data);
-  gboolean was_resizable =
-    GPOINTER_TO_INT (g_object_get_data (G_OBJECT (dialog), "pm-prev-resizable"));
 
   gulong handler =
     GPOINTER_TO_SIZE (g_object_get_data (G_OBJECT (dialog), "pm-maximized-handler"));
@@ -1643,7 +1668,7 @@ on_window_dialog_closed (AdwDialog *dialog, gpointer user_data)
     adw_header_bar_set_decoration_layout (self->header_bar, NULL);
   }
 
-  gtk_window_set_resizable (GTK_WINDOW (self), was_resizable);
+  pm_window_apply_resize_policy (self);
 }
 
 /* Present @dialog inside the application window, even while mirroring.
@@ -1656,8 +1681,6 @@ static void
 pm_window_present_dialog (PmWindow *self, AdwDialog *dialog)
 {
   gboolean was_resizable = gtk_window_get_resizable (GTK_WINDOW (self));
-  g_object_set_data (G_OBJECT (dialog), "pm-prev-resizable",
-                     GINT_TO_POINTER (was_resizable));
 
   /* If the window was locked (mirroring), guard against the user maximizing it
    * via the temporary resizable state. */
@@ -1676,11 +1699,16 @@ pm_window_present_dialog (PmWindow *self, AdwDialog *dialog)
 }
 
 static void
-on_setup_action (GSimpleAction *action, GVariant *param, gpointer user_data)
+pm_window_open_setup_dialog (PmWindow *self)
 {
-  PmWindow *self = PM_WINDOW (user_data);
   PmConnectDialog *dialog = pm_connect_dialog_new (on_device_chosen, self);
   pm_window_present_dialog (self, ADW_DIALOG (dialog));
+}
+
+static void
+on_setup_action (GSimpleAction *action, GVariant *param, gpointer user_data)
+{
+  pm_window_open_setup_dialog (PM_WINDOW (user_data));
 }
 
 static void
@@ -1713,10 +1741,7 @@ pm_window_set_free_resize (PmWindow *self, gboolean free_resize)
       pm_session_get_state (self->session) != PM_STATE_MIRRORING)
     return;
 
-  /* Free resize hands sizing back to the compositor's native edge resize;
-   * locking takes it over with the edge-drag gesture (window made non-resizable). */
-  gtk_window_set_resizable (GTK_WINDOW (self), free_resize);
-  pm_window_set_resize_gesture_active (self, !free_resize);
+  pm_window_apply_resize_policy (self);
 
   if (free_resize)
     /* Relax the minimum so the window can be dragged to any shape; the current
@@ -2051,10 +2076,9 @@ on_settings_action (GSimpleAction *action, GVariant *param, gpointer user_data)
 }
 
 static void
-on_first_setup_action (GSimpleAction *action, GVariant *param, gpointer user_data)
+pm_window_open_setup_guide (PmWindow    *self,
+                            PmSetupStep  step)
 {
-  PmWindow *self = PM_WINDOW (user_data);
-
   self->setup_review_active = self->setup_complete;
 
   if (self->session != NULL &&
@@ -2063,7 +2087,13 @@ on_first_setup_action (GSimpleAction *action, GVariant *param, gpointer user_dat
   else
     pm_window_apply_state (self, PM_STATE_IDLE, NULL);
 
-  pm_window_show_setup_step (self, PM_SETUP_WELCOME);
+  pm_window_show_setup_step (self, step);
+}
+
+static void
+on_first_setup_action (GSimpleAction *action, GVariant *param, gpointer user_data)
+{
+  pm_window_open_setup_guide (PM_WINDOW (user_data), PM_SETUP_WELCOME);
 }
 
 static void
@@ -2076,6 +2106,12 @@ on_connect_clicked (GtkButton *button, gpointer user_data)
    * First-time pairing lives behind "Set Up Device…"; manual IP entry is an
    * app-menu fallback. */
   pm_session_start (self->session, NULL);
+}
+
+static void
+on_setup_guide_clicked (GtkButton *button, gpointer user_data)
+{
+  pm_window_open_setup_guide (PM_WINDOW (user_data), PM_SETUP_SETTINGS);
 }
 
 static void
@@ -3946,6 +3982,7 @@ pm_window_finish_setup (PmWindow *self)
   self->setup_complete = TRUE;
   pm_window_save_prefs (self);
   pm_window_apply_state (self, PM_STATE_IDLE, NULL);
+  pm_window_open_setup_dialog (self);
 }
 
 static void
@@ -4313,9 +4350,17 @@ pm_window_init (PmWindow *self)
   gtk_widget_set_halign (setup_button, GTK_ALIGN_CENTER);
   gtk_actionable_set_action_name (GTK_ACTIONABLE (setup_button), "win.setup");
 
+  self->setup_guide_button = gtk_button_new_with_label (_("How to Set Up Phone"));
+  gtk_widget_add_css_class (self->setup_guide_button, "pill");
+  gtk_widget_set_halign (self->setup_guide_button, GTK_ALIGN_CENTER);
+  gtk_widget_set_visible (self->setup_guide_button, FALSE);
+  g_signal_connect (self->setup_guide_button, "clicked",
+                    G_CALLBACK (on_setup_guide_clicked), self);
+
   GtkBox *status_extra = GTK_BOX (gtk_box_new (GTK_ORIENTATION_VERTICAL, 12));
   gtk_box_append (status_extra, GTK_WIDGET (self->spinner));
   gtk_box_append (status_extra, GTK_WIDGET (self->connect_button));
+  gtk_box_append (status_extra, self->setup_guide_button);
   gtk_box_append (status_extra, setup_button);
   adw_status_page_set_child (self->status_page, GTK_WIDGET (status_extra));
 

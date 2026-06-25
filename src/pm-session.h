@@ -90,8 +90,8 @@ void pm_session_reconnect (PmSession *self);
  * the UI with a synthetic test pattern when no phone is available. */
 void pm_session_start (PmSession *self, const PmDeviceInfo *target);
 
-/* Like pm_session_start(), but startup/autoconnect failures return to IDLE
- * without surfacing an error message to the UI. */
+/* Like pm_session_start(), but startup/autoconnect failures return to IDLE so
+ * the caller can decide how to present the failed automatic attempt. */
 void pm_session_start_silent (PmSession *self, const PmDeviceInfo *target);
 
 /* Tear everything down and return to IDLE. */

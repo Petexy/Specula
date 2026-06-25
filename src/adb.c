@@ -3,6 +3,9 @@
 #include <stdio.h>
 #include <string.h>
 
+#define PM_ADB_READY_ATTEMPTS 30
+#define PM_ADB_READY_DELAY_MS 200
+
 /* Run `adb` with the given NULL-terminated argv tail (after "adb"), wait for
  * it, and optionally capture stdout. Returns FALSE on non-zero exit. */
 static gboolean
@@ -41,6 +44,42 @@ adb_run (const char *const *argv_tail,
   if (out_stdout)
     *out_stdout = g_steal_pointer (&out_buf);
   return TRUE;
+}
+
+/* A cold adb daemon can return from `adb connect` before the freshly-created
+ * wireless transport has settled into the authorised "device" state. The mirror
+ * pipeline immediately pushes the server and installs a forward, so wait a
+ * short bounded window for the transport instead of racing those commands. */
+static gboolean
+adb_wait_for_device (const char *serial, GError **error)
+{
+  g_autofree char *last_status = NULL;
+
+  for (guint i = 0; i < PM_ADB_READY_ATTEMPTS; i++) {
+    const char *argv[] = { "-s", serial, "get-state", NULL };
+    g_autofree char *out = NULL;
+    g_autoptr (GError) attempt_error = NULL;
+
+    if (adb_run (argv, &out, &attempt_error)) {
+      g_strstrip (out);
+      if (g_strcmp0 (out, "device") == 0)
+        return TRUE;
+      g_free (last_status);
+      last_status = g_strdup (out);
+    } else if (attempt_error != NULL) {
+      g_free (last_status);
+      last_status = g_strdup (attempt_error->message);
+    }
+
+    g_usleep (PM_ADB_READY_DELAY_MS * 1000);
+  }
+
+  g_set_error (error, G_IO_ERROR, G_IO_ERROR_TIMED_OUT,
+               "adb device %s did not become ready%s%s",
+               serial,
+               last_status ? ": " : "",
+               last_status ? last_status : "");
+  return FALSE;
 }
 
 /* Parse a keyguard/lock verdict out of a `dumpsys` blob. Returns PM_LOCK_UNKNOWN
@@ -479,7 +518,7 @@ pm_adb_connect (const char *host, guint16 port, GError **error)
                  "adb connect: %s", g_strstrip (out));
     return FALSE;
   }
-  return TRUE;
+  return adb_wait_for_device (endpoint, error);
 }
 
 static gboolean
@@ -661,6 +700,16 @@ pm_adb_forward (const char *serial,
 {
   g_autofree char *local  = g_strdup_printf ("tcp:%u", local_port);
   g_autofree char *remote = g_strdup_printf ("localabstract:%s", remote_socket_name);
+
+  /* A prior failed attempt may have left the forward registered. Removing it is
+   * best-effort; the fresh forward below is the command whose error matters. */
+  {
+    const char *remove_argv[] = {
+      "-s", serial, "forward", "--remove", local, NULL
+    };
+    adb_run (remove_argv, NULL, NULL);
+  }
+
   const char *argv[] = { "-s", serial, "forward", local, remote, NULL };
   return adb_run (argv, NULL, error);
 }

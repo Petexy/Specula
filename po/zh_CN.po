@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: specula 0.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-24 16:33+0200\n"
+"POT-Creation-Date: 2026-06-24 17:34+0200\n"
 "PO-Revision-Date: 2026-06-17 21:30+0200\n"
 "Last-Translator: Specula <piotr.petexiness@gmail.com>\n"
 "Language-Team: Chinese (Simplified)\n"
@@ -16,60 +16,72 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: src/pm-application.c:59 src/pm-window.c:1142 src/pm-window.c:1150
-#: src/pm-window.c:4252 src/pm-window.c:4271
+#: src/pm-application.c:59 src/pm-window.c:1163 src/pm-window.c:1171
+#: src/pm-window.c:4282 src/pm-window.c:4301
 msgid "Phone Mirror"
 msgstr "手机镜像"
 
-#: src/pm-window.c:1152
+#: src/pm-window.c:1154 src/pm-window.c:1214 src/pm-session.c:1229
+msgid "No phone found"
+msgstr "未找到手机"
+
+#: src/pm-window.c:1173
 msgid "Press Connect to find your phone automatically."
 msgstr "按“连接”自动查找您的手机。"
 
-#: src/pm-window.c:1160
+#: src/pm-window.c:1181
 msgid "Searching…"
 msgstr "正在搜索…"
 
-#: src/pm-window.c:1162
+#: src/pm-window.c:1183
 msgid "Looking for your phone on the local network."
 msgstr "正在本地网络中查找您的手机。"
 
-#: src/pm-window.c:1170
+#: src/pm-window.c:1191
 msgid "Connecting…"
 msgstr "正在连接…"
 
-#: src/pm-window.c:1172
+#: src/pm-window.c:1193
 msgid "Starting the mirror server on your device."
 msgstr "正在您的设备上启动镜像服务器。"
 
-#: src/pm-window.c:1192
+#: src/pm-window.c:1214
 msgid "Connection failed"
 msgstr "连接失败"
 
-#: src/pm-window.c:1194
+#: src/pm-window.c:1217
+msgid ""
+"Make sure Wireless ADB is turned on on your phone. Android turns it off "
+"every time the phone loses its Wi-Fi connection."
+msgstr ""
+"请确保手机上的无线 ADB 已开启。每当手机失去 Wi-Fi 连接时，Android 都会将其"
+"关闭。"
+
+#: src/pm-window.c:1219
 msgid "Could not reach the device."
 msgstr "无法连接到设备。"
 
-#: src/pm-window.c:1429 src/pm-window.c:1497
+#: src/pm-window.c:1454 src/pm-window.c:1522
 msgid "Incorrect PIN"
 msgstr "PIN 码错误"
 
-#: src/pm-window.c:1429
+#: src/pm-window.c:1454
 msgid "Unlock Phone"
 msgstr "解锁手机"
 
-#: src/pm-window.c:1430
+#: src/pm-window.c:1455
 msgid "Try again."
 msgstr "请重试。"
 
-#: src/pm-window.c:1430
+#: src/pm-window.c:1455
 msgid "Enter your PIN."
 msgstr "输入您的 PIN 码。"
 
-#: src/pm-window.c:1434
+#: src/pm-window.c:1459
 msgid "PIN"
 msgstr "PIN 码"
 
-#: src/pm-window.c:1440 src/pm-window.c:2974
+#: src/pm-window.c:1465 src/pm-window.c:3004
 msgid "Cancel"
 msgstr "取消"
 
@@ -78,11 +90,11 @@ msgstr "取消"
 #. * keyguard poll). Tapping it opens the one-time PIN dialog. A revealer
 #. * crossfades it in/out, mirroring the auto-unlock alert above. Uses the same
 #. * pill + suggested-action style as the app's other primary actions.
-#: src/pm-window.c:1441 src/pm-window.c:4357
+#: src/pm-window.c:1466 src/pm-window.c:4395
 msgid "Unlock"
 msgstr "解锁"
 
-#: src/pm-window.c:1498
+#: src/pm-window.c:1523
 msgid ""
 "The saved lockscreen PIN didn't unlock your phone. Auto-unlock has stopped "
 "trying so repeated wrong attempts can't lock you out of the device. Enter "
@@ -91,313 +103,313 @@ msgstr ""
 "保存的锁屏 PIN 码未能解锁您的手机。自动解锁已停止尝试，以免反复输错将您锁定在"
 "设备之外。请输入正确的 PIN 码后重试。"
 
-#: src/pm-window.c:1503
+#: src/pm-window.c:1528
 msgid "Dismiss"
 msgstr "忽略"
 
-#: src/pm-window.c:1504
+#: src/pm-window.c:1529
 msgid "Enter PIN"
 msgstr "输入 PIN 码"
 
-#: src/pm-window.c:1993 src/pm-window.c:2006 src/pm-connect-dialog.c:138
+#: src/pm-window.c:2012 src/pm-window.c:2025 src/pm-connect-dialog.c:138
 msgid "Lockscreen PIN"
 msgstr "锁屏 PIN"
 
-#: src/pm-window.c:2000 src/pm-connect-dialog.c:131
+#: src/pm-window.c:2019 src/pm-connect-dialog.c:131
 msgid "Auto-unlock"
 msgstr "自动解锁"
 
-#: src/pm-window.c:2002
+#: src/pm-window.c:2021
 msgid ""
 "Stored encrypted on this computer, tied to this phone, and used to unlock it "
 "automatically when it connects."
 msgstr "以加密形式存储在此计算机上,与此手机绑定,用于在连接时自动解锁手机。"
 
-#: src/pm-window.c:2015
+#: src/pm-window.c:2034
 msgid "Save"
 msgstr "保存"
 
-#: src/pm-window.c:2018
+#: src/pm-window.c:2037
 msgid "Remove"
 msgstr "移除"
 
-#: src/pm-window.c:2154
+#: src/pm-window.c:2184
 msgid "Network & internet"
 msgstr "网络和互联网"
 
-#: src/pm-window.c:2154
+#: src/pm-window.c:2184
 msgid "Wi-Fi, SIM, hotspot"
 msgstr "Wi-Fi、SIM 卡、热点"
 
-#: src/pm-window.c:2155
+#: src/pm-window.c:2185
 msgid "Connected devices"
 msgstr "已连接的设备"
 
-#: src/pm-window.c:2155
+#: src/pm-window.c:2185
 msgid "Bluetooth, pairing"
 msgstr "蓝牙、配对"
 
-#: src/pm-window.c:2156
+#: src/pm-window.c:2186
 msgid "Apps"
 msgstr "应用"
 
-#: src/pm-window.c:2156
+#: src/pm-window.c:2186
 msgid "Permissions and defaults"
 msgstr "权限和默认应用"
 
-#: src/pm-window.c:2157
+#: src/pm-window.c:2187
 msgid "Notifications"
 msgstr "通知"
 
-#: src/pm-window.c:2157
+#: src/pm-window.c:2187
 msgid "History and conversations"
 msgstr "历史记录和对话"
 
-#: src/pm-window.c:2158
+#: src/pm-window.c:2188
 msgid "Battery"
 msgstr "电池"
 
-#: src/pm-window.c:2158
+#: src/pm-window.c:2188
 msgid "87%, until 10:30 PM"
 msgstr "87%,可用至晚上 10:30"
 
-#: src/pm-window.c:2159
+#: src/pm-window.c:2189
 msgid "System"
 msgstr "系统"
 
-#: src/pm-window.c:2159
+#: src/pm-window.c:2189
 msgid "Languages, gestures, time"
 msgstr "语言、手势、时间"
 
-#: src/pm-window.c:2160 src/pm-window.c:3211 src/pm-window.c:3244
-#: src/pm-window.c:3321
+#: src/pm-window.c:2190 src/pm-window.c:3241 src/pm-window.c:3274
+#: src/pm-window.c:3351
 msgid "About phone"
 msgstr "关于手机"
 
-#: src/pm-window.c:2160
+#: src/pm-window.c:2190
 msgid "Model, Android version"
 msgstr "型号、Android 版本"
 
-#: src/pm-window.c:2161 src/pm-window.c:3334 src/pm-window.c:3391
-#: src/pm-window.c:3450
+#: src/pm-window.c:2191 src/pm-window.c:3364 src/pm-window.c:3421
+#: src/pm-window.c:3480
 msgid "Developer options"
 msgstr "开发者选项"
 
-#: src/pm-window.c:2161
+#: src/pm-window.c:2191
 msgid "Debugging and input"
 msgstr "调试和输入"
 
-#: src/pm-window.c:2171 src/pm-window.c:3376
+#: src/pm-window.c:2201 src/pm-window.c:3406
 msgid "Device name"
 msgstr "设备名称"
 
-#: src/pm-window.c:2171
+#: src/pm-window.c:2201
 msgid "Pixel phone"
 msgstr "Pixel 手机"
 
-#: src/pm-window.c:2172
+#: src/pm-window.c:2202
 msgid "Android version"
 msgstr "Android 版本"
 
-#: src/pm-window.c:2172
+#: src/pm-window.c:2202
 msgid "Version and security update"
 msgstr "版本和安全更新"
 
-#: src/pm-window.c:2173
+#: src/pm-window.c:2203
 msgid "Build number"
 msgstr "版本号"
 
-#: src/pm-window.c:2173
+#: src/pm-window.c:2203
 msgid "Tap seven times"
 msgstr "点按七次"
 
-#: src/pm-window.c:2192
+#: src/pm-window.c:2222
 msgid "Use developer options"
 msgstr "使用开发者选项"
 
-#: src/pm-window.c:2192 src/pm-window.c:3470
+#: src/pm-window.c:2222 src/pm-window.c:3500
 msgid "On"
 msgstr "开启"
 
-#: src/pm-window.c:2193
+#: src/pm-window.c:2223
 msgid "USB debugging"
 msgstr "USB 调试"
 
-#: src/pm-window.c:2193
+#: src/pm-window.c:2223
 msgid "Debug mode when USB is connected"
 msgstr "连接 USB 时进入调试模式"
 
-#: src/pm-window.c:2194 src/pm-window.c:3401 src/pm-window.c:3485
+#: src/pm-window.c:2224 src/pm-window.c:3431 src/pm-window.c:3515
 msgid "Wireless debugging"
 msgstr "无线调试"
 
-#: src/pm-window.c:2194
+#: src/pm-window.c:2224
 msgid "Debug over Wi-Fi"
 msgstr "通过 Wi-Fi 调试"
 
-#: src/pm-window.c:2195
+#: src/pm-window.c:2225
 msgid "Revoke debugging authorizations"
 msgstr "撤销调试授权"
 
-#: src/pm-window.c:2196 src/pm-window.c:4017
+#: src/pm-window.c:2226 src/pm-window.c:4047
 msgid "Disable adb authorization timeout"
 msgstr "停用 adb 授权超时"
 
-#: src/pm-window.c:2196
+#: src/pm-window.c:2226
 msgid "Stay authorized"
 msgstr "保持授权"
 
-#: src/pm-window.c:2568
+#: src/pm-window.c:2598
 msgid "Phone"
 msgstr "电话"
 
-#: src/pm-window.c:2569
+#: src/pm-window.c:2599
 msgid "Messages"
 msgstr "信息"
 
-#: src/pm-window.c:2570
+#: src/pm-window.c:2600
 msgid "Photos"
 msgstr "照片"
 
-#: src/pm-window.c:2571
+#: src/pm-window.c:2601
 msgid "Camera"
 msgstr "相机"
 
-#: src/pm-window.c:2572 src/pm-window.c:3169 src/pm-window.c:3201
-#: src/pm-window.c:3308 src/pm-settings-dialog.c:76
+#: src/pm-window.c:2602 src/pm-window.c:3199 src/pm-window.c:3231
+#: src/pm-window.c:3338 src/pm-settings-dialog.c:76
 msgid "Settings"
 msgstr "设置"
 
-#: src/pm-window.c:2573
+#: src/pm-window.c:2603
 msgid "Files"
 msgstr "文件"
 
-#: src/pm-window.c:2596
+#: src/pm-window.c:2626
 msgid "Search your phone"
 msgstr "搜索您的手机"
 
-#: src/pm-window.c:3253
+#: src/pm-window.c:3283
 #, c-format
 msgid "Tap %d of 7"
 msgstr "第 %d 次点按(共 7 次)"
 
-#: src/pm-window.c:3278
+#: src/pm-window.c:3308
 msgid "You are now a developer!"
 msgstr "您现在是开发者了!"
 
-#: src/pm-window.c:3358
+#: src/pm-window.c:3388
 msgid "Allow USB debugging?"
 msgstr "允许 USB 调试?"
 
-#: src/pm-window.c:3359
+#: src/pm-window.c:3389
 msgid "Computer RSA key fingerprint"
 msgstr "计算机 RSA 密钥指纹"
 
-#: src/pm-window.c:3360
+#: src/pm-window.c:3390
 msgid "OK"
 msgstr "确定"
 
-#: src/pm-window.c:3374 src/pm-window.c:3470
+#: src/pm-window.c:3404 src/pm-window.c:3500
 msgid "Use wireless debugging"
 msgstr "使用无线调试"
 
-#: src/pm-window.c:3374
+#: src/pm-window.c:3404
 msgid "Current Wi-Fi network"
 msgstr "当前 Wi-Fi 网络"
 
-#: src/pm-window.c:3375
+#: src/pm-window.c:3405
 msgid "Wi-Fi network"
 msgstr "Wi-Fi 网络"
 
-#: src/pm-window.c:3375
+#: src/pm-window.c:3405
 msgid "Same network as Linux"
 msgstr "与 Linux 相同的网络"
 
-#: src/pm-window.c:3376
+#: src/pm-window.c:3406
 msgid "Android device"
 msgstr "Android 设备"
 
-#: src/pm-window.c:3420
+#: src/pm-window.c:3450
 msgid "Allow wireless debugging?"
 msgstr "允许无线调试?"
 
-#: src/pm-window.c:3421
+#: src/pm-window.c:3451
 msgid "Allow on this Wi-Fi network"
 msgstr "在此 Wi-Fi 网络上允许"
 
-#: src/pm-window.c:3422
+#: src/pm-window.c:3452
 msgid "Allow"
 msgstr "允许"
 
-#: src/pm-window.c:3471
+#: src/pm-window.c:3501
 msgid "Pair device with code"
 msgstr "使用配对码配对设备"
 
-#: src/pm-window.c:3471
+#: src/pm-window.c:3501
 msgid "Shows code and address"
 msgstr "显示配对码和地址"
 
-#: src/pm-window.c:3472
+#: src/pm-window.c:3502
 msgid "IP address & port"
 msgstr "IP 地址和端口"
 
-#: src/pm-window.c:3475 src/pm-window.c:3664 src/pm-connect-dialog.c:310
+#: src/pm-window.c:3505 src/pm-window.c:3694 src/pm-connect-dialog.c:310
 msgid "Pairing code"
 msgstr "配对码"
 
-#: src/pm-window.c:3476
+#: src/pm-window.c:3506
 msgid "Pairing address"
 msgstr "配对地址"
 
-#: src/pm-window.c:3477
+#: src/pm-window.c:3507
 msgid "Keep this screen open"
 msgstr "请保持此屏幕开启"
 
-#: src/pm-window.c:3477
+#: src/pm-window.c:3507
 msgid "Code expires soon"
 msgstr "配对码即将过期"
 
-#: src/pm-window.c:3495
+#: src/pm-window.c:3525
 msgid "Pair device"
 msgstr "配对设备"
 
-#: src/pm-window.c:3631 src/pm-connect-dialog.c:321
+#: src/pm-window.c:3661 src/pm-connect-dialog.c:321
 msgid "Set up device"
 msgstr "设置设备"
 
-#: src/pm-window.c:3642 src/pm-connect-dialog.c:302
+#: src/pm-window.c:3672 src/pm-connect-dialog.c:302
 msgid "Pairing"
 msgstr "配对"
 
-#: src/pm-window.c:3652
+#: src/pm-window.c:3682
 msgid "Pair device with code."
 msgstr "使用配对码配对设备。"
 
-#: src/pm-window.c:3667 src/pm-connect-dialog.c:308
+#: src/pm-window.c:3697 src/pm-connect-dialog.c:308
 msgid "Pairing address (ip:port)"
 msgstr "配对地址(ip:端口)"
 
-#: src/pm-window.c:3681 src/pm-connect-dialog.c:318
+#: src/pm-window.c:3711 src/pm-connect-dialog.c:318
 msgid "Pair & Connect"
 msgstr "配对并连接"
 
-#: src/pm-window.c:3926
+#: src/pm-window.c:3956
 msgid "Go to Home"
 msgstr "返回主屏幕"
 
-#: src/pm-window.c:3927 src/pm-window.c:4139
+#: src/pm-window.c:3957 src/pm-window.c:4169
 msgid "Continue"
 msgstr "继续"
 
-#: src/pm-window.c:3930
+#: src/pm-window.c:3960
 msgid "First Time Setup"
 msgstr "首次设置"
 
-#: src/pm-window.c:3997
+#: src/pm-window.c:4027
 msgid "Welcome to Phone Mirror"
 msgstr "欢迎使用手机镜像"
 
-#: src/pm-window.c:3998
+#: src/pm-window.c:4028
 msgid ""
 "We will help you prepare your Android phone. Keep your phone nearby and "
 "connect it to the same Wi-Fi network as this computer."
@@ -405,19 +417,19 @@ msgstr ""
 "我们将帮助您准备 Android 手机。请将手机放在附近,并将其连接到与此计算机相同的 "
 "Wi-Fi 网络。"
 
-#: src/pm-window.c:4001
+#: src/pm-window.c:4031
 msgid "Open Settings"
 msgstr "打开设置"
 
-#: src/pm-window.c:4002
+#: src/pm-window.c:4032
 msgid "Unlock your Android phone. Find the Settings app and open it."
 msgstr "解锁您的 Android 手机。找到“设置”应用并打开它。"
 
-#: src/pm-window.c:4005
+#: src/pm-window.c:4035
 msgid "Find About phone"
 msgstr "找到“关于手机”"
 
-#: src/pm-window.c:4006
+#: src/pm-window.c:4036
 msgid ""
 "In Settings, scroll toward the bottom. Tap About phone. On some phones, open "
 "System first, then tap About phone."
@@ -425,11 +437,11 @@ msgstr ""
 "在“设置”中向下滚动。点按“关于手机”。在某些手机上,请先打开“系统”,然后点按“关于"
 "手机”。"
 
-#: src/pm-window.c:4009
+#: src/pm-window.c:4039
 msgid "Turn on Developer options"
 msgstr "开启开发者选项"
 
-#: src/pm-window.c:4010
+#: src/pm-window.c:4040
 msgid ""
 "Find Build number. Tap Build number seven times. If Android asks for your "
 "PIN, enter it. Stop when the phone says you are now a developer."
@@ -437,11 +449,11 @@ msgstr ""
 "找到“版本号”。点按“版本号”七次。如果 Android 要求输入 PIN,请输入。当手机提示"
 "您已成为开发者时停止。"
 
-#: src/pm-window.c:4013
+#: src/pm-window.c:4043
 msgid "Turn on USB debugging"
 msgstr "开启 USB 调试"
 
-#: src/pm-window.c:4014
+#: src/pm-window.c:4044
 msgid ""
 "Go back to Settings. Open Developer options. On some phones, open System "
 "first, then turn on USB debugging. If Android asks, tap OK."
@@ -449,7 +461,7 @@ msgstr ""
 "返回“设置”。打开开发者选项。在某些手机上,请先打开“系统”,然后开启 USB 调试。如"
 "果 Android 询问,请点按“确定”。"
 
-#: src/pm-window.c:4018
+#: src/pm-window.c:4048
 msgid ""
 "Stay in Developer options. Find Disable adb authorization timeout and turn "
 "it on. This stops Android from removing this computer after seven days, so "
@@ -458,11 +470,11 @@ msgstr ""
 "保持在开发者选项中。找到“停用 adb 授权超时”并将其开启。这样 Android 就不会在"
 "七天后移除此电脑,您也无需重新配对。"
 
-#: src/pm-window.c:4021
+#: src/pm-window.c:4051
 msgid "Turn on Wireless debugging"
 msgstr "开启无线调试"
 
-#: src/pm-window.c:4022
+#: src/pm-window.c:4052
 msgid ""
 "Stay in Developer options. Turn on Wireless debugging. Keep your phone and "
 "this computer on the same network. If Android asks, tap Allow."
@@ -470,11 +482,11 @@ msgstr ""
 "保持在开发者选项中。开启无线调试。让您的手机和此计算机处于同一网络。如果 "
 "Android 询问,请点按“允许”。"
 
-#: src/pm-window.c:4025
+#: src/pm-window.c:4055
 msgid "Get the pairing code"
 msgstr "获取配对码"
 
-#: src/pm-window.c:4026
+#: src/pm-window.c:4056
 msgid ""
 "Tap Wireless debugging, then Pair device with pairing code. Leave that "
 "screen open. On the home page, choose Set Up Device, enter the pairing "
@@ -483,68 +495,72 @@ msgstr ""
 "点按“无线调试”,然后点按“使用配对码配对设备”。保持该屏幕开启。在主页上,选择“设"
 "置设备”,输入配对地址和配对码,然后选择“配对并连接”。"
 
-#: src/pm-window.c:4040
+#: src/pm-window.c:4070
 msgid "Welcome"
 msgstr "欢迎"
 
-#: src/pm-window.c:4041
+#: src/pm-window.c:4071
 #, c-format
 msgid "Step %u of %u"
 msgstr "第 %u 步,共 %u 步"
 
-#: src/pm-window.c:4134
+#: src/pm-window.c:4164
 msgid "Back"
 msgstr "返回"
 
-#: src/pm-window.c:4174
+#: src/pm-window.c:4204
 msgid "_Disconnect"
 msgstr "断开连接(_D)"
 
-#: src/pm-window.c:4175
+#: src/pm-window.c:4205
 msgid "_Lockscreen PIN…"
 msgstr "锁屏 PIN(_L)…"
 
-#: src/pm-window.c:4176
+#: src/pm-window.c:4206
 msgid "_First Time Setup"
 msgstr "首次设置(_F)"
 
-#: src/pm-window.c:4182
+#: src/pm-window.c:4212
 msgid "_Manual Connection…"
 msgstr "手动连接(_M)…"
 
-#: src/pm-window.c:4183
+#: src/pm-window.c:4213
 msgid "_Set Up Device…"
 msgstr "设置设备(_S)…"
 
-#: src/pm-window.c:4189
+#: src/pm-window.c:4219
 msgid "_Settings"
 msgstr "设置(_S)"
 
-#: src/pm-window.c:4190
+#: src/pm-window.c:4220
 msgid "_About Phone Mirror"
 msgstr "关于手机镜像(_A)"
 
-#: src/pm-window.c:4195
+#: src/pm-window.c:4225
 msgid "_Quit"
 msgstr "退出(_Q)"
 
-#: src/pm-window.c:4282
+#: src/pm-window.c:4312
 msgid "Keep controls visible"
 msgstr "保持控件可见"
 
-#: src/pm-window.c:4299
+#: src/pm-window.c:4329
 msgid "Press Connect to look for your paired device."
 msgstr "按“连接”查找已配对的设备。"
 
-#: src/pm-window.c:4304
+#: src/pm-window.c:4334
 msgid "Connect"
 msgstr "连接"
 
-#: src/pm-window.c:4311
+#: src/pm-window.c:4341
 msgid "Set Up Device…"
 msgstr "设置设备…"
 
-#: src/pm-window.c:4336
+#: src/pm-window.c:4346
+msgid "How to Set Up Phone"
+msgstr "如何设置手机"
+
+#: src/pm-window.c:4374
 msgid "Unlocking your phone…"
 msgstr "正在解锁您的手机…"
 
@@ -785,11 +801,10 @@ msgstr "连接失败"
 msgid "Found device — starting mirror server…"
 msgstr "已找到设备 — 正在启动镜像服务器…"
 
-#: src/pm-session.c:1229
-msgid ""
-"No phone found. Use Set Up Device to enter your phone's Wireless debugging "
-"address."
-msgstr "未找到手机。请使用“设置设备”输入手机的无线调试地址。"
+#~ msgid ""
+#~ "No phone found. Use Set Up Device to enter your phone's Wireless "
+#~ "debugging address."
+#~ msgstr "未找到手机。请使用“设置设备”输入手机的无线调试地址。"
 
 #~ msgid "IP address"
 #~ msgstr "IP 地址"

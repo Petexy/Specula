@@ -1226,7 +1226,7 @@ discovery_timeout (gpointer data)
       pm_session_set_state (self, PM_STATE_IDLE, NULL);
     else
       pm_session_set_state (self, PM_STATE_ERROR,
-                            _("No phone found. Use Set Up Device to enter your phone's Wireless debugging address."));
+                            _("No phone found"));
   }
   return G_SOURCE_REMOVE;
 }
