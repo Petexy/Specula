@@ -1,6 +1,7 @@
 # Build output
 /build/
 /builddir/
+/src/build/
 *.o
 *.a
 *.so
@@ -17,5 +18,16 @@ compile_commands.json
 # Python venv used to run meson (project-local convenience)
 /.meson-venv/
 
-# Local stable-release packaging (separate gitignored PKGBUILD)
+# Distribution build output
 /dist/
+*.AppImage
+*.deb
+*.rpm
+*.src.rpm
+*.pkg.tar
+*.pkg.tar.*
+
+# Non-Arch packaging generated locally only
+/debian/
+/specula.spec
+/packaging/appimage/

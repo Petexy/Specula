@@ -3,7 +3,8 @@
  * Fed raw Annex-B H.264/H.265 chunks (as they arrive off the socket). Splits
  * them into packets with an AVCodecParser, decodes, converts to RGB, and
  * delivers a GdkTexture to `frame_cb` *on the GTK main thread* for direct use
- * by PmVideoView.
+ * by PmVideoView. If `owner` is non-NULL, each queued callback holds a ref to
+ * it until delivery so teardown cannot leave the callback's user_data dangling.
  *
  * The current path is a portable software decode + swscale conversion. The
  * zero-copy upgrade (hardware decode -> DMABUF -> GdkDmabufTexture, no CPU
@@ -23,7 +24,9 @@ typedef struct _PmDecoder PmDecoder;
  * that retain it must take their own reference; PmVideoView does. */
 typedef void (*PmDecoderFrameCb) (GdkTexture *texture, gpointer user_data);
 
-PmDecoder *pm_decoder_new (PmDecoderFrameCb frame_cb, gpointer user_data);
+PmDecoder *pm_decoder_new (PmDecoderFrameCb frame_cb,
+                           gpointer         user_data,
+                           GObject         *owner);
 void       pm_decoder_free (PmDecoder *self);
 
 /* Open a decoder for the negotiated codec. */

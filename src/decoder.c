@@ -8,6 +8,7 @@
 struct _PmDecoder {
   PmDecoderFrameCb       frame_cb;
   gpointer               user_data;
+  GObject               *owner;       /* borrowed; ref held by queued frames */
 
   const AVCodec         *codec;
   AVCodecContext        *ctx;
@@ -24,6 +25,7 @@ struct _PmDecoder {
 typedef struct {
   PmDecoderFrameCb cb;
   gpointer         user_data;
+  GObject         *owner;
   GdkTexture      *texture;
 } DeliverPayload;
 
@@ -40,17 +42,21 @@ deliver_payload_free (gpointer data)
 {
   DeliverPayload *p = data;
   g_clear_object (&p->texture);
+  g_clear_object (&p->owner);
   g_free (p);
 }
 
 /* --- lifecycle ------------------------------------------------------------ */
 
 PmDecoder *
-pm_decoder_new (PmDecoderFrameCb frame_cb, gpointer user_data)
+pm_decoder_new (PmDecoderFrameCb frame_cb,
+                gpointer         user_data,
+                GObject         *owner)
 {
   PmDecoder *self = g_new0 (PmDecoder, 1);
   self->frame_cb = frame_cb;
   self->user_data = user_data;
+  self->owner = owner;
   return self;
 }
 
@@ -143,6 +149,8 @@ emit_frame (PmDecoder *self, GError **error)
   DeliverPayload *p = g_new0 (DeliverPayload, 1);
   p->cb = self->frame_cb;
   p->user_data = self->user_data;
+  if (self->owner != NULL)
+    p->owner = g_object_ref (self->owner);
   p->texture = GDK_TEXTURE (gdk_memory_texture_new (w, h,
                               GDK_MEMORY_R8G8B8, bytes, stride));
   g_bytes_unref (bytes);

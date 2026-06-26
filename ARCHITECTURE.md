@@ -18,8 +18,8 @@ with its saved pairing), not missing subsystems.
 |------|----------------|
 | `main.c` | Entry point; creates and runs `PmApplication`. |
 | `pm-application.{c,h}` | `AdwApplication` subclass: lifecycle, dark-mode via `AdwStyleManager`, global actions/accels. |
-| `pm-window.{c,h}` | `AdwApplicationWindow`: the `AdwViewStack` (a status page for Idle/Searching/Connecting/Error, a mirror page for Mirroring) plus all the window chrome. Drives aspect-ratio-locked resizing of the undecorated mirror window (custom resize edges/cursors), the auto-hiding header bar with a pin toggle, the first-run setup wizard, the lockscreen-PIN entry, and persists prefs. Observes `PmSession`. |
-| `pm-session.{c,h}` | **Controller.** Owns the lifecycle state machine and worker thread; the single object the UI talks to. Emits `state-changed`. |
+| `pm-window.{c,h}` | `AdwApplicationWindow`: the `AdwViewStack` (a status page for Idle/Searching/Connecting/Error, a mirror page for Mirroring) plus all the window chrome. Drives aspect-ratio-locked resizing of the undecorated mirror window (custom resize edges/cursors), the auto-hiding header bar with a pin toggle, the first-run setup wizard, the lockscreen-PIN entry, the floating Unlock button and "Unlocking…" overlay shown over a locked mirror, and persists prefs. Observes `PmSession`. |
+| `pm-session.{c,h}` | **Controller.** Owns the lifecycle state machine and worker thread; the single object the UI talks to. Emits `state-changed` plus `stream-changed`, `startup-check-failed`, `pin-required`, `unlocking`, `unlock-failed`, and `locked-changed`. |
 | `pm-video-view.{c,h}` | **Renderer surface.** `GtkWidget` showing decoded `GdkTexture`s with correct aspect ratio; maps widget→device coordinates for input. |
 | `pm-connect-dialog.{c,h}` | `AdwDialog` to set up a device: connect by IP[:port] and one-time `adb pair` (run async via `GTask`). Persists via `device.c`. |
 | `pm-settings-dialog.{c,h}` | `AdwDialog` (bottom sheet) for the live mirror options: aspect-ratio lock, mouse vs touch, audio on/off, video bitrate, mirror vs virtual display (with width/height/DPI), and screen-off. Reports each change through a callback. |
@@ -88,6 +88,10 @@ work is pushed to a worker and results are marshalled back.
   video read loop. Best-effort: any error just drops sound and leaves the mirror
   running. The session worker closes its socket (to unblock the read) and joins
   it during teardown.
+- **Unlock worker** (`pm-session.c::unlock_worker`): a short-lived thread spawned
+  once the stream is live to drive best-effort keyguard auto-unlock (several
+  `adb` round trips with deliberate settle delays) without stalling the frame
+  loop; joined during teardown.
 - **Input** writes are tiny (≤32 bytes) and sent inline from the UI thread.
   *Upgrade:* move to a dedicated control-writer thread + lock-free queue if a
   blocked socket ever stalls the UI.
@@ -142,13 +146,18 @@ handoff to `adb tcpip 5555`. The result (serial, host, port) is persisted by
 (`gtk_application_inhibit`) so the desktop does not suspend or lock the screen
 while you drive the phone rather than the desktop. If screen-off is enabled it
 also blanks the phone's panel via `SET_DISPLAY_POWER`, but only once the device
-reports unlocked (polled about once a second from the read loop) so it never
-blacks out a lock screen the user still has to get past.
+reports unlocked (the keyguard is polled every couple of seconds from the read
+loop — the same probe also raises the floating Unlock button whenever the phone
+sits on its lockscreen) so it never blacks out a lock screen the user still has
+to get past.
 
 **Teardown** (`finalize_screen`, run once per session on a clean stop, a
 spontaneous disconnect, or a crash): release any pointer/keys still held on the
 device, restore the panel if it was blanked, then lock the phone with a
-`KEYCODE_POWER` press. The server is deliberately launched **without**
+`KEYCODE_SLEEP` press — unlike `KEYCODE_POWER`'s toggle, SLEEP always sleeps
+(never wakes), so it locks regardless of the current panel state and never races
+a just-restored display awake on slower OEM panels. The server is deliberately
+launched **without**
 `power_off_on_close` so a settings reconnect does not lock on every change; the
 lock is injected here instead, and is skipped during a reconnect so the next
 session inherits a live, unlocked phone. The crash fail-safe (`failsafe.c`)
@@ -192,8 +201,9 @@ logs and exits, leaving the video mirror untouched.
 
 `input.c` installs GTK controllers on `PmVideoView`:
 
-- `GtkGestureDrag` → touch DOWN / MOVE / UP (a tap is a zero-length drag), or
-  mouse events when mouse mode is on.
+- One `GtkGestureClick` per mouse button + a `GtkEventControllerMotion` → touch
+  DOWN / MOVE / UP (tap, drag, and hover), or full mouse-button events
+  (independent button holds and chording) when mouse mode is on.
 - `GtkEventControllerScroll` → scroll events at the last pointer position.
 - `GtkEventControllerKey`: a printable character with no Ctrl/Alt/Super is
   injected as UTF-8 via `INJECT_TEXT` (so the device IME handles composition and

@@ -1,7 +1,7 @@
 # Maintainer: Piotr 'Linexy' Lewandowski <piotr.petexiness@gmail.com>
 
 pkgname=specula-git
-pkgver=0
+pkgver=1
 pkgrel=1
 pkgdesc="Wire-free Android screen mirroring and control for the Linux desktop."
 arch=('x86_64' 'aarch64')
@@ -9,14 +9,16 @@ url="https://github.com/Petexy/specula"
 license=('GPL-3.0-or-later')
 
 depends=(
-  'gtk4'          # UI toolkit (>= 4.10)
-  'libadwaita'    # GNOME platform library (>= 1.4)
+  'gtk4>=4.10'
+  'libadwaita>=1.5'
   'ffmpeg'
-  'libpulse'      # libpulse-simple, audio playback (PipeWire's shim works too)
+  'libpulse'
   'glib2'
   'avahi'
   'android-tools'
   'scrcpy'
+  'hicolor-icon-theme'
+  'desktop-file-utils'
 )
 
 makedepends=(
@@ -26,9 +28,9 @@ makedepends=(
   'git'
 )
 
-optdepends=(
-  'desktop-file-utils: desktop-file-validate test + desktop database refresh'
-  'appstream: metainfo validation test'
+checkdepends=(
+  'desktop-file-utils'
+  'appstream'
 )
 
 provides=('specula')

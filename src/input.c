@@ -552,6 +552,18 @@ pm_input_attach (PmInput *self, PmVideoView *view)
 }
 
 void
+pm_input_clear_net (PmInput *self)
+{
+  if (self == NULL)
+    return;
+  /* The session frees the control socket on a spontaneous disconnect (worker
+   * thread), so the borrowed pointer here can dangle. NULL it; send_msg already
+   * no-ops on a NULL net, so every later send (including teardown releases)
+   * becomes a safe no-op instead of a write through freed memory. */
+  self->net = NULL;
+}
+
+void
 pm_input_free (PmInput *self)
 {
   if (self == NULL)

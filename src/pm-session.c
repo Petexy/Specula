@@ -240,6 +240,14 @@ pm_session_set_state (PmSession *self, PmState state, const char *message)
                                 &self->wake_suppressed);
     pm_input_set_mouse_mode (self->input, self->mouse_mode);
     pm_input_attach (self->input, self->view);
+  } else if (state != PM_STATE_MIRRORING && self->input != NULL) {
+    /* Left the live stream. Clean stops release held input in pm_session_stop()
+     * before the worker is woken; worker-posted disconnects may still be tearing
+     * sockets down concurrently. Drop the borrowed control pointer here instead
+     * of sending through a socket whose ownership is no longer on the UI thread.
+     * This also ensures the next successful mirror creates fresh controllers. */
+    pm_input_clear_net (self->input);
+    g_clear_pointer (&self->input, pm_input_free);
   }
 }
 
@@ -781,6 +789,7 @@ live_worker (gpointer data)
   g_autofree char *version = NULL;
   g_autofree char *new_display_arg = NULL;
   g_autofree char *bitrate_arg = NULL;
+  g_autoptr (GPtrArray) server_args = NULL;
   const char *step = "Starting connection";
 
   post_state (self, PM_STATE_CONNECTING, _("Connecting to device…"));
@@ -826,33 +835,30 @@ live_worker (gpointer data)
   if (self->video_bitrate > 0)
     bitrate_arg = g_strdup_printf ("video_bit_rate=%u",
                                    self->video_bitrate * 1000000u);
-  const char *server_args[] = {
-    version,
-    "log_level=debug",
-    want_audio ? "audio=true" : "audio=false",
-    "audio_codec=raw",
-    "control=true",
-    "tunnel_forward=true",
-    "send_frame_meta=false",
-    "send_dummy_byte=true",
-    "send_device_meta=true",
-    "send_stream_meta=true",
-    "clipboard_autosync=false",
-    "power_on=true",
-    /* Deliberately NOT power_off_on_close: the server's close-handler can't tell a
-     * settings reconnect (which force-kills and relaunches it) from a real
-     * disconnect, so it would lock the phone on every settings change. The phone
-     * is locked on a genuine teardown instead (see finalize_screen), letting
-     * reconnects hand the next session a live, unlocked phone. Trade-off: a silent
-     * network drop leaves the device unreachable, so it can no longer be locked. */
-    bitrate_arg,       /* non-NULL whenever a bitrate is set (the normal case) */
-    new_display_arg,   /* NULL when mirroring → trailing optional, omitted     */
-    NULL,
-  };
-  /* pm_adb_spawn_server stops at the first NULL, so every optional arg that can
-   * be NULL must trail the mandatory ones. bitrate_arg is only NULL when the
-   * bitrate is 0 (never via the UI, which clamps to >= 1 Mbps); keep it ahead of
-   * new_display_arg, the genuinely optional tail. */
+  server_args = g_ptr_array_new ();
+  g_ptr_array_add (server_args, version);
+  g_ptr_array_add (server_args, "log_level=debug");
+  g_ptr_array_add (server_args, want_audio ? "audio=true" : "audio=false");
+  g_ptr_array_add (server_args, "audio_codec=raw");
+  g_ptr_array_add (server_args, "control=true");
+  g_ptr_array_add (server_args, "tunnel_forward=true");
+  g_ptr_array_add (server_args, "send_frame_meta=false");
+  g_ptr_array_add (server_args, "send_dummy_byte=true");
+  g_ptr_array_add (server_args, "send_device_meta=true");
+  g_ptr_array_add (server_args, "send_stream_meta=true");
+  g_ptr_array_add (server_args, "clipboard_autosync=false");
+  g_ptr_array_add (server_args, "power_on=true");
+  /* Deliberately NOT power_off_on_close: the server's close-handler can't tell a
+   * settings reconnect (which force-kills and relaunches it) from a real
+   * disconnect, so it would lock the phone on every settings change. The phone
+   * is locked on a genuine teardown instead (see finalize_screen), letting
+   * reconnects hand the next session a live, unlocked phone. Trade-off: a silent
+   * network drop leaves the device unreachable, so it can no longer be locked. */
+  if (bitrate_arg != NULL)
+    g_ptr_array_add (server_args, bitrate_arg);
+  if (new_display_arg != NULL)
+    g_ptr_array_add (server_args, new_display_arg);
+  g_ptr_array_add (server_args, NULL);
 
   step = "Connecting with adb";
   post_state (self, PM_STATE_CONNECTING, _("Connecting with adb…"));
@@ -877,7 +883,9 @@ live_worker (gpointer data)
   step = "Starting scrcpy-server";
   post_state (self, PM_STATE_CONNECTING, _("Starting mirror server…"));
   g_message ("%s %s", step, version);
-  self->server = pm_adb_spawn_server (serial, PM_REMOTE_JAR, PM_SERVER_CLASS, server_args, &error);
+  self->server = pm_adb_spawn_server (serial, PM_REMOTE_JAR, PM_SERVER_CLASS,
+                                      (const char * const *) server_args->pdata,
+                                      &error);
   if (self->server == NULL)
     goto fail;
 
@@ -917,7 +925,7 @@ live_worker (gpointer data)
     goto fail;
 
   step = "Opening video decoder";
-  self->decoder = pm_decoder_new (on_decoder_frame, self);
+  self->decoder = pm_decoder_new (on_decoder_frame, self, G_OBJECT (self));
   if (!pm_decoder_open (self->decoder, self->stream.codec, &error))
     goto fail;
 
@@ -1355,8 +1363,10 @@ pm_session_stop (PmSession *self)
      * navigation key) while the control socket is open, so ending the session
      * mid-gesture can never strand a finger or key on the phone - which would
      * block its back/home gestures until a reboot. The crash fail-safe covers
-     * the abnormal-exit case; this covers a clean close. */
-    if (self->input != NULL)
+     * the abnormal-exit case; this covers a clean close. Guarded on a live
+     * socket: after a spontaneous disconnect the worker has already exited and
+     * freed control_net, leaving input's borrowed pointer dangling. */
+    if (self->input != NULL && self->control_net != NULL)
       pm_input_release_all (self->input);
     /* Hand the lock + teardown to the worker rather than doing it here too.
      * Closing only the video socket wakes the worker out of its blocking stream
@@ -1380,6 +1390,12 @@ pm_session_stop (PmSession *self)
     self->worker = NULL;
   }
 
+  /* The worker's teardown (joined above, or already run on a spontaneous
+   * disconnect) freed the control socket PmInput borrows, so its pointer now
+   * dangles; drop it before the free so pm_input_free can't write through it.
+   * No-op when the IDLE state handler already tore input down. */
+  if (self->input != NULL)
+    pm_input_clear_net (self->input);
   g_clear_pointer (&self->input, pm_input_free);
   g_clear_pointer (&self->decoder, pm_decoder_free);
   g_clear_pointer (&self->audio, pm_audio_free);

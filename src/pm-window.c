@@ -4248,6 +4248,7 @@ pm_window_dispose (GObject *object)
   pm_window_cancel_chrome_tick (self);
   if (self->session != NULL) {
     g_signal_handlers_disconnect_by_data (self->session, self);
+    pm_session_set_video_view (self->session, NULL);
     g_clear_object (&self->session);
   }
   G_OBJECT_CLASS (pm_window_parent_class)->dispose (object);

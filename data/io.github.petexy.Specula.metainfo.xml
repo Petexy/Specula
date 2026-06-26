@@ -69,6 +69,65 @@
   <content_rating type="oars-1.1"/>
 
   <releases>
+    <release version="1.0.0" date="2026-06-26">
+      <description>
+        <p>First stable release, focused on making shutdown, reconnect, and
+        disconnect paths safer for regular use.</p>
+        <ul>
+          <li>Prevented queued decoder frames from targeting a session that is
+          already being destroyed.</li>
+          <li>Avoided sending input-release messages through a freed control
+          socket after spontaneous disconnects.</li>
+          <li>Cleaned up input controllers when leaving the live mirroring
+          state, so the next session starts with fresh control state.</li>
+          <li>Detached the video view during window disposal to avoid stale
+          session-to-widget references.</li>
+          <li>Made scrcpy-server argument construction tolerant of omitted
+          optional bitrate or virtual-display values.</li>
+          <li>Updated version, packaging, translation metadata, README
+          localization details, and architecture notes for the stable release.</li>
+        </ul>
+      </description>
+    </release>
+    <release version="0.8.0" date="2026-06-25">
+      <description>
+        <ul>
+          <li>Waits for a freshly connected wireless adb device to become ready
+          before pushing the mirror server, reducing races on cold adb starts.</li>
+          <li>Removes stale adb port forwards before creating a new mirror
+          forward, so failed previous attempts are less likely to block the next
+          connection.</li>
+          <li>Shows clearer "No phone found" guidance with a shortcut back to
+          the setup guide when automatic reconnect cannot find the phone.</li>
+          <li>Improves resize handling after in-window dialogs while mirroring.</li>
+        </ul>
+      </description>
+    </release>
+    <release version="0.7.0" date="2026-06-24">
+      <description>
+        <ul>
+          <li>Adds a floating Unlock button over the live mirror whenever the
+          connected phone is detected on its lockscreen.</li>
+          <li>Polls keyguard state during mirroring to drive the Unlock button
+          and to avoid blanking the phone screen before it is usable.</li>
+          <li>Adds a setup-guide step for disabling Android's adb authorization
+          timeout, helping keep paired computers trusted for longer.</li>
+          <li>Refreshes icons, preview imagery, and translated strings.</li>
+        </ul>
+      </description>
+    </release>
+    <release version="0.6.0" date="2026-06-22">
+      <description>
+        <ul>
+          <li>Prompts for a one-time PIN when a connected phone is locked but no
+          saved PIN is available.</li>
+          <li>Lets users unlock a live mirrored phone without storing the PIN on
+          the computer.</li>
+          <li>Runs manual unlock attempts asynchronously and clears entered PIN
+          text after use.</li>
+        </ul>
+      </description>
+    </release>
     <release version="0.5.0" date="2026-06-20">
       <description>
         <ul>
@@ -82,10 +141,37 @@
         </ul>
       </description>
     </release>
-    <release version="0.4.0" date="2026-06-17">
+    <release version="0.4.0" date="2026-06-18">
       <description>
-        <p>Added localization support with a Polish translation; the interface
-        follows the system language automatically.</p>
+        <ul>
+          <li>Improves wireless device discovery by validating saved/manual
+          endpoints and skipping stale mDNS records.</li>
+          <li>Scans the paired phone's host for Android's dynamic wireless
+          debugging port when only the host address is known.</li>
+          <li>Accepts host:port input directly in the connection dialog,
+          including bracketed IPv6 addresses.</li>
+          <li>Moves auto-unlock to run after the stream starts and shows an
+          "Unlocking" overlay instead of leaving users on a blank screen.</li>
+          <li>Improves mirror-window sizing limits and aspect-locked resizing.</li>
+        </ul>
+      </description>
+    </release>
+    <release version="0.3.0" date="2026-06-17">
+      <description>
+        <p>Expanded localization metadata and catalogs with German, Spanish,
+        French, Hindi, Brazilian Portuguese, Russian, and Simplified Chinese,
+        alongside the existing Polish translation.</p>
+      </description>
+    </release>
+    <release version="0.2.0" date="2026-06-17">
+      <description>
+        <ul>
+          <li>Added gettext localization support with a Polish translation.</li>
+          <li>Introduced the guided first-run setup wizard for preparing Android
+          wireless debugging and pairing in-app.</li>
+          <li>Updated the README, desktop metadata, and packaging for the new
+          setup and localization flow.</li>
+        </ul>
       </description>
     </release>
     <release version="0.1.0" date="2026-06-15">

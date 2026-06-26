@@ -46,6 +46,12 @@ void pm_input_set_mouse_mode (PmInput *self, gboolean mouse_mode);
  * that ends mid-press cannot strand a finger or key on the phone. UI thread. */
 void pm_input_release_all (PmInput *self);
 
+/* Drop the borrowed control socket so no further control messages are sent.
+ * Call when the session has already torn that socket down (e.g. a spontaneous
+ * disconnect freed it on the worker thread) so the input object can be released
+ * without writing through a now-dangling pointer. UI thread. */
+void pm_input_clear_net (PmInput *self);
+
 void pm_input_free (PmInput *self);
 
 G_END_DECLS

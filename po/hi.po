@@ -4,7 +4,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: specula 0.5.0\n"
+"Project-Id-Version: specula 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-24 17:34+0200\n"
 "PO-Revision-Date: 2026-06-17 21:30+0200\n"

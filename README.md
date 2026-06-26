@@ -101,14 +101,16 @@ PM_DEMO=1 ./build/src/specula
 
 ## Localization
 
-Phone Mirror is localized with gettext and ships with a **Polish** translation.
-The interface follows your system language automatically (from the `LANG` /
-`LC_*` environment) — no in-app setting to change. Translations live under
-[`po/`](po/): `specula.pot` is the message template and each `<lang>.po` a
-translated catalog (currently `pl.po`).
+Phone Mirror is localized with gettext and ships with translations for
+**German, Spanish, French, Hindi, Polish, Brazilian Portuguese, Russian, and
+Simplified Chinese**. The interface follows your system language automatically
+(from the `LANG` / `LC_*` environment) — no in-app setting to change.
+Translations live under [`po/`](po/): `specula.pot` is the message template and
+each `<lang>.po` a translated catalog (`de`, `es`, `fr`, `hi`, `pl`, `pt_BR`,
+`ru`, `zh_CN`).
 
 To add another language, append its code to [`po/LINGUAS`](po/LINGUAS) and drop
-in a `<code>.po` (e.g. `msginit -i po/specula.pot -l de -o po/de.po`); meson
+in a `<code>.po` (e.g. `msginit -i po/specula.pot -l it -o po/it.po`); meson
 compiles and installs the `.mo` catalogs on build.
 
 When running **uninstalled** from the build tree, gettext looks under the
